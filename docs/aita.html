@@ -1,0 +1,963 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>aita &mdash; G50 AITA toolbox 0.1a1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1a1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="G50 AITA toolbox 0.1a1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">G50 AITA toolbox 0.1a1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for aita</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">.. py:module:: AITA toolbox</span>
+<span class="sd">Created on 3 juil. 2015</span>
+<span class="sd">Toolbox for data obtained using G50 Automatique Ice Texture Analyser (AITA) provide by :</span>
+<span class="sd">Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quartz and ice. J. Glaciol. 24, 117–130</span>
+
+<span class="sd">@author: Thomas Chauve</span>
+<span class="sd">@contact: thomas.chauve@lgge.obs.ujf-grenoble.fr</span>
+<span class="sd">@license: CC-BY-CC</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">image2d</span> <span class="kn">as</span> <span class="nn">im2d</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">pylab</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">io</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">gaussian_kde</span>
+<span class="kn">import</span> <span class="nn">colorsys</span>
+
+<div class="viewcode-block" id="aita"><a class="viewcode-back" href="../index.html#aita.aita">[docs]</a><span class="k">class</span> <span class="nc">aita</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	&quot;aita&quot; is a python class to analyse output from G50-AITA analyser.</span>
+<span class="sd">	It provide an environnement to plot data, to create inpur for CraFT code,...</span>
+<span class="sd">	</span>
+<span class="sd">	This toolbox is running on python3 and need various packages :</span>
+<span class="sd">	</span>
+<span class="sd">	    :library: numpy	    </span>
+<span class="sd">	    :library: matplotlib</span>
+<span class="sd">	    :library: math</span>
+<span class="sd">	    :library: pylab</span>
+<span class="sd">	    :library: skimage</span>
+<span class="sd">	    :library: datetime</span>
+<span class="sd">	    :library: random</span>
+<span class="sd">	    :library: colosys</span>
+<span class="sd">	    :library: image2d (see below)	    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span>
+    
+<div class="viewcode-block" id="aita.__init__"><a class="viewcode-back" href="../index.html#aita.aita.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data_adress</span><span class="p">,</span><span class="n">micro_adress</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;        </span>
+<span class="sd">        :param data_adress: where is the G50 output</span>
+<span class="sd">        :param micro_adress: where is the black and white image for the microstructure (default 0-no microstructure add)</span>
+<span class="sd">        :type data_adress: str</span>
+<span class="sd">        :type micro_adress: str</span>
+<span class="sd">        :return: aita object output</span>
+<span class="sd">        :rtype: aita</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        :Example: </span>
+<span class="sd">            &gt;&gt;&gt; adrdata=&#39;path of analyser output&#39;</span>
+<span class="sd">            &gt;&gt;&gt; adrmicro=&#39;path of microstructure image&#39;</span>
+<span class="sd">            &gt;&gt;&gt; data=aita.aita(adrdata,adrmicro)</span>
+<span class="sd">                        </span>
+<span class="sd">        .. note:: Bunge Euler Angle convention is used (phi1,phi,phi2) ,phi2 is not compute as during optical measurement phi2 is not know.</span>
+<span class="sd">        .. todo:: create an option when you don&#39;t want include microstructure</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c"># load data from G50 output</span>
+        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">data_adress</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">azi</span><span class="p">,</span><span class="n">col</span><span class="p">,</span><span class="n">qua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">19</span><span class="p">,</span><span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;f,f,f&#39;</span><span class="p">,</span><span class="n">comments</span><span class="o">=</span><span class="s">&#39;[eof]&#39;</span><span class="p">,</span><span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="c"># read head of file</span>
+        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">data_adress</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">a</span><span class="o">=</span><span class="p">[]</span>
+        <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">file</span><span class="o">.</span><span class="n">readline</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="mi">16</span><span class="p">))]</span>
+        <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="c"># resolution mu m</span>
+        <span class="n">res</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">10</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span>
+        <span class="c"># number of pixel along x</span>
+        <span class="n">nx</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">14</span><span class="p">][</span><span class="mi">9</span><span class="p">:</span><span class="mi">13</span><span class="p">])</span>
+        <span class="c"># number of pixel along y</span>
+        <span class="n">ny</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">15</span><span class="p">][</span><span class="mi">9</span><span class="p">:</span><span class="mi">13</span><span class="p">])</span>
+        <span class="c"># reashape the vector to a matrix</span>
+        <span class="c"># use Bunge Euler angle convention</span>
+        <span class="n">phi1_field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">((</span><span class="n">azi</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">ny</span><span class="p">,</span><span class="n">nx</span><span class="p">))</span><span class="o">+</span><span class="mi">90</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="n">phi_field</span><span class="o">=</span><span class="n">col</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">ny</span><span class="p">,</span><span class="n">nx</span><span class="p">))</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
+        <span class="n">qua_field</span><span class="o">=</span><span class="n">qua</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">ny</span><span class="p">,</span><span class="n">nx</span><span class="p">))</span>
+        <span class="c"># create image object from data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">=</span><span class="n">im2d</span><span class="o">.</span><span class="n">image2d</span><span class="p">(</span><span class="n">phi1_field</span><span class="p">,</span><span class="n">res</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">=</span><span class="n">im2d</span><span class="o">.</span><span class="n">image2d</span><span class="p">(</span><span class="n">phi_field</span><span class="p">,</span><span class="n">res</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qua</span><span class="o">=</span><span class="n">im2d</span><span class="o">.</span><span class="n">image2d</span><span class="p">(</span><span class="n">qua_field</span><span class="p">,</span><span class="n">res</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span>
+        
+        <span class="c"># open the microstructure</span>
+        <span class="k">if</span> <span class="n">micro_adress</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">micro_bmp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">ny</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">mm</span><span class="o">=</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">micro_bmp</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">micro_adress</span><span class="p">)</span>
+            <span class="n">mm</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">micro_bmp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">=</span><span class="n">im2d</span><span class="o">.</span><span class="n">image2d</span><span class="p">(</span><span class="n">micro_bmp</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">mm</span><span class="p">,</span><span class="n">res</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">grain_label</span><span class="p">()</span>
+        
+        <span class="c"># replace grains boundary with NaN number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">,</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="k">print</span> <span class="p">(</span><span class="s">&quot;Sucessfull aita build !&quot;</span><span class="p">)</span>  
+        </div>
+<div class="viewcode-block" id="aita.crop"><a class="viewcode-back" href="../index.html#aita.aita.crop">[docs]</a>    <span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Crop function to select the area of interest</span>
+<span class="sd">        </span>
+<span class="sd">        :return: crop aita object</span>
+<span class="sd">        :rtype: aita</span>
+<span class="sd">        :Exemple: &gt;&gt;&gt; data.crop()</span>
+<span class="sd">        </span>
+<span class="sd">        .. note:: clic on the top left corner and bottom right corner to select the area</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c"># plot the data</span>
+        <span class="n">h</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="c"># select top left and bottom right corner for crop</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Select top left and bottom right corner for crop :&#39;</span><span class="p">)</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pylab</span><span class="o">.</span><span class="n">ginput</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">res</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s">&quot;all&quot;</span><span class="p">)</span>
+        <span class="c"># create x and Y coordinate</span>
+        
+        <span class="n">xx</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">yy</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="c"># size of the initial map</span>
+        <span class="n">ss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="c"># find xmin xmax ymin and ymax</span>
+        <span class="n">xmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
+        <span class="n">xmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
+        <span class="n">ymin</span><span class="o">=</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">yy</span><span class="p">))</span>
+        <span class="n">ymax</span><span class="o">=</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">yy</span><span class="p">))</span>
+        
+        <span class="c"># crop the map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">,</span> <span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">,</span> <span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qua</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qua</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">,</span> <span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">,</span> <span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">grain_label</span><span class="p">()</span>
+        
+        <span class="c"># replace grains boundary with NaN number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">,</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        </div>
+<div class="viewcode-block" id="aita.fliplr"><a class="viewcode-back" href="../index.html#aita.aita.fliplr">[docs]</a>    <span class="k">def</span> <span class="nf">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Applied an horizontal miror to the data</span>
+<span class="sd">        </span>
+<span class="sd">        :return:  aita object with an horizontal miror</span>
+<span class="sd">        :rtype: aita</span>
+<span class="sd">        :Exemple: &gt;&gt;&gt; data.fliplr()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c"># horizontal miror (fliplr) on all the data in self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">),</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="c"># change phi1 angle by pi-phi1 modulo 2*pi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qua</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qua</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="aita.rot180"><a class="viewcode-back" href="../index.html#aita.aita.rot180">[docs]</a>    <span class="k">def</span> <span class="nf">rot180</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Rotate the data of 180 degree</span>
+<span class="sd">        </span>
+<span class="sd">        :return: crop aita object</span>
+<span class="sd">        :rtype: aita</span>
+<span class="sd">        :Exemple: &gt;&gt;&gt; data.rot180()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c"># rotate the position of the data if 180 degre</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">)),</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="c"># rotate the c-axis : phi1 = pi + phi1 mod(2*pi)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qua</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qua</span><span class="o">.</span><span class="n">field</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">))</span>
+        </div>
+<div class="viewcode-block" id="aita.filter"><a class="viewcode-back" href="../index.html#aita.aita.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">        Remove data of bad quality</span>
+<span class="sd">        </span>
+<span class="sd">        :param value: limit quality value between 0 to 100</span>
+<span class="sd">        :type value: int</span>
+<span class="sd">        :return: data object with no orientation with quality value under threshold</span>
+<span class="sd">        :rtype: aita</span>
+<span class="sd">        :Exemple: &gt;&gt;&gt; data.filter(75)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c"># find where quality&lt;value</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qua</span><span class="o">.</span><span class="n">field</span> <span class="o">&lt;</span> <span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NAN</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">NAN</span>
+        </div>
+<div class="viewcode-block" id="aita.mean_grain"><a class="viewcode-back" href="../index.html#aita.aita.mean_grain">[docs]</a>    <span class="k">def</span> <span class="nf">mean_grain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Compute the mean orientation inside the grain</span>
+<span class="sd">        </span>
+<span class="sd">        :return: data with only one orientation per grains, the mean orientation</span>
+<span class="sd">        :rtype: aita</span>
+<span class="sd">        :Exemple: &gt;&gt;&gt; data.mean_orientation()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c"># number of grain</span>
+        <span class="n">nb_grain</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">))</span>
+        <span class="c"># loop on all the grain</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">nb_grain</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
+            <span class="c"># find the pixel inside the grain i</span>
+            <span class="n">idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="o">==</span><span class="n">i</span><span class="p">)</span>
+            <span class="c"># compute the mean value of phi1 and phi and replace the value in the map</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        </div>
+<div class="viewcode-block" id="aita.imresize"><a class="viewcode-back" href="../index.html#aita.aita.imresize">[docs]</a>    <span class="k">def</span> <span class="nf">imresize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">res</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Resize the data</span>
+<span class="sd">        </span>
+<span class="sd">        :param res: the new resolution wanted in millimeter (mm)</span>
+<span class="sd">        :type res: float</span>
+<span class="sd">        :return: data with the resolution wanted</span>
+<span class="sd">        :rtype: aita</span>
+<span class="sd">        :Exemple: &gt;&gt;&gt; data.imresize(0.25)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">imresize</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">imresize</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qua</span><span class="o">.</span><span class="n">imresize</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">imresize</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        
+        <span class="c"># make larger the boundaries to keep them</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="o">=</span><span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">binary_dilation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">res</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">res</span><span class="p">)))</span>
+        <span class="c"># resize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">imresize</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="aita.craft"><a class="viewcode-back" href="../index.html#aita.aita.craft">[docs]</a>    <span class="k">def</span> <span class="nf">craft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nameId</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create the inputs for craft</span>
+<span class="sd">        </span>
+<span class="sd">        :param nameId: name of the prefixe used for craft files</span>
+<span class="sd">        :type nameId: str</span>
+<span class="sd">        :return: create file : nameId_micro.vtk, nameId.phase, nameId.in, nameId.load, nameId.output</span>
+<span class="sd">        :Exemple: &gt;&gt;&gt; data.craft(&#39;manip01&#39;)</span>
+<span class="sd">        </span>
+<span class="sd">        .. note:: nameId.load, nameId.output need to be rewrite to get a correct loading and the output wanted</span>
+<span class="sd">           </span>
+<span class="sd">        .. note:: nameId.in need to be adapt depending of your folder structure used for craft</span>
+<span class="sd">            </span>
+<span class="sd">        .. note:: NaN orientation value are removed by the closest orientation</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c">##############################################</span>
+        <span class="c"># remove the grain boundary (remove NaN value)</span>
+        <span class="c">##############################################</span>
+        <span class="c"># find where are the NaN Value corresponding to the grain boundary</span>
+        <span class="n">idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">))</span>
+        <span class="c"># while NaN value are in the microstructure we replace by an other value ...</span>
+        <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="c"># for all the pixel NaN</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">idx</span><span class="p">)[</span><span class="mi">1</span><span class="p">])):</span>
+                <span class="c"># if the pixel is at the bottom line of the sample, we choose the pixel one line upper ...</span>
+                <span class="k">if</span> <span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">k</span><span class="o">=</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span>
+                <span class="c">#... else we choose the pixel one line higher.</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">k</span><span class="o">=</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
+                <span class="c"># if the pixel is at the left side of the sample, we choose the pixel at its right  ...</span>
+                <span class="k">if</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">kk</span><span class="o">=</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span>
+                <span class="c"># else we choose the pixel at its left.</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">kk</span><span class="o">=</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
+                <span class="c"># Replace the value by the value of the neighbor select just before</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">kk</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">kk</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">kk</span><span class="p">]</span>
+                <span class="c"># re-evaluate if there is sill NaN value inside the microstructure</span>
+            <span class="n">idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">))</span><span class="c"># re-evaluate the NaN</span>
+            
+        <span class="c"># find the value of the orientation for each phase</span>
+        <span class="n">phi1</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">phi</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">phi2</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))):</span>
+            <span class="n">idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">)</span><span class="o">==</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">phi1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="n">phi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="n">phi2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">phi1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+                <span class="n">phi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+                <span class="n">phi2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="c">################################   </span>
+        <span class="c"># Write the microstructure input</span>
+        <span class="c">################################</span>
+        <span class="c"># size of the map</span>
+        <span class="n">ss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="c"># open micro.vtk file</span>
+        <span class="n">micro_out</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">nameId</span><span class="o">+</span><span class="s">&#39;_micro.vtk&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="c"># write the header of the file</span>
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# vtk DataFile Version 3.0 &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;craft output </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;ASCII </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;DATASET STRUCTURED_POINTS </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;DIMENSIONS &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span>  <span class="s">&#39; 1</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;ORIGIN 0.000000 0.000000 0.000000 </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;SPACING &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; 1.000000 </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;POINT_DATA &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">ss</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;SCALARS scalars float </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;LOOKUP_TABLE default </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+                <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]))</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+            <span class="n">micro_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>        
+        <span class="n">micro_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="c">################################   </span>
+        <span class="c">##### Write the phase input ####</span>
+        <span class="c">################################</span>
+        <span class="n">phase_out</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">nameId</span><span class="o">+</span><span class="s">&#39;.phase&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">phase_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">phase_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# Date &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#39;      Manip: &#39;</span> <span class="o">+</span> <span class="n">nameId</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">phase_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">phase_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# This file give for each phase </span><span class="se">\n</span><span class="s"># *the matetial </span><span class="se">\n</span><span class="s"># *its orientation (3 euler angles)</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">phase_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">phase_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# phase    material       phi1    Phi   phi2</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">phase_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">phi</span><span class="p">))):</span>
+            <span class="k">if</span> <span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                <span class="n">phase_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;          0              &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">phi1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">phi2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">);</span>  
+        <span class="n">phase_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="c">################################</span>
+        <span class="c"># Write an exemple of load file##</span>
+        <span class="c">################################</span>
+        <span class="n">out_load</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">nameId</span> <span class="o">+</span> <span class="s">&#39;.load&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">);</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# Date &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#39;      Manip: &#39;</span> <span class="o">+</span> <span class="n">nameId</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# choix du type de chargement </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# direction contrainte imposée: S </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# contrainte imposée:          C </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# déformation imposée:         D </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;C</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# nb de pas    temps        direction            facteur</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#                            11 22 33 12 13 23</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;                5.            0  1  0  0  0  0    -0.5</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;5.            100.          0  1  0  0  0  0    -0.5</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_load</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="c">###################################</span>
+        <span class="c"># Write an exemple of output file #</span>
+        <span class="c">###################################    </span>
+        <span class="n">out_output</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">nameId</span> <span class="o">+</span> <span class="s">&#39;.output&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# Date &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#39;      Manip: &#39;</span> <span class="o">+</span> <span class="n">nameId</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;equivalent stress image = yes 10,60,100</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;equivalent strain image = yes 10,60,100</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;stress image = yes 10,60,100</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;strain image = yes 10,60,100</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;backstress image = yes 10,60,100</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;strain moment = yes 5:100</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;stress moment = yes 5:100</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;im_format=vtk</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_output</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  
+        <span class="c">#####################################</span>
+        <span class="c">## Write the input file for craft####</span>
+        <span class="c">#####################################</span>
+        <span class="n">out_in</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">nameId</span> <span class="o">+</span> <span class="s">&#39;.in&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">);</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# Date &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#39;      Manip: &#39;</span> <span class="o">+</span> <span class="n">nameId</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# name of the file of the image of the microstructure</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;microstructure=../&#39;</span><span class="o">+</span> <span class="n">nameId</span><span class="o">+</span><span class="s">&#39;_micro.vtk</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# name of the file of the description of phases</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;phases=../&#39;</span><span class="o">+</span><span class="n">nameId</span><span class="o">+</span><span class="s">&#39;.phase</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# name of the file describing the materials the phases are made of:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;materials=../../../../Ice_Constitutive_Law/glace3_oc2_5mai2011.mat</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# file of the loading conditions:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;loading=../&#39;</span><span class="o">+</span><span class="n">nameId</span> <span class="o">+</span> <span class="s">&#39;.load</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# file telling the outputs one wants to obtain:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;output=../&#39;</span> <span class="o">+</span><span class="n">nameId</span> <span class="o">+</span> <span class="s">&#39;.output</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# The parameter C0 has to be set by craft:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;C0=auto</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;# # required precision for equilibrium and for loading conditions:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;precision=1.e-4, 1.e-4</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">out_in</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="aita.plotpdf"><a class="viewcode-back" href="../index.html#aita.aita.plotpdf">[docs]</a>    <span class="k">def</span> <span class="nf">plotpdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">peigen</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">select_grain</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">grainlist</span><span class="o">=</span><span class="p">[],</span><span class="n">allpixel</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="nb">filter</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Plot pole figure for c-axis (0001)</span>
+<span class="sd">        </span>
+<span class="sd">        :param peigen: Plot the eigenvalues and eigenvectors on the pole figure (default = False)</span>
+<span class="sd">        :type peigen: bool</span>
+<span class="sd">        :param select_grain: select the grains use for the pole figure</span>
+<span class="sd">        :type select_grain: bool</span>
+<span class="sd">        :param grainlist: give the list of the grainId you want to plot</span>
+<span class="sd">        :type grainlist: list</span>
+<span class="sd">        :param allpixel: do you want plot all the pixel ?</span>
+<span class="sd">        :type allpixel: bool</span>
+<span class="sd">        :param filter: remove the pixel were the density is the lower, in fact the filter % lower point. (filter between 0 and 100)</span>
+<span class="sd">        :type filter: float</span>
+<span class="sd">        :return: eigenvector a1, a2, a3</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        :return: pole figure image</span>
+<span class="sd">        :rtype: matplotlib figure</span>
+<span class="sd">        :Exemple:</span>
+<span class="sd">            &gt;&gt;&gt; a1, a2, a3 = data.plotpdf(peigen=True)</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">if</span> <span class="n">select_grain</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">grainlist</span><span class="o">==</span><span class="p">[]:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">waitforbuttonpress</span><span class="p">()</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;midle mouse clic when you are finish&#39;</span><span class="p">)</span>
+                <span class="c">#grain wanted for the plot</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pylab</span><span class="o">.</span><span class="n">ginput</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s">&#39;all&#39;</span><span class="p">)</span>
+                <span class="c"># find the label of grain</span>
+                <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="nb">id</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="nb">id</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">grainlist</span>
+            <span class="n">tazi</span><span class="o">=</span><span class="p">[]</span>
+            <span class="n">tcol</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">))):</span>
+                <span class="n">idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="o">==</span><span class="n">label</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">tazi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>
+                <span class="n">tcol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))</span>
+                
+            <span class="n">azi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tazi</span><span class="p">)))</span>
+            <span class="n">col</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tcol</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># compute azimuth and colatitude</span>
+            <span class="n">azi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+            <span class="n">col</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="c"># compute [xc,yc,zc] the coordinate of the c-axis</span>
+        <span class="n">xc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
+        <span class="n">yc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
+        <span class="n">zc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+        
+        <span class="c"># compute components of the orientation tensor</span>
+        <span class="c"># corection vicious bug : if you are not using np.float128 sommetimes the sum is wrong (different of the loof &#39;for&#39; and wrong), you need to have a better precision in your definition of a float.</span>
+        <span class="n">a11</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">xc</span><span class="p">,</span><span class="n">xc</span><span class="p">))))</span>
+        <span class="n">a22</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">yc</span><span class="p">,</span><span class="n">yc</span><span class="p">))))</span>
+        <span class="n">a33</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">zc</span><span class="p">,</span><span class="n">zc</span><span class="p">))))</span>
+        <span class="n">a12</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">xc</span><span class="p">,</span><span class="n">yc</span><span class="p">))))</span>
+        <span class="n">a13</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">xc</span><span class="p">,</span><span class="n">zc</span><span class="p">))))</span>
+        <span class="n">a23</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">yc</span><span class="p">,</span><span class="n">zc</span><span class="p">))))</span>
+        
+        <span class="n">orientation_tensor</span><span class="o">=</span><span class="p">[</span><span class="n">a11</span><span class="p">,</span> <span class="n">a12</span><span class="p">,</span> <span class="n">a13</span><span class="p">],[</span><span class="n">a12</span><span class="p">,</span> <span class="n">a22</span><span class="p">,</span> <span class="n">a23</span><span class="p">],[</span><span class="n">a13</span><span class="p">,</span> <span class="n">a23</span><span class="p">,</span> <span class="n">a33</span><span class="p">]</span>
+
+        <span class="n">orientation_tensor</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">orientation_tensor</span><span class="p">)</span>
+        <span class="c"># calcul eigenvalue and eigenvector</span>
+        <span class="n">w</span><span class="p">,</span><span class="n">v</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">orientation_tensor</span><span class="p">)</span>
+        
+        <span class="c">#compute theta and phi</span>
+        <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">zc</span><span class="p">)</span>
+        <span class="n">phi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">yc</span><span class="p">,</span> <span class="n">xc</span><span class="p">)</span>
+        <span class="c"># caculate coordinate for the pole figure</span>
+        <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
+        <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">allpixel</span><span class="p">:</span>
+            <span class="n">rand</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># select only 10000 pixels</span>
+            <span class="n">rand</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">xc</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">xc</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span><span class="p">))</span>
+            
+        <span class="c"># select phi[rand] is not an NaN value</span>
+        <span class="n">rand</span><span class="o">=</span><span class="n">rand</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="p">[</span><span class="n">rand</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">rand</span><span class="p">)))]</span>
+                      
+        <span class="c"># plot pixel orientation with density color bar</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="p">[</span><span class="n">rand</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">rand</span><span class="p">))</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">yy</span><span class="p">[</span><span class="n">rand</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">rand</span><span class="p">))</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">(</span><span class="n">xy</span><span class="p">)(</span><span class="n">xy</span><span class="p">)</span>
+        
+        <span class="n">idf</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">z</span><span class="o">&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="nb">filter</span><span class="p">))</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">idf</span><span class="p">]</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="n">idf</span><span class="p">]</span>
+        <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">idf</span><span class="p">]</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s">&#39;vertical&#39;</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="c"># compute a circle</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="n">x_circle</span> <span class="o">=</span> <span class="mf">1.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+        <span class="n">y_circle</span> <span class="o">=</span> <span class="mf">1.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_circle</span><span class="p">,</span> <span class="n">y_circle</span><span class="p">,</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="c"># draw a cross for x and y directiondef new_ori_TJ(self,mask):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span><span class="s">&#39;+k&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+        <span class="c"># write axis</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">1.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04</span><span class="p">,</span> <span class="s">r&#39;X&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">0.04</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">,</span> <span class="s">r&#39;Y&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">1.4</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="s">r&#39;[0001]&#39;</span><span class="p">)</span>
+        
+        <span class="c"># plot eigenvector</span>
+        <span class="c">#compute theta_e and phi_e</span>
+        <span class="k">if</span> <span class="n">peigen</span><span class="p">:</span>
+            <span class="c"># to plot the pole figure here zc should be positive</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="mi">3</span><span class="p">)):</span>
+                <span class="c">#test if zc is negative</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">i</span><span class="p">])</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="c"># replace the vector by -vector</span>
+                    <span class="n">v</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">=-</span><span class="n">v</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">theta_e</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">,:])</span>
+            <span class="n">phi_e</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
+            <span class="c"># caculate coordinate for the pole figure</span>
+            <span class="n">xx_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_e</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi_e</span><span class="p">))</span>
+            <span class="n">yy_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_e</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi_e</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx_e</span><span class="p">,</span><span class="n">yy_e</span><span class="p">,</span><span class="s">&#39;sk&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+            <span class="c"># write eigenvalue        </span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xx_e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">yy_e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">0.04</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">)))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xx_e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">yy_e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">0.04</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">2</span><span class="p">)))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xx_e</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">yy_e</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mf">0.04</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">2</span><span class="p">)))</span>
+        <span class="c"># figure format</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&quot;equal&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">w</span>
+    </div>
+<div class="viewcode-block" id="aita.grain_ori"><a class="viewcode-back" href="../index.html#aita.aita.grain_ori">[docs]</a>    <span class="k">def</span> <span class="nf">grain_ori</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Give the grain orientation output</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">waitforbuttonpress</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;midle mouse clic when you are finish&#39;</span><span class="p">)</span>
+        <span class="c">#grain wanted for the plot</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pylab</span><span class="o">.</span><span class="n">ginput</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s">&#39;all&#39;</span><span class="p">)</span>
+        
+        <span class="n">phi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="nb">id</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="nb">id</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">phi1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="nb">id</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="nb">id</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]]</span>
+        
+        <span class="k">return</span> <span class="p">[</span><span class="n">phi1</span><span class="p">,</span><span class="n">phi</span><span class="p">]</span>
+        </div>
+<div class="viewcode-block" id="aita.plot"><a class="viewcode-back" href="../index.html#aita.aita.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nlut</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Plot the data using a 2d lut</span>
+<span class="sd">        </span>
+<span class="sd">        :param nlut: number of pixel tou want for the 2d LUT (default 512)</span>
+<span class="sd">        :type nlut: int</span>
+<span class="sd">        :return: figure of orientation mapping</span>
+<span class="sd">        :rtype: matplotlib figure</span>
+<span class="sd">        :Exemple: </span>
+<span class="sd">            &gt;&gt;&gt; data.plot()</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
+<span class="sd">            &gt;&gt;&gt; # print the associated color wheel</span>
+<span class="sd">            &gt;&gt;&gt; lut=lut()</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
+<span class="sd">            </span>
+<span class="sd">        .. note:: It takes time to build the colormap</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c"># size of the map</span>
+        <span class="n">nx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="c"># create image for color map</span>
+        <span class="n">img</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">nx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">3</span><span class="p">])</span>
+        <span class="c"># load the colorwheel</span>
+        <span class="n">rlut</span><span class="o">=</span><span class="n">lut</span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="n">nlut</span><span class="p">,</span><span class="n">circle</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="c"># fill the color map</span>
+        <span class="n">XX</span><span class="o">=</span><span class="p">(</span><span class="n">nlut</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">))</span><span class="o">+</span><span class="p">(</span><span class="n">nlut</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">YY</span><span class="o">=</span><span class="p">(</span><span class="n">nlut</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">))</span><span class="o">+</span><span class="p">(</span><span class="n">nlut</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">nx</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">nx</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+                <span class="k">if</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]):</span>
+                    <span class="n">img</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">rlut</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">XX</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">YY</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]),</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">img</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">rlut</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">XX</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">YY</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]),</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">img</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">rlut</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">XX</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">YY</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]),</span><span class="mi">2</span><span class="p">]</span>
+                
+        <span class="n">h</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">res</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">nx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">res</span><span class="p">))</span>               
+        
+        <span class="k">return</span> <span class="n">h</span><span class="p">,</span><span class="n">img</span>
+    
+</div>
+<div class="viewcode-block" id="aita.misorientation_profile"><a class="viewcode-back" href="../index.html#aita.aita.misorientation_profile">[docs]</a>    <span class="k">def</span> <span class="nf">misorientation_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">orientation</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>       
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Compute the misorientation profile along a line</span>
+<span class="sd">        </span>
+<span class="sd">        :param plot: option for to misorientation profile plot, &#39;all&#39; (default), &#39;mis2o&#39;, &#39;mis2p&#39;</span>
+<span class="sd">        :type plot: str</span>
+<span class="sd">        :param orientation: option for the color code used for the map, False (default) use phi1 and True use colorwheel (take time)</span>
+<span class="sd">        :type orientation: bool</span>
+<span class="sd">        :param pos: coordinate of the profile line - 0 (default) click on the map to select the 2 points</span>
+<span class="sd">        :type pos: array</span>
+<span class="sd">        :return: x - coordinate along the line</span>
+<span class="sd">        :rtype: array, float</span>
+<span class="sd">        :return: mis2o,mis2p - misorientation angle to the origin, and misorientation angle to the previous pixel</span>
+<span class="sd">        :rtype: array, float</span>
+<span class="sd">        :return: h - matplotlib image with line draw on the orientation map, subplot with mis2o and/or mis2p profile</span>
+<span class="sd">        :return: pos - coordinate of the profile line</span>
+<span class="sd">        :Exemple: </span>
+<span class="sd">            &gt;&gt;&gt; [x,mis2o,mis2p,h,pos]=data.misorientation_profile()</span>
+<span class="sd">            &gt;&gt;&gt; rpos = pos[::-1]</span>
+<span class="sd">            &gt;&gt;&gt; [x,mis2o,mis2p,hr,pos]=data.misorientation_profile(pos=rpos)</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c"># size of the map</span>
+        <span class="n">ss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="c"># plot the data with phi1 value</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">h</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+            <span class="c"># select initial and final points for the line</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Select initial and final points for the line :&#39;</span><span class="p">)</span>
+            <span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pylab</span><span class="o">.</span><span class="n">ginput</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+        
+        <span class="n">yy</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">res</span>
+        <span class="n">xx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">res</span>
+        
+        <span class="c"># numbers of pixel along the line</span>
+        <span class="n">nb_pixel</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">xx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">yy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">yy</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        
+        <span class="c"># calcul for each pixel</span>
+        <span class="n">phi</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">phi1</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">x</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">xi</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">yi</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">mis2p</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">mis2o</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">ori</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">nb_pixel</span><span class="p">)):</span>
+            <span class="c"># find the coordinate x an y along the line</span>
+            <span class="n">xi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="p">(</span><span class="n">xx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">nb_pixel</span><span class="o">+</span><span class="n">xx</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="n">yi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="p">(</span><span class="n">yy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">yy</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">nb_pixel</span><span class="o">+</span><span class="n">yy</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="c"># extract phi and phi1</span>
+            <span class="n">phi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">xi</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">yi</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="n">phi1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">xi</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">yi</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            
+            <span class="c"># ori0 and orii are the c axis vector</span>
+            <span class="n">ori</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mat</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">phi1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">phi1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">])]))</span>   
+            <span class="c"># mis2o is the misorientation between pixel i and the origin</span>
+            <span class="n">mis2o</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ori</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">ori</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="c"># mis2p is the misorientation to the previous pixel    </span>
+                <span class="n">mis2p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ori</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">ori</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+            <span class="c"># x is the position along the line</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">xi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">xi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">yi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">yi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mis2p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+
+        <span class="n">hh</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">orientation</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">yy</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">res</span><span class="p">,</span><span class="n">xx</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">res</span><span class="p">)</span>
+        <span class="c"># plot misorientation profile</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">plot</span><span class="o">==</span><span class="s">&#39;all&#39;</span> <span class="ow">or</span> <span class="n">plot</span><span class="o">==</span><span class="s">&#39;mis2o&#39;</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">mis2o</span><span class="p">,</span><span class="s">&#39;-b&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">plot</span><span class="o">==</span><span class="s">&#39;all&#39;</span> <span class="ow">or</span> <span class="n">plot</span><span class="o">==</span><span class="s">&#39;mis2p&#39;</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">mis2p</span><span class="p">,</span><span class="s">&#39;-k&#39;</span><span class="p">)</span>    
+        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">mis2o</span><span class="p">,</span> <span class="n">mis2p</span><span class="p">,</span> <span class="n">hh</span><span class="p">,</span> <span class="n">pos</span>
+    
+    </div>
+<div class="viewcode-block" id="aita.addgrain"><a class="viewcode-back" href="../index.html#aita.aita.addgrain">[docs]</a>    <span class="k">def</span> <span class="nf">addgrain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ori</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        add a grain inside the microstructure</span>
+<span class="sd">        </span>
+<span class="sd">        :param ori: orienation of the new grain [phi1 phi] (default random value)</span>
+<span class="sd">        :type ori: array, float</span>
+<span class="sd">        :return: new_micro, object with the new grain include</span>
+<span class="sd">        :rtype: aita</span>
+<span class="sd">        :Exemple: </span>
+<span class="sd">            &gt;&gt;&gt; data.addgrain()      </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c"># select the contour of the grains</span>
+        <span class="n">h</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="c"># click on the submit of the new grain</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">waitforbuttonpress</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;click on the submit of the new grain :&#39;</span><span class="p">)</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pylab</span><span class="o">.</span><span class="n">ginput</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">res</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s">&#39;all&#39;</span><span class="p">)</span>
+        
+        <span class="c"># select a subarea contening the triangle</span>
+        <span class="n">minx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])))</span>
+        <span class="n">maxx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])))</span>
+        <span class="n">miny</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="n">maxy</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])))</span>
+        
+        <span class="c"># write all point inside this area</span>
+        <span class="n">gpoint</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">minx</span><span class="p">,</span><span class="n">maxx</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">miny</span><span class="p">,</span><span class="n">maxy</span><span class="p">)):</span>
+                <span class="n">gpoint</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span>
+        
+    
+        <span class="c"># test if the point is inside the triangle    </span>
+        <span class="n">gIn</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gpoint</span><span class="p">))):</span>
+            <span class="n">gIn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">isInsideTriangle</span><span class="p">(</span><span class="n">gpoint</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]))</span>
+
+        <span class="n">gpointIn</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gpoint</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gIn</span><span class="p">)]</span>
+        
+        <span class="c">#transform in xIn and yIn, the coordinate of the map</span>
+        <span class="n">xIn</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">gpointIn</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">yIn</span><span class="o">=</span><span class="n">gpointIn</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+               
+        <span class="c"># add one grains</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">xIn</span><span class="p">,</span><span class="n">yIn</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+        <span class="c"># add the orientation of the grains</span>
+        <span class="k">if</span> <span class="n">ori</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">xIn</span><span class="p">,</span><span class="n">yIn</span><span class="p">]</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">xIn</span><span class="p">,</span><span class="n">yIn</span><span class="p">]</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">xIn</span><span class="p">,</span><span class="n">yIn</span><span class="p">]</span><span class="o">=</span><span class="n">ori</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">xIn</span><span class="p">,</span><span class="n">yIn</span><span class="p">]</span><span class="o">=</span><span class="n">ori</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            
+        <span class="k">return</span>
+    </div>
+<div class="viewcode-block" id="aita.new_ori_TJ"><a class="viewcode-back" href="../index.html#aita.aita.new_ori_TJ">[docs]</a>    <span class="k">def</span> <span class="nf">new_ori_TJ</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">mean</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Extract orientation to compare with CraFT simulation</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">ng</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">*</span><span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">field</span>        
+        <span class="n">res</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">con</span><span class="o">=</span><span class="bp">True</span>
+        
+        <span class="k">while</span> <span class="n">con</span><span class="p">:</span>
+            <span class="n">gID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">mask_build</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;triple junction label&#39;</span><span class="p">)</span>
+            <span class="n">x</span><span class="o">=</span><span class="nb">input</span><span class="p">()</span>
+            <span class="n">ng</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">*</span><span class="n">gID</span><span class="p">)</span><span class="o">.</span><span class="n">field</span>
+            <span class="n">ngmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">ng</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">ngmax</span><span class="p">))):</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">field</span><span class="o">==</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">mean</span><span class="p">:</span>
+                        <span class="n">pp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="nb">id</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]])</span>
+                        <span class="n">phi1</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">extract_data</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pp</span><span class="p">)</span>
+                        <span class="n">phi</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">extract_data</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pp</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">phi1</span><span class="p">):</span>
+                            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">i</span><span class="p">,</span><span class="n">phi1</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]))):</span>
+                            <span class="n">pp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">],</span><span class="nb">id</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]]])</span>
+                            <span class="n">phi1</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">extract_data</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pp</span><span class="p">)</span>
+                            <span class="n">phi</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">extract_data</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pp</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">phi1</span><span class="p">):</span>
+                                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">i</span><span class="p">,</span><span class="n">phi1</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span>
+                            
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;continue ? 0 no, 1 yes&#39;</span><span class="p">)</span>
+            <span class="n">con</span><span class="o">=</span><span class="nb">input</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="n">res</span>
+            
+      
+<span class="c">##########################################################################</span>
+<span class="c">###################### Function need for aita class  #####################</span>
+<span class="c">##########################################################################        </span>
+        </div></div>
+<div class="viewcode-block" id="cart2pol"><a class="viewcode-back" href="../index.html#aita.cart2pol">[docs]</a><span class="k">def</span> <span class="nf">cart2pol</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Convert cartesien coordinate x,y into polar coordinate rho, theta</span>
+<span class="sd">    </span>
+<span class="sd">    :param x: x cartesian coordinate</span>
+<span class="sd">    :param y: y cartesian coordinate</span>
+<span class="sd">    :type x: float</span>
+<span class="sd">    :type y: float</span>
+<span class="sd">    :return: rho (radius), theta (angle)</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    :Exemple: &gt;&gt;&gt; rho,theta=cart2pol(x,y)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c"># transform cartesien to polar coordinate</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="lut"><a class="viewcode-back" href="../index.html#aita.lut">[docs]</a><span class="k">def</span> <span class="nf">lut</span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span><span class="n">circle</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Create a 2D colorwheel</span>
+<span class="sd">    </span>
+<span class="sd">    :param nx: number of pixel for the colorwheel</span>
+<span class="sd">    :param circle: do you want create a black circle around</span>
+<span class="sd">    :type nx: int</span>
+<span class="sd">    :type circle: bool</span>
+<span class="sd">    :return: lut</span>
+<span class="sd">    :rtype: array of size [nx,nx,3]</span>
+<span class="sd">    :Exemple:</span>
+<span class="sd">        &gt;&gt;&gt; lut2d=lut()</span>
+<span class="sd">        &gt;&gt;&gt; plt.imshow(lut)</span>
+<span class="sd">        &gt;&gt;&gt; plt.show()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">rho</span><span class="p">,</span><span class="n">phi</span><span class="o">=</span><span class="n">cart2pol</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
+    <span class="c">#print(h)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">rho</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
+    <span class="c"># lut=[h,s,v]</span>
+    <span class="c"># colorwheel hsv</span>
+    <span class="n">luthsv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nx</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">luthsv</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">h</span>
+    <span class="n">luthsv</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">v</span>
+    <span class="c"># colorwheel rgb</span>
+    <span class="n">lutrgb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nx</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">nx</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">nx</span><span class="p">)):</span>
+            <span class="n">lutrgb</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">lutrgb</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">lutrgb</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">colorsys</span><span class="o">.</span><span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">luthsv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">luthsv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">luthsv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+
+        
+    <span class="c"># build a circle color bar        </span>
+    <span class="k">if</span> <span class="n">circle</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">nx</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">nx</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="p">((</span><span class="n">i</span><span class="o">-</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="o">&gt;</span><span class="p">(</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span><span class="p">):</span>
+                    <span class="n">lutrgb</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span> 
+                    <span class="n">lutrgb</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+                    <span class="n">lutrgb</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+                    
+
+
+    <span class="k">return</span> <span class="n">lutrgb</span>
+    
+    </div>
+<div class="viewcode-block" id="isInsideTriangle"><a class="viewcode-back" href="../index.html#aita.isInsideTriangle">[docs]</a><span class="k">def</span> <span class="nf">isInsideTriangle</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">,</span><span class="n">p3</span><span class="p">):</span> <span class="c">#is P inside triangle made by p1,p2,p3?</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    test if P is inside the triangle define by p1 p2 p3</span>
+<span class="sd">    </span>
+<span class="sd">    :param P: point you want test</span>
+<span class="sd">    :param p1: one submit of the triangle</span>
+<span class="sd">    :param p2: one submit of the triangle</span>
+<span class="sd">    :param p3: one submit of the triangle</span>
+<span class="sd">    :type P: array</span>
+<span class="sd">    :type p1: array</span>
+<span class="sd">    :type p2: array</span>
+<span class="sd">    :type p3: array</span>
+<span class="sd">    :return: isIn</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    :Exemple:</span>
+<span class="sd">        &gt;&gt;&gt; isInsideTriangle([0,0],[-1,0],[0,1],[1,0])</span>
+<span class="sd">        &gt;&gt;&gt; isInsideTriangle([0,-0.1],[-1,0],[0,1],[1,0])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">x3</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">y3</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">p3</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">full</span> <span class="o">=</span> <span class="nb">abs</span> <span class="p">(</span><span class="n">x1</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y3</span><span class="p">)</span> <span class="o">+</span> <span class="n">x2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y3</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x3</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">))</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="nb">abs</span> <span class="p">(</span><span class="n">x1</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">x2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">))</span>
+    <span class="n">second</span> <span class="o">=</span> <span class="nb">abs</span> <span class="p">(</span><span class="n">x1</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y3</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">y3</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x3</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y</span><span class="p">))</span>
+    <span class="n">third</span> <span class="o">=</span> <span class="nb">abs</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y3</span><span class="p">)</span> <span class="o">+</span> <span class="n">x2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y3</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">x3</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">first</span> <span class="o">+</span> <span class="n">second</span> <span class="o">+</span> <span class="n">third</span> <span class="o">-</span> <span class="n">full</span><span class="p">)</span> <span class="o">&lt;</span> <span class="o">.</span><span class="mo">0000001</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">G50 AITA toolbox 0.1a1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Thomas Chauve &lt;thomas.chauve@lgge.obs.ujf-grenoble.fr&gt;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

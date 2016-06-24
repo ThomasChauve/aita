@@ -57,7 +57,6 @@ class aita(object):
             >>> data=aita.aita(adrdata,adrmicro)
                         
         .. note:: Bunge Euler Angle convention is used (phi1,phi,phi2) ,phi2 is not compute as during optical measurement phi2 is not know.
-        .. todo:: create an option when you don't want include microstructure
         '''
         
         # load data from G50 output

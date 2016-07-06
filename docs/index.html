@@ -56,46 +56,9 @@
 <span id="script-exemples"></span><h1>Script exemples<a class="headerlink" href="#module-exemple" title="Permalink to this headline">¶</a></h1>
 <p>Exemple of script</p>
 <dl class="function">
-<dt id="exemple.create_craft_input">
-<tt class="descclassname">exemple.</tt><tt class="descname">create_craft_input</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/exemple.html#create_craft_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exemple.create_craft_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Script to create CraFT input from save data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># load aita function</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">aita</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># load pickle to save data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pickle</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Load the data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span> <span class="nb">open</span><span class="p">(</span> <span class="s">&quot;CI02_py.G50&quot;</span><span class="p">,</span> <span class="s">&quot;rb&quot;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># compute mean value in the grain</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span><span class="o">.</span><span class="n">mean_grain</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># choose the resolution you want to run craft (value in mm)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span><span class="o">.</span><span class="n">imresize</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># create CraFT input</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span><span class="o">.</span><span class="n">craft</span><span class="p">(</span><span class="s">&#39;CI02&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="exemple.load_data">
-<tt class="descclassname">exemple.</tt><tt class="descname">load_data</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/exemple.html#load_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exemple.load_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Script to load data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># load aita function</span>
+<dt id="exemple.example">
+<tt class="descclassname">exemple.</tt><tt class="descname">example</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/exemple.html#example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exemple.example" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># load aita function</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">aita</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># load image2d function used to manipulate 2D image</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">image2d</span> <span class="kn">as</span> <span class="nn">im</span>
@@ -103,57 +66,63 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># load pickle to save data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pickle</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">####################################################################</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># load loadData_aita where different function to create aita object are available</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">loadData_aita</span> <span class="kn">as</span> <span class="nn">lda</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">####################################################################</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">############################### Help ###############################</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">####################################################################</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">aita</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">####################################################################</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">####################################################################</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">############## open the data from G50 analyseur#####################</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">####################################################################</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># the inputs come from G50 analyseur</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">adr_data</span><span class="o">=</span><span class="s">&#39;/home/tchauve/Documents/LGGE/Data/AITA/Columnar Ice (CI)/CI Temperature -7C/CI02_T7_3-7pc/20140109_CI02_T7/orientation.dat&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">adr_micro</span><span class="o">=</span><span class="s">&#39;/home/tchauve/Documents/LGGE/Data/AITA/Columnar Ice (CI)/CI Temperature -7C/CI02_T7_3-7pc/20140109_CI02_T7/micro_RM_full_boundary.bmp&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># create CI02 where all the data are include</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span><span class="o">=</span><span class="n">aita</span><span class="o">.</span><span class="n">aita</span><span class="p">(</span><span class="n">adr_data</span><span class="p">,</span><span class="n">adr_micro</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">####################################################################</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">adr_data</span><span class="o">=</span><span class="s">&#39;orientation_test.dat&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">adr_micro</span><span class="o">=</span><span class="s">&#39;micro_test.bmp&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># create data where all the data are include</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">=</span><span class="n">lda</span><span class="o">.</span><span class="n">aita5col</span><span class="p">(</span><span class="n">adr_data</span><span class="p">,</span><span class="n">adr_micro</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">####################################################################</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">####Correct the analysis position with the experiment position######</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">####################################################################</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># select a restricted area</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span><span class="o">.</span><span class="n">crop</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">crop</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># rotate of 180 degree the data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#CI02.rot180()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#data.rot180()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># Horizontal mirror on the data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#CI02.fliplr()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#data.fliplr()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># remove data with quality under 75</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># As creating this object can be time consuming you prefer reload it. So this is a way to save data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">CI02</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;CI02_py.G50&#39;</span><span class="p">,</span><span class="s">&quot;wb&quot;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># we can know visualized the phi1 value</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># or grains</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># colormap</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># plot pole figure with eigen -vectors and -values of the second order orientation tensor</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CI02</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">peigen</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#pickle.dump(data, open(&#39;data_py.G50&#39;,&quot;wb&quot;))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># And to load the data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#data = pickle.load( open( &quot;data_py.G50&quot;, &quot;rb&quot;))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># we can know visualized the phi1 value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</td>
-</tr>
-</tbody>
-</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># or grains</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># colormap</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># plot pole figure with eigen -vectors and -values of the second order orientation tensor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">peigen</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -168,7 +137,7 @@ Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quart
 &#64;license: CC-BY-CC</p>
 <dl class="class">
 <dt id="aita.aita">
-<em class="property">class </em><tt class="descclassname">aita.</tt><tt class="descname">aita</tt><big>(</big><em>data_adress</em>, <em>micro_adress=0</em><big>)</big><a class="reference internal" href="_modules/aita.html#aita"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aita.aita" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">aita.</tt><tt class="descname">aita</tt><big>(</big><em>phi1_field</em>, <em>phi_field</em>, <em>qua_field</em>, <em>resolution=1</em>, <em>micro_field=0</em><big>)</big><a class="reference internal" href="_modules/aita.html#aita"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aita.aita" title="Permalink to this definition">¶</a></dt>
 <dd><p>&#8220;aita&#8221; is a python class to analyse output from G50-AITA analyser.
 It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 <p>This toolbox is running on python3 and need various packages :</p>
@@ -200,29 +169,34 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 </div></blockquote>
 <dl class="method">
 <dt id="aita.aita.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>data_adress</em>, <em>micro_adress=0</em><big>)</big><a class="reference internal" href="_modules/aita.html#aita.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aita.aita.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>phi1_field</em>, <em>phi_field</em>, <em>qua_field</em>, <em>resolution=1</em>, <em>micro_field=0</em><big>)</big><a class="reference internal" href="_modules/aita.html#aita.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aita.aita.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data_adress</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; where is the G50 output</li>
-<li><strong>micro_adress</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; where is the black and white image for the microstructure (default 0-no microstructure add)</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>phi1_field</strong> &#8211; Euler angle phi1 map</li>
+<li><strong>phi_field</strong> &#8211; Euler angle phi map</li>
+<li><strong>qua_field</strong> &#8211; quality facteur map</li>
+<li><strong>resolution</strong> &#8211; spatial step size (mm); default = 1 mm</li>
+<li><strong>micro_field</strong> &#8211; microstructure (0 background, 1 grain boundary)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aita object output</p>
-</td>
+</tbody>
+</table>
+<p>:type phi1_field np.array
+:type phi_field np.array
+:type qua_field: np.array
+:type resolution: float
+:type micro_adress: np.array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">aita object output</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">aita</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Example:</th><td class="field-body"><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">adrdata</span><span class="o">=</span><span class="s">&#39;path of analyser output&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">adrmicro</span><span class="o">=</span><span class="s">&#39;path of microstructure image&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">=</span><span class="n">aita</span><span class="o">.</span><span class="n">aita</span><span class="p">(</span><span class="n">adrdata</span><span class="p">,</span><span class="n">adrmicro</span><span class="p">)</span>
-</pre></div>
-</div>
-</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">aita</td>
 </tr>
 </tbody>
 </table>
@@ -671,6 +645,40 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 </table>
 </dd></dl>
 
+<dl class="docutils">
+<dt><strong>AITA open data</strong></dt>
+<dd><span class="target" id="module-loadData_aita"></span><dl class="first function">
+<dt id="loadData_aita.aita3col">
+<tt class="descclassname">loadData_aita.</tt><tt class="descname">aita3col</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/loadData_aita.html#aita3col"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loadData_aita.aita3col" title="Permalink to this definition">¶</a></dt>
+<dd><p>A toi de jouer Maurine</p>
+</dd></dl>
+
+<dl class="last function">
+<dt id="loadData_aita.aita5col">
+<tt class="descclassname">loadData_aita.</tt><tt class="descname">aita5col</tt><big>(</big><em>data_adress</em>, <em>micro_adress=0</em><big>)</big><a class="reference internal" href="_modules/loadData_aita.html#aita5col"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loadData_aita.aita5col" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to open data from AITA analyser using &#8216;cistodat&#8217; which give output file with 5 column (x,y,azi,col,qua)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_adress</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; orientation.dat file</li>
+<li><strong>micro_adress</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; .bmp (24 bit) with black background and grains boundary in white</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aita object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">aita</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd>
+</dl>
 </div>
 <div class="section" id="module-image2d">
 <span id="other-object-defined"></span><h1>Other object defined<a class="headerlink" href="#module-image2d" title="Permalink to this headline">¶</a></h1>
@@ -833,7 +841,7 @@ The default mask is a circle of center you choose and radius you define.</p>
 
 <dl class="method">
 <dt id="image2d.image2d.plot">
-<tt class="descname">plot</tt><big>(</big><em>vmin=nan</em>, <em>vmax=nan</em>, <em>colorbarcenter=False</em>, <em>colorbar=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x7fa39f0d1a50&gt;</em><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.plot" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot</tt><big>(</big><em>vmin=nan</em>, <em>vmax=nan</em>, <em>colorbarcenter=False</em>, <em>colorbar=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x7efd2760d090&gt;</em><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot the image2d</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -905,6 +913,14 @@ The default mask is a circle of center you choose and radius you define.</p>
 <dt id="image2d.image2d.triple_junction">
 <tt class="descname">triple_junction</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.triple_junction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.triple_junction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Localized the triple junction</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="image2d.image2d.vtk_export">
+<tt class="descname">vtk_export</tt><big>(</big><em>nameId</em><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.vtk_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.vtk_export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export the image2d into vtk file
+:param nameId: name of the output file
+:type name: str</p>
 </dd></dl>
 
 </dd></dl>

@@ -41,57 +41,33 @@ class aita(object):
     '''
     pass
     
-    def __init__(self,data_adress,micro_adress=0):
+    def __init__(self,phi1_field,phi_field,qua_field,resolution=1,micro_field=0):
         '''        
-        :param data_adress: where is the G50 output
-        :param micro_adress: where is the black and white image for the microstructure (default 0-no microstructure add)
-        :type data_adress: str
-        :type micro_adress: str
+        :param phi1_field: Euler angle phi1 map
+        :param phi_field: Euler angle phi map
+        :param qua_field: quality facteur map
+        :param resolution: spatial step size (mm); default = 1 mm
+        :param micro_field: microstructure (0 background, 1 grain boundary)
+        
+        :type phi1_field np.array
+        :type phi_field np.array
+        :type qua_field: np.array
+        :type resolution: float
+        :type micro_adress: np.array
+        
         :return: aita object output
         :rtype: aita
-        
-        
-        :Example: 
-            >>> adrdata='path of analyser output'
-            >>> adrmicro='path of microstructure image'
-            >>> data=aita.aita(adrdata,adrmicro)
-                        
+                             
         .. note:: Bunge Euler Angle convention is used (phi1,phi,phi2) ,phi2 is not compute as during optical measurement phi2 is not know.
         '''
         
-        # load data from G50 output
-        file=open(data_adress,'r')
-        azi,col,qua = np.loadtxt(file, skiprows=19,usecols=(2,3,5),dtype='f,f,f',comments='[eof]',unpack=True)
-        file.close()
-        # read head of file
-        file=open(data_adress,'r')
-        a=[]
-        [a.append(file.readline()) for i in list(xrange(16))]
-        file.close()
-        # resolution mu m
-        res=int(a[5][10:12])
-        # number of pixel along x
-        nx=int(a[14][9:13])
-        # number of pixel along y
-        ny=int(a[15][9:13])
-        # reashape the vector to a matrix
-        # use Bunge Euler angle convention
-        phi1_field=np.mod((azi.reshape((ny,nx))+90)*math.pi/180,2*math.pi)
-        phi_field=col.reshape((ny,nx))*math.pi/180
-        qua_field=qua.reshape((ny,nx))
         # create image object from data
-        self.phi1=im2d.image2d(phi1_field,res/1000.)
-        self.phi=im2d.image2d(phi_field,res/1000.)
-        self.qua=im2d.image2d(qua_field,res/1000.)
+        self.phi1=im2d.image2d(phi1_field,resolution)
+        self.phi=im2d.image2d(phi_field,resolution)
+        self.qua=im2d.image2d(qua_field,resolution)
         
-        # open the microstructure
-        if micro_adress==0:
-            micro_bmp=np.zeros([ny,nx,1])
-            mm=1
-        else:
-            micro_bmp = io.imread(micro_adress)
-            mm=np.max(micro_bmp)
-        self.micro=im2d.image2d(micro_bmp[:,:,0]/mm,res/1000.)
+        # create microstructure
+        self.micro=im2d.image2d(micro_field,resolution)
         self.grains=self.micro.grain_label()
         
         # replace grains boundary with NaN number

@@ -40,13 +40,13 @@ def aita5col(data_adress,micro_adress=0):
     
     #open micro.bmp if necessary
     if micro_adress==0:
-        micro_field=0;
+        micro_field=np.zeros((ny,nx))
     else:
         micro_bmp = io.imread(micro_adress)
         mm=np.max(micro_bmp)
         micro_field=micro_bmp[:,:,0]/mm
         
-    return aita.aita(phi1_field,phi_field,qua_field,resolution=resolution,micro_field=micro_field)
+    return aita.aita(phi1_field,phi_field,qua_field,micro_field,resolution=resolution)
 
 def aita3col():
     '''

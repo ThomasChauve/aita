@@ -41,7 +41,7 @@ class aita(object):
     '''
     pass
     
-    def __init__(self,phi1_field,phi_field,qua_field,resolution=1,micro_field=0):
+    def __init__(self,phi1_field,phi_field,qua_field,micro_field,resolution=1):
         '''        
         :param phi1_field: Euler angle phi1 map
         :param phi_field: Euler angle phi map

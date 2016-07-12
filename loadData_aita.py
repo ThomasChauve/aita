@@ -49,9 +49,47 @@ def aita5col(data_adress,micro_adress=0):
         
     return aita.aita(phi1_field,phi_field,qua_field,micro_field,resolution=resolution)
 
-def aita3col():
+def aita3col(data_adress, im_adress, micro_adress=0):
     '''
-    A toi de jouer Maurine
-    '''
+    Function to open data from AITA analyser using 'cistodat' which give output file with 3 column azi,col,qua)
+    Require to load an image file to get the image dimension nx, ny
     
-    return
+    :param data_adress: orientation.dat file
+    :type data_adress: str
+    :param im_adress : any .bmp image file from AITA G50
+    :type im_adress: str
+    :param micro_adress: .bmp (24 bit) with black background and grains boundary in white
+    :type micro_adress: str
+    :return: aita object
+    :rtype: aita
+    '''
+    # load data from G50 output
+    with open(data_adress,'r') as file:    
+        azi, col, qua = np.loadtxt(file, skiprows=16,comments='[eof]',unpack=True)
+    
+    with open(data_adress,'r') as file:
+        a = [file.readline() for i in range(16)] #Thomas utilise xrange, mais ca ne marche pas... verifier ce que ca change
+    # resolution mu m
+    res=int(a[5][10:12])
+    # transforme the resolution in mm
+    resolution=res/1000. 
+
+    im = Image.open(im_adress)
+    [nx,ny] = im.size
+    
+    # reashape the vector to a matrix
+    # use Bunge Euler angle convention
+
+    phi1_field = np.mod((azi.reshape((ny,nx))+90)*math.pi/180,2*math.pi)
+    phi_field = col.reshape((ny,nx))*math.pi/180
+    qua_field = qua.reshape((ny,nx))
+    
+    #open micro.bmp if necessary
+    if micro_adress==0:
+        micro_field=np.zeros((ny,nx))
+    else:
+        micro_bmp = io.imread(micro_adress)
+        mm=np.max(micro_bmp)
+        micro_field=micro_bmp[:,:,0]/mm
+    
+    return aita.aita(phi1_field,phi_field,qua_field,micro_field,resolution=resolution)

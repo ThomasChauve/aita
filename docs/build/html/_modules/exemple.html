@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>exemple &mdash; G50 AITA toolbox 0.1a1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1a1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="G50 AITA toolbox 0.1a1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">G50 AITA toolbox 0.1a1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for exemple</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Exemple of script</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="example"><a class="viewcode-back" href="../index.html#exemple.example">[docs]</a><span class="k">def</span> <span class="nf">example</span><span class="p">():</span>
+	<span class="sd">&#39;&#39;&#39;	</span>
+<span class="sd">	&gt;&gt;&gt; # load aita function</span>
+<span class="sd">	&gt;&gt;&gt; import aita</span>
+<span class="sd">	&gt;&gt;&gt; # load image2d function used to manipulate 2D image</span>
+<span class="sd">	&gt;&gt;&gt; import image2d as im</span>
+<span class="sd">	&gt;&gt;&gt; # load matplotlib for plot</span>
+<span class="sd">	&gt;&gt;&gt; import matplotlib.pylab as plt</span>
+<span class="sd">	&gt;&gt;&gt; # load pickle to save data</span>
+<span class="sd">	&gt;&gt;&gt; import pickle</span>
+<span class="sd">	&gt;&gt;&gt; # load loadData_aita where different function to create aita object are available</span>
+<span class="sd">	&gt;&gt;&gt; import loadData_aita as lda</span>
+<span class="sd">	</span>
+<span class="sd">	&gt;&gt;&gt; ####################################################################</span>
+<span class="sd">	&gt;&gt;&gt; ############################### Help ###############################</span>
+<span class="sd">	&gt;&gt;&gt; ####################################################################</span>
+<span class="sd">	&gt;&gt;&gt; help(aita)</span>
+<span class="sd">	</span>
+<span class="sd">	&gt;&gt;&gt; ####################################################################</span>
+<span class="sd">	&gt;&gt;&gt; ############## open the data from G50 analyseur#####################</span>
+<span class="sd">	&gt;&gt;&gt; ####################################################################</span>
+<span class="sd">	&gt;&gt;&gt; # the inputs come from G50 analyseur</span>
+<span class="sd">	&gt;&gt;&gt; adr_data=&#39;orientation_test.dat&#39;</span>
+<span class="sd">	&gt;&gt;&gt; adr_micro=&#39;micro_test.bmp&#39;</span>
+<span class="sd">	&gt;&gt;&gt; # create data where all the data are include</span>
+<span class="sd">	&gt;&gt;&gt; data=lda.aita5col(adr_data,adr_micro)</span>
+<span class="sd">		</span>
+<span class="sd">	&gt;&gt;&gt; ####################################################################</span>
+<span class="sd">	&gt;&gt;&gt; ####Correct the analysis position with the experiment position######</span>
+<span class="sd">	&gt;&gt;&gt; ####################################################################</span>
+<span class="sd">	&gt;&gt;&gt; # select a restricted area</span>
+<span class="sd">	&gt;&gt;&gt; data.crop()</span>
+<span class="sd">	&gt;&gt;&gt; # rotate of 180 degree the data</span>
+<span class="sd">	&gt;&gt;&gt; #data.rot180()</span>
+<span class="sd">	&gt;&gt;&gt; # Horizontal mirror on the data</span>
+<span class="sd">	&gt;&gt;&gt; #data.fliplr()</span>
+<span class="sd">	&gt;&gt;&gt; # remove data with quality under 75</span>
+<span class="sd">	&gt;&gt;&gt; data.filter(75)</span>
+<span class="sd">	&gt;&gt;&gt; # As creating this object can be time consuming you prefer reload it. So this is a way to save data</span>
+<span class="sd">	&gt;&gt;&gt; #pickle.dump(data, open(&#39;data_py.G50&#39;,&quot;wb&quot;))</span>
+<span class="sd">	&gt;&gt;&gt; # And to load the data</span>
+<span class="sd">	&gt;&gt;&gt; #data = pickle.load( open( &quot;data_py.G50&quot;, &quot;rb&quot;))</span>
+<span class="sd">		</span>
+<span class="sd">	</span>
+<span class="sd">	&gt;&gt;&gt; # we can know visualized the phi1 value</span>
+<span class="sd">	&gt;&gt;&gt; data.phi1.plot()</span>
+<span class="sd">	&gt;&gt;&gt; plt.show()</span>
+<span class="sd">		</span>
+<span class="sd">	&gt;&gt;&gt; # or grains</span>
+<span class="sd">	&gt;&gt;&gt; data.grains.plot()</span>
+<span class="sd">	&gt;&gt;&gt; plt.show()</span>
+<span class="sd">		</span>
+<span class="sd">	&gt;&gt;&gt; # colormap</span>
+<span class="sd">	&gt;&gt;&gt; data.plot()</span>
+<span class="sd">	&gt;&gt;&gt; plt.show()</span>
+<span class="sd">		</span>
+<span class="sd">	&gt;&gt;&gt; # plot pole figure with eigen -vectors and -values of the second order orientation tensor</span>
+<span class="sd">	&gt;&gt;&gt; data.plotpdf(peigen=True)</span>
+<span class="sd">	&gt;&gt;&gt; plt.show()</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	
+	
+	<span class="c"># load aita function</span>
+	<span class="kn">import</span> <span class="nn">aita</span>
+	<span class="c"># load image2d function used to manipulate 2D image</span>
+	<span class="kn">import</span> <span class="nn">image2d</span> <span class="kn">as</span> <span class="nn">im</span>
+	<span class="c"># load matplotlib for plot</span>
+	<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+	<span class="c"># load pickle to save data</span>
+	<span class="kn">import</span> <span class="nn">pickle</span>
+	<span class="c"># load loadData_aita where different function to create aita object are available</span>
+	<span class="kn">import</span> <span class="nn">loadData_aita</span> <span class="kn">as</span> <span class="nn">lda</span>
+	
+	<span class="c">####################################################################</span>
+	<span class="c">############################### Help ###############################</span>
+	<span class="c">####################################################################</span>
+	<span class="n">help</span><span class="p">(</span><span class="n">aita</span><span class="p">)</span>
+	
+	<span class="c">####################################################################</span>
+	<span class="c">############## open the data from G50 analyseur#####################</span>
+	<span class="c">####################################################################</span>
+	<span class="c"># the inputs come from G50 analyseur</span>
+	<span class="n">adr_data</span><span class="o">=</span><span class="s">&#39;orientation_test.dat&#39;</span>
+	<span class="n">adr_micro</span><span class="o">=</span><span class="s">&#39;micro_test.bmp&#39;</span>
+	<span class="c"># create data where all the data are include</span>
+	<span class="n">data</span><span class="o">=</span><span class="n">lda</span><span class="o">.</span><span class="n">aita5col</span><span class="p">(</span><span class="n">adr_data</span><span class="p">,</span><span class="n">adr_micro</span><span class="p">)</span>
+		
+	<span class="c">####################################################################</span>
+	<span class="c">####Correct the analysis position with the experiment position######</span>
+	<span class="c">####################################################################</span>
+	<span class="c"># select a restricted area</span>
+	<span class="n">data</span><span class="o">.</span><span class="n">crop</span><span class="p">()</span>
+	<span class="c"># rotate of 180 degree the data</span>
+	<span class="c">#data.rot180()</span>
+	<span class="c"># Horizontal mirror on the data</span>
+	<span class="c">#data.fliplr()</span>
+	<span class="c"># remove data with quality under 75</span>
+	<span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
+	<span class="c"># As creating this object can be time consuming you prefer reload it. So this is a way to save data</span>
+	<span class="c">#pickle.dump(data, open(&#39;data_py.G50&#39;,&quot;wb&quot;))</span>
+	<span class="c"># And to load the data</span>
+	<span class="c">#data = pickle.load( open( &quot;data_py.G50&quot;, &quot;rb&quot;))</span>
+		
+	
+	<span class="c"># we can know visualized the phi1 value</span>
+	<span class="n">data</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+		
+	<span class="c"># or grains</span>
+	<span class="n">data</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+		
+	<span class="c"># colormap</span>
+	<span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+		
+	<span class="c"># plot pole figure with eigen -vectors and -values of the second order orientation tensor</span>
+	<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">peigen</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">G50 AITA toolbox 0.1a1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Thomas Chauve &lt;thomas.chauve@lgge.obs.ujf-grenoble.fr&gt;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

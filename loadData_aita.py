@@ -56,7 +56,7 @@ def aita3col(data_adress, im_adress, micro_adress=0):
     
     :param data_adress: orientation.dat file
     :type data_adress: str
-    :param im_adress : any .bmp image file from AITA G50
+    :param im_adress: any .bmp image file from AITA G50
     :type im_adress: str
     :param micro_adress: .bmp (24 bit) with black background and grains boundary in white
     :type micro_adress: str
@@ -68,7 +68,7 @@ def aita3col(data_adress, im_adress, micro_adress=0):
         azi, col, qua = np.loadtxt(file, skiprows=16,comments='[eof]',unpack=True)
     
     with open(data_adress,'r') as file:
-        a = [file.readline() for i in range(16)] #Thomas utilise xrange, mais ca ne marche pas... verifier ce que ca change
+        a = [file.readline() for i in range(16)]
     # resolution mu m
     res=int(a[5][10:12])
     # transforme the resolution in mm

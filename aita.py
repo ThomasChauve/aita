@@ -12,6 +12,7 @@ Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quart
 
 import numpy as np
 import matplotlib.pyplot as plt
+import micro2d as mi2d
 import image2d as im2d
 import math
 import pylab
@@ -67,7 +68,7 @@ class aita(object):
         self.qua=im2d.image2d(qua_field,resolution)
         
         # create microstructure
-        self.micro=im2d.image2d(micro_field,resolution)
+        self.micro=mi2d.micro2d(micro_field,resolution)
         self.grains=self.micro.grain_label()
         
         # replace grains boundary with NaN number

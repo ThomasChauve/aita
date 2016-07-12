@@ -16,9 +16,11 @@ image2d is a class used to manipulate image under matrix shape and to do the ana
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from skimage import morphology
 import scipy
+import symetricTensorMap
+import TensorMap
 import pylab
+import datetime
 
 class image2d(object):
     '''
@@ -127,19 +129,6 @@ class image2d(object):
             arrowprops = dict(arrowstyle = '->', connectionstyle = 'arc3,rad=0'))
 
         return triple,c
-        
-    def grain_label(self):
-        '''
-        Label area in a black and white picture
-        
-        .. note:: black color for the background and white color for the boundary
-        '''
-        # function which label a microstructure skeleton in one number per grain
-        new_img=self.field
-        res=self.res
-        new_grain = morphology.label(new_img, neighbors=4, background=1)
-        grains=image2d(new_grain,res)
-        return grains
     
     def imresize(self,res):
         '''
@@ -201,6 +190,10 @@ class image2d(object):
         '''
         if (type(other) is image2d):
             return image2d(self.field*other.field,self.res)
+        if (type(other) is symetricTensorMap.symetricTensorMap):
+            return other*self
+        if (type(other) is TensorMap.TensorMap):
+            return other*self
         if (type(other) is float):
             return image2d(self.field*other,self.res)
         
@@ -221,45 +214,22 @@ class image2d(object):
         '''
         
         return image2d(np.power(self.field,nb),self.res)
-    
-    def plotBoundary(self,dilatation=0):
-        '''
-        Add boundary to the figure
         
-        :param dilatation: number of iteration for the dilation of 1 value - used this to make larger the boundaries (default 2)
-        :type dilatation: int
-        :Exemple:
-            >>> data.phi1.plot()
-            >>> data.micro.plotBoundary(dilatation=10)
-            >>> plt.show()
-        
-        .. note:: plot only the value of the pixel equal at 1
-        '''
-        # extract microstructure matrix
-        micro=self.field
-        # make the dilation the number of time wanted
-        if dilatation>0:
-            micro=scipy.ndimage.binary_dilation(micro, iterations=dilatation)
-        # create a mask with the 0 value
-        micro = np.ma.masked_where(micro == 0, micro)
-        # size of the image2d
-        ss=np.shape(self.field)    
-        # plot the boundaries
-        plt.imshow(micro, extent=(0,ss[1]*self.res,0,ss[0]*self.res), interpolation='none',cmap=cm.gist_gray)
-        
-        return
-        
-    def mask_build(self,r=0,grainId=[],pos_center=0):
+    def mask_build(self,polygone=False,r=0,grainId=[],pos_center=0):
         '''
         Create a mask map with NaN value where you don't want data and one were you want
         The default mask is a circle of center you choose and radius you define. 
         
-        :param r: radius of the circle, If r=0 you clic of each of grain you want
+        :param polygone: make a polygone mask ('not yet implemented')
+        :type polygone: bool
+        :param r: radius of the circle (warning what is the dimention of r mm ?)
         :type r: float
         :param grainId: You select the grainId you want in an array
         :type: array
         :return: mask
         :rtype: image2d
+        :return: vec (vector of grainId is selction by grain or pos_center if selection by circle or 0 if polygone )
+        :rtype: array
         
         .. note:: if you want applied a mask one your data just do data*mask where data is an image2d object
         '''
@@ -267,24 +237,14 @@ class image2d(object):
         ss=np.shape(self.field)
         mask_map=np.empty(ss, float)
         mask_map.fill(np.nan)
-        if (r==0 and len(grainId)==0) or r==0:
-            if len(grainId)==0:
-                plt.imshow(self.field,aspect='equal')
-                plt.waitforbuttonpress()
-                print('Select grains :')
-                print('midle mouse clic when you are finish')
-                xp=np.int32(np.array(plt.ginput(0)))
-                plt.close('all')
-            
-                gId=self.field[xp[:,1],xp[:,0]]
-            else:
-                gId=grainId
-                xp=0
-                
-            for i in range(len(gId)):
-                idx=np.where(self.field==gId[i])
-                mask_map[idx]=1
-        else:
+        
+        # option 1 : draw polygone
+        if polygone:
+            print('not yet implemented')           
+            xp=0
+                    
+        # option 2 : you want are circle
+        elif r!=0:
             if np.size(pos_center)==1:
                 self.plot()
                 plt.waitforbuttonpress()
@@ -292,7 +252,9 @@ class image2d(object):
                 xp=np.int32(np.array(plt.ginput(1))/self.res)
             else:
                 xp=pos_center
+            
             idx=[]
+            plt.close('all')
             for i in np.int32(np.arange(2*r/self.res+1)+xp[0][0]-r/self.res):
                 for j in np.int32(np.arange(2*r/self.res+1)+xp[0][1]-r/self.res):
                     if (((i-xp[0][0])**2+(j-xp[0][1])**2)**(0.5)<r/self.res):
@@ -302,11 +264,29 @@ class image2d(object):
             x=idx2[:,0]
             v=(y>=0)*(y<ss[0])*(x>=0)*(x<ss[1])
             mask_map[[y[v],x[v]]]=1
-            plt.close('all')
+            
             
             pc=float(sum(v))/float(len(y))
             if pc<1:
                 print('WARNING : area is close to the border only '+str(pc)+'% of the initial area as been selected')
+            
+        # option 3 : grainId    
+        else:
+            if len(grainId)!=0:    
+                gId=grainId
+            else:
+                plt.imshow(self.field,aspect='equal')
+                plt.waitforbuttonpress()
+                print('Select grains :')
+                print('midle mouse clic when you are finish')
+                xp=np.int32(np.array(plt.ginput(0)))
+                plt.close('all')
+                gId=self.field[xp[:,1],xp[:,0]]
+            
+            xp=gId
+            for i in range(len(gId)):
+                idx=np.where(self.field==gId[i])
+                mask_map[idx]=1    
         
         return image2d(mask_map,self.res),xp
     
@@ -332,3 +312,34 @@ class image2d(object):
         
         return skel
         
+    def vtk_export(self,nameId):
+        '''
+            Export the image2d into vtk file
+            :param nameId: name of the output file
+            :type name: str
+        '''
+
+        # size of the map
+        ss=np.shape(self.field)
+        # open micro.vtk file
+        micro_out=open(nameId+'.vtk','w')
+        # write the header of the file
+        micro_out.write('# vtk DataFile Version 3.0 ' + str(datetime.date.today()) + '\n')
+        micro_out.write('craft output \n')
+        micro_out.write('ASCII \n')
+        micro_out.write('DATASET STRUCTURED_POINTS \n')
+        micro_out.write('DIMENSIONS ' + str(ss[1]) + ' ' + str(ss[0]) +  ' 1\n')
+        micro_out.write('ORIGIN 0.000000 0.000000 0.000000 \n')
+        micro_out.write('SPACING ' + str(self.res) + ' ' + str(self.res) + ' 1.000000 \n')
+        micro_out.write('POINT_DATA ' + str(ss[0]*ss[1]) + '\n')
+        micro_out.write('SCALARS scalars float \n')
+        micro_out.write('LOOKUP_TABLE default \n')
+        for i in list(xrange(ss[0]))[::-1]:
+            for j in list(xrange(ss[1])):
+                micro_out.write(str(int(self.field[i][j]))+' ')
+            micro_out.write('\n')
+        
+                
+        micro_out.close()
+        
+        return "vtk file created"

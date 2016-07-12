@@ -2,6 +2,7 @@ import aita
 import numpy as np
 import math
 from skimage import io
+from PIL import Image
 
 def aita5col(data_adress,micro_adress=0):
     '''

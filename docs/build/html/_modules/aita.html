@@ -61,6 +61,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">mask2d</span>
 <span class="kn">import</span> <span class="nn">micro2d</span> <span class="kn">as</span> <span class="nn">mi2d</span>
 <span class="kn">import</span> <span class="nn">image2d</span> <span class="kn">as</span> <span class="nn">im2d</span>
 <span class="kn">import</span> <span class="nn">math</span>
@@ -760,7 +761,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">xIn</span><span class="p">,</span><span class="n">yIn</span><span class="p">]</span><span class="o">=</span><span class="n">ori</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">xIn</span><span class="p">,</span><span class="n">yIn</span><span class="p">]</span><span class="o">=</span><span class="n">ori</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             
-        <span class="k">return</span>
+        <span class="n">returnphi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">*</span><span class="n">mask</span>
     </div>
 <div class="viewcode-block" id="aita.new_ori_TJ"><a class="viewcode-back" href="../index.html#aita.aita.new_ori_TJ">[docs]</a>    <span class="k">def</span> <span class="nf">new_ori_TJ</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">mean</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -797,7 +798,40 @@
             <span class="n">con</span><span class="o">=</span><span class="nb">input</span><span class="p">()</span>
         
         <span class="k">return</span> <span class="n">res</span>
+    </div>
+<div class="viewcode-block" id="aita.mask"><a class="viewcode-back" href="../index.html#aita.aita.mask">[docs]</a>    <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mask</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Applied mask on aita data</span>
+<span class="sd">        </span>
+<span class="sd">        :param mask:</span>
+<span class="sd">        :type mask: mask2d.mask2d</span>
+<span class="sd">        </span>
+<span class="sd">        :return aita:</span>
+<span class="sd">        :rtype aita: aita</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="ow">is</span> <span class="n">mask2d</span><span class="o">.</span><span class="n">mask2d</span><span class="p">):</span>
+            <span class="n">phi1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">*</span><span class="n">mask</span>
+            <span class="n">phi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">*</span><span class="n">mask</span>
+            <span class="n">qua</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qua</span><span class="o">*</span><span class="n">mask</span>
+            <span class="n">micro</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span>
+            <span class="n">res</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">res</span>
+            <span class="c"># reduce the size of the aita data : remouve band of NaN</span>
+            <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">field</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">minx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">maxx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">miny</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">maxy</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
             
+           
+            
+            <span class="n">ma</span><span class="o">=</span><span class="n">aita</span><span class="p">(</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">minx</span><span class="p">:</span><span class="n">maxx</span><span class="p">,</span><span class="n">miny</span><span class="p">:</span><span class="n">maxy</span><span class="p">],</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">minx</span><span class="p">:</span><span class="n">maxx</span><span class="p">,</span><span class="n">miny</span><span class="p">:</span><span class="n">maxy</span><span class="p">],</span><span class="n">qua</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">minx</span><span class="p">:</span><span class="n">maxx</span><span class="p">,</span><span class="n">miny</span><span class="p">:</span><span class="n">maxy</span><span class="p">],</span><span class="n">micro</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">minx</span><span class="p">:</span><span class="n">maxx</span><span class="p">,</span><span class="n">miny</span><span class="p">:</span><span class="n">maxy</span><span class="p">],</span><span class="n">res</span><span class="p">)</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;mask is not and mask2d object&#39;</span><span class="p">)</span>
+            <span class="n">ma</span><span class="o">=</span><span class="bp">False</span>
+           
+        <span class="k">return</span> <span class="n">ma</span>
       
 <span class="c">##########################################################################</span>
 <span class="c">###################### Function need for aita class  #####################</span>

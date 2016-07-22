@@ -41,6 +41,10 @@ Other object defined
    :special-members:
    :members:
 
+.. automodule:: mask2d
+   :special-members:
+   :members:
+
 
 
 Indices and tables

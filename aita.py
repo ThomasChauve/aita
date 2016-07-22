@@ -12,6 +12,7 @@ Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quart
 
 import numpy as np
 import matplotlib.pyplot as plt
+import mask2d
 import micro2d as mi2d
 import image2d as im2d
 import math
@@ -711,7 +712,7 @@ class aita(object):
             self.phi1.field[xIn,yIn]=ori[0]
             self.phi.field[xIn,yIn]=ori[1]
             
-        return
+        returnphi=self.phi1*mask
     
     def new_ori_TJ(self,mask,mean=True):
         '''
@@ -748,7 +749,40 @@ class aita(object):
             con=input()
         
         return res
+    
+    def mask(self,mask):
+        '''
+        Applied mask on aita data
+        
+        :param mask:
+        :type mask: mask2d.mask2d
+        
+        :return aita:
+        :rtype aita: aita
+        '''
+        
+        if (type(mask) is mask2d.mask2d):
+            phi1=self.phi1*mask
+            phi=self.phi*mask
+            qua=self.qua*mask
+            micro=self.micro
+            res=self.micro.res
+            # reduce the size of the aita data : remouve band of NaN
+            x,y=np.where(mask.field==1)
+            minx=np.min(x)
+            maxx=np.max(x)
+            miny=np.min(y)
+            maxy=np.max(y)
             
+           
+            
+            ma=aita(phi1.field[minx:maxx,miny:maxy],phi.field[minx:maxx,miny:maxy],qua.field[minx:maxx,miny:maxy],micro.field[minx:maxx,miny:maxy],res)
+            
+        else:
+            print('mask is not and mask2d object')
+            ma=False
+           
+        return ma
       
 ##########################################################################
 ###################### Function need for aita class  #####################

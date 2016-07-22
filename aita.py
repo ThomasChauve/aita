@@ -431,8 +431,12 @@ class aita(object):
 
 
         # remove nan value
-        azi[np.isnan(azi)]=[]
-        col[np.isnan(col)]=[]
+        idnan=np.isnan(azi)
+        idlist=np.where(idnan==True)
+        
+        azi=np.delete(azi,idlist,0)
+        col=np.delete(col,idlist,0)
+        
         # compute [xc,yc,zc] the coordinate of the c-axis
         xc = np.multiply(np.cos(azi),np.sin(col))
         yc = np.multiply(np.sin(azi),np.sin(col))

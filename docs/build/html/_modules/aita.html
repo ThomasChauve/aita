@@ -480,8 +480,12 @@
 
 
         <span class="c"># remove nan value</span>
-        <span class="n">azi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">azi</span><span class="p">)]</span><span class="o">=</span><span class="p">[]</span>
-        <span class="n">col</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">col</span><span class="p">)]</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">idnan</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">azi</span><span class="p">)</span>
+        <span class="n">idlist</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">idnan</span><span class="o">==</span><span class="bp">True</span><span class="p">)</span>
+        
+        <span class="n">azi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">azi</span><span class="p">,</span><span class="n">idlist</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">col</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">idlist</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        
         <span class="c"># compute [xc,yc,zc] the coordinate of the c-axis</span>
         <span class="n">xc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>
         <span class="n">yc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">col</span><span class="p">))</span>

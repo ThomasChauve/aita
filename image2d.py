@@ -17,8 +17,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import scipy
+import symetricTensorMap
+import TensorMap
 import pylab
 import datetime
+import mask2d
 
 class image2d(object):
     '''
@@ -188,6 +191,12 @@ class image2d(object):
         '''
         if (type(other) is image2d):
             return image2d(self.field*other.field,self.res)
+        if (type(other) is mask2d.mask2d):
+            return image2d(self.field*other.field,self.res)
+        if (type(other) is symetricTensorMap.symetricTensorMap):
+            return other*self
+        if (type(other) is TensorMap.TensorMap):
+            return other*self
         if (type(other) is float):
             return image2d(self.field*other,self.res)
         
@@ -282,7 +291,7 @@ class image2d(object):
                 idx=np.where(self.field==gId[i])
                 mask_map[idx]=1    
         
-        return image2d(mask_map,self.res),xp
+        return mask2d.mask2d(mask_map,self.res),xp
     
     
     def skeleton(self):

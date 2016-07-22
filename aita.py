@@ -378,7 +378,7 @@ class aita(object):
         out_in.write('#------------------------------------------------------------\n')
         out_in.close()
     
-    def plotpdf(self,peigen=False,select_grain=False,grainlist=[],allpixel=False,filter=0):
+    def plotpdf(self,peigen=False,select_grain=False,grainlist=[],allpixel=False,filter=0,nbp=10000):
         '''
         Plot pole figure for c-axis (0001)
         
@@ -392,6 +392,8 @@ class aita(object):
         :type allpixel: bool
         :param filter: remove the pixel were the density is the lower, in fact the filter % lower point. (filter between 0 and 100)
         :type filter: float
+        :param nbp: number of pixel plotted
+        :type nbp: int
         :return: eigenvector a1, a2, a3
         :rtype: float
         :return: pole figure image
@@ -427,6 +429,10 @@ class aita(object):
             azi=np.mod(self.phi1.field.reshape((-1,1))-math.pi/2,2*math.pi)
             col=self.phi.field.reshape((-1,1))
 
+
+        # remove nan value
+        azi[np.isnan(azi)]=[]
+        col[np.isnan(col)]=[]
         # compute [xc,yc,zc] the coordinate of the c-axis
         xc = np.multiply(np.cos(azi),np.sin(col))
         yc = np.multiply(np.sin(azi),np.sin(col))
@@ -458,10 +464,7 @@ class aita(object):
             rand=np.arange(np.size(xx))
         else:
             # select only 10000 pixels
-            rand=np.int32(np.linspace(1., np.size(xc)-1, np.size(xc)/1000))
-            
-        # select phi[rand] is not an NaN value
-        rand=rand[~np.isnan(np.reshape(xx[rand],np.size(rand)))]
+            rand=np.int32(np.linspace(1., np.size(xc)-1, nbp))
                       
         # plot pixel orientation with density color bar
         x=np.reshape(xx[rand],np.size(rand))

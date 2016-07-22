@@ -382,6 +382,24 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="aita.aita.mask">
+<tt class="descname">mask</tt><big>(</big><em>mask</em><big>)</big><a class="reference internal" href="_modules/aita.html#aita.mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aita.aita.mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applied mask on aita data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mask</strong> (<a class="reference internal" href="#mask2d.mask2d" title="mask2d.mask2d"><em>mask2d.mask2d</em></a>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return aita:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype aita:</th><td class="field-body">aita</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="aita.aita.mean_grain">
 <tt class="descname">mean_grain</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/aita.html#aita.mean_grain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aita.aita.mean_grain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the mean orientation inside the grain</p>
@@ -858,7 +876,7 @@ The default mask is a circle of center you choose and radius you define.</p>
 
 <dl class="method">
 <dt id="image2d.image2d.plot">
-<tt class="descname">plot</tt><big>(</big><em>vmin=nan</em>, <em>vmax=nan</em>, <em>colorbarcenter=False</em>, <em>colorbar=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x7ff8a5284110&gt;</em><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.plot" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot</tt><big>(</big><em>vmin=nan</em>, <em>vmax=nan</em>, <em>colorbarcenter=False</em>, <em>colorbar=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x7fa93b05c390&gt;</em><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot the image2d</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -992,6 +1010,57 @@ The default mask is a circle of center you choose and radius you define.</p>
 <p class="first admonition-title">Note</p>
 <p class="last">plot only the value of the pixel equal at 1</p>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-mask2d"></span><p>Created on 22 juil. 2015</p>
+<p>&#64;author: Thomas Chauve
+&#64;contact: <a class="reference external" href="mailto:thomas&#46;chauve&#37;&#52;&#48;lgge&#46;obs&#46;ujf-grenoble&#46;fr">thomas<span>&#46;</span>chauve<span>&#64;</span>lgge<span>&#46;</span>obs<span>&#46;</span>ujf-grenoble<span>&#46;</span>fr</a>
+&#64;license: CC-BY-CC</p>
+<dl class="function">
+<dt id="mask2d.load_mask">
+<tt class="descclassname">mask2d.</tt><tt class="descname">load_mask</tt><big>(</big><em>adr_bmp</em>, <em>res=1</em><big>)</big><a class="reference internal" href="_modules/mask2d.html#load_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mask2d.load_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a mask from a black and white bmp image where whith correspond to the selected area</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>adr_bmp</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; path of the mask bmp file</li>
+<li><strong>res</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; resolution of the picture mm (default 1)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return mask:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Rtype mask:</th><td class="field-body"><p class="first last">mask2d</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="mask2d.mask2d">
+<em class="property">class </em><tt class="descclassname">mask2d.</tt><tt class="descname">mask2d</tt><big>(</big><em>field</em>, <em>resolution</em><big>)</big><a class="reference internal" href="_modules/mask2d.html#mask2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mask2d.mask2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>mask2d is a class which herit from image2d but it is restricted to microstructure object (background NaN, selected area 1)</p>
+<dl class="method">
+<dt id="mask2d.mask2d.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>field</em>, <em>resolution</em><big>)</big><a class="reference internal" href="_modules/mask2d.html#mask2d.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mask2d.mask2d.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor : field is a matrix and resolution is the step size in mm</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; tabular of scalar data</li>
+<li><strong>resolution</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; step size resolution (millimeters)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>

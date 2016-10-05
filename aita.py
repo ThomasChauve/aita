@@ -12,6 +12,7 @@ Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quart
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.mlab import griddata
 import mask2d
 import micro2d as mi2d
 import image2d as im2d
@@ -378,7 +379,7 @@ class aita(object):
         out_in.write('#------------------------------------------------------------\n')
         out_in.close()
     
-    def plotpdf(self,peigen=False,select_grain=False,grainlist=[],allpixel=False,filter=0,nbp=10000):
+    def plotpdf(self,peigen=False,select_grain=False,grainlist=[],allpixel=False,filter=0,nbp=10000,contourf=False):
         '''
         Plot pole figure for c-axis (0001)
         
@@ -394,6 +395,8 @@ class aita(object):
         :type filter: float
         :param nbp: number of pixel plotted
         :type nbp: int
+        :param contourf: Do you want to add contouring to your pole figure ? (Default : False)
+        :type contourf: bool
         :return: eigenvector a1, a2, a3
         :rtype: float
         :return: pole figure image
@@ -472,7 +475,7 @@ class aita(object):
                       
         # plot pixel orientation with density color bar
         x=np.reshape(xx[rand],np.size(rand))
-        y=np.reshape(yy[rand],np.size(rand))
+        y=np.reshape(yy[rand],np.size(rand)) # Is the reshape needed ?
         xy = np.vstack([x,y])
         z = gaussian_kde(xy)(xy)
         
@@ -481,7 +484,18 @@ class aita(object):
         y=y[idf]
         z=z[idf]
         
-        plt.scatter(x, y, c=z, s=20, edgecolor='')
+        
+        
+        if contourf:
+            xi = np.linspace(-1.5, 1.5, 1000)
+            yi = np.linspace(-1.5, 1.5, 1000)
+            Zc = griddata(x, y, z, xi, yi, interp='linear')
+            Xc, Yc = np.meshgrid(xi, yi)
+            plt.contourf(Xc,Yc,Zc)
+        else:
+            plt.scatter(x, y, c=z, s=20, edgecolor='')
+        
+        
         plt.colorbar(orientation='vertical',aspect=4,shrink=0.5)
         # compute a circle
         omega = np.linspace(0, 2*math.pi, 60)
@@ -886,3 +900,23 @@ def isInsideTriangle(P,p1,p2,p3): #is P inside triangle made by p1,p2,p3?
     second = abs (x1 * (y - y3) + x * (y3 - y1) + x3 * (y1 - y))
     third = abs (x * (y2 - y3) + x2 * (y3 - y) + x3 * (y - y2))
     return abs(first + second + third - full) < .0000001
+
+def euler2azi(phi1,phi):
+    '''
+    Convert Euler angle to azimuth and colatitude
+    :param phi1:
+    :type phi1: array
+    :param phi:
+    :type phi: array
+    :return: azi
+    :rtype: array
+    :return: col
+    :rtype: array
+    '''
+    col=phi
+    azi=np.mod((phi1-math.pi/2.),2.*math.pi)
+    
+    return azi,col
+    
+    
+    

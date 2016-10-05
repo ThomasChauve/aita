@@ -64,3 +64,12 @@ def load_mask(adr_bmp,res=1):
     mask[id]=1
     
     return mask2d(mask,res)
+
+def complementary(self):
+    '''
+    Return complementary mask
+    '''
+    m=np.ones(np.shape(self.field))
+    m[np.where(self.field==1)]=np.NaN
+
+    return mask2d(m,self.res)

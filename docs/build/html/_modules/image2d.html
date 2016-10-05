@@ -71,6 +71,7 @@
 <span class="kn">import</span> <span class="nn">pylab</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">mask2d</span>
+<span class="kn">import</span> <span class="nn">math</span>
 
 <div class="viewcode-block" id="image2d"><a class="viewcode-back" href="../index.html#image2d.image2d">[docs]</a><span class="k">class</span> <span class="nc">image2d</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -338,7 +339,7 @@
             <span class="n">xp</span><span class="o">=</span><span class="n">gId</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gId</span><span class="p">)):</span>
                 <span class="n">idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="o">==</span><span class="n">gId</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="n">mask_map</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>    
+                <span class="n">mask_map</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
         
         <span class="k">return</span> <span class="n">mask2d</span><span class="o">.</span><span class="n">mask2d</span><span class="p">(</span><span class="n">mask_map</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">),</span><span class="n">xp</span>
     
@@ -394,7 +395,153 @@
                 
         <span class="n">micro_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         
-        <span class="k">return</span> <span class="s">&quot;vtk file created&quot;</span></div></div>
+        <span class="k">return</span> <span class="s">&quot;vtk file created&quot;</span>
+    </div>
+<div class="viewcode-block" id="image2d.auto_correlation"><a class="viewcode-back" href="../index.html#image2d.image2d.auto_correlation">[docs]</a>    <span class="k">def</span> <span class="nf">auto_correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Compute the auto-correlation function from Dumoulin 2003</span>
+<span class="sd">        </span>
+<span class="sd">        :param pad: padding with mean data (default 1)</span>
+<span class="sd">        :type pad: int</span>
+<span class="sd">        </span>
+<span class="sd">        :return: res_auto which the auto correlation function</span>
+<span class="sd">        :rtype: image2d</span>
+<span class="sd">        :return: Cinf see equation 6 Doumalin 2003</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        :return: profil, it correspond to 180 profile taken for along line with direction between 0 and 180°. The profil[i,:] correspond to a line making an angle of i degree from x direction.</span>
+<span class="sd">        :rtype: np.array 180*length profile</span>
+<span class="sd">        :return: xi, it correspond to the distance along the profile for the variable profile</span>
+<span class="sd">        :rtype: np.array 180*length profile</span>
+<span class="sd">        :return: cross, it correspond to the length of the autocorrelation radius</span>
+<span class="sd">        :rtype: np.array dim=180</span>
+<span class="sd">        :Exemple:</span>
+<span class="sd">            &gt;&gt;&gt; # Using a fake image</span>
+<span class="sd">            &gt;&gt;&gt; data=image2d.image2d(np.eye(200),1)</span>
+<span class="sd">            &gt;&gt;&gt; [res_auto,Cinf,profil,xi,cross]=data.auto_correlation(pad=2)</span>
+<span class="sd">            &gt;&gt;&gt; # plot the auto correlation function</span>
+<span class="sd">            &gt;&gt;&gt; res_auto.plot()</span>
+<span class="sd">            &gt;&gt;&gt;plt.show()</span>
+<span class="sd">            &gt;&gt;&gt; # plot the auto_correlation radius in function of the angle of the profile</span>
+<span class="sd">            &gt;&gt;&gt; plt.plot(cross)</span>
+<span class="sd">            &gt;&gt;&gt; plt.xlabel(&#39;angle degree&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; plt.ylabel(&#39;auto correlation radius (mm)&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
+<span class="sd">            &gt;&gt;&gt; # extract the max and min auto correlation radius</span>
+<span class="sd">            &gt;&gt;&gt; id=np.where(cross==np.min(cross))</span>
+<span class="sd">            &gt;&gt;&gt; minC=id[0][0]</span>
+<span class="sd">            &gt;&gt;&gt; id=np.where(cross==np.max(cross))</span>
+<span class="sd">            &gt;&gt;&gt; maxC=id[0][0]</span>
+<span class="sd">            &gt;&gt;&gt; ss=np.shape(xi) </span>
+<span class="sd">            &gt;&gt;&gt; CC=np.ones(ss[1])*Cinf</span>
+<span class="sd">            &gt;&gt;&gt; plt.figure()</span>
+<span class="sd">            &gt;&gt;&gt; plt.plot(xi[0,:],CC)</span>
+<span class="sd">            &gt;&gt;&gt; plt.hold(&#39;on&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; plt.plot(xi[minC,:],profil[minC,:])</span>
+<span class="sd">            &gt;&gt;&gt; plt.plot(xi[maxC,:],profil[maxC,:])</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
+<span class="sd">            </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c"># build a square picture nm*nm</span>
+        <span class="n">nm</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">))</span>
+        <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">nm</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">nm</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c"># mean of the data field</span>
+        <span class="n">mean_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="c"># if there is nan value in data you need to replace them the choise now is to replace them by the mean value but may be interpolation can be better.</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">=</span><span class="n">mean_data</span>
+        <span class="c">#</span>
+        <span class="n">fpad</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">pad</span><span class="o">*</span><span class="n">nm</span><span class="p">,</span><span class="n">pad</span><span class="o">*</span><span class="n">nm</span><span class="p">])</span><span class="o">*</span><span class="n">mean_data</span>
+        <span class="n">fpad</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">nm</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">nm</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">data</span>
+        <span class="c">##</span>
+        <span class="n">FFT_fpad</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">fpad</span><span class="p">)</span>
+        <span class="n">abs_FFTpad</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">FFT_fpad</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">An</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">abs_FFTpad</span><span class="p">)</span>
+        <span class="n">mAn</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">An</span><span class="p">)</span>
+        
+        <span class="n">Autocor</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">An</span><span class="o">/</span><span class="n">mAn</span><span class="p">));</span>
+        <span class="n">Cinf</span><span class="o">=</span><span class="n">mean_data</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fpad</span><span class="o">**</span><span class="mi">2</span><span class="p">);</span>
+        <span class="n">res_auto</span><span class="o">=</span><span class="n">image2d</span><span class="p">(</span><span class="n">Autocor</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        
+        
+        <span class="c"># etract min an max direction</span>
+        <span class="n">ss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">res_auto</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="n">x0</span><span class="o">=</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">y0</span><span class="o">=</span><span class="n">x0</span>
+        <span class="n">cross</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">180</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">180</span><span class="p">)):</span>
+            <span class="n">xt</span><span class="o">=</span><span class="n">x0</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span><span class="p">)</span><span class="o">*</span><span class="n">x0</span>
+            <span class="n">yt</span><span class="o">=</span><span class="n">y0</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span><span class="p">)</span><span class="o">*</span><span class="n">y0</span>
+            <span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">],[</span><span class="n">xt</span><span class="p">,</span><span class="n">yt</span><span class="p">]])</span>
+            <span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">out</span><span class="p">,</span><span class="n">pos</span><span class="p">]</span><span class="o">=</span><span class="n">res_auto</span><span class="o">.</span><span class="n">extract_profil</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">l</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+                <span class="n">profil</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">180</span><span class="p">,</span><span class="n">l</span><span class="p">])</span>
+                <span class="n">xi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">180</span><span class="p">,</span><span class="n">l</span><span class="p">])</span>
+            <span class="n">profil</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">l</span><span class="p">]</span>
+            <span class="n">xi</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">l</span><span class="p">]</span>
+            <span class="c">#</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">profil</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">-</span><span class="mf">1.002</span><span class="o">*</span><span class="n">Cinf</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">cross</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cross</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            
+        <span class="k">return</span> <span class="n">res_auto</span><span class="p">,</span><span class="n">Cinf</span><span class="p">,</span><span class="n">profil</span><span class="p">,</span><span class="n">xi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">,</span><span class="n">cross</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span>
+    </div>
+<div class="viewcode-block" id="image2d.extract_profil"><a class="viewcode-back" href="../index.html#image2d.image2d.extract_profil">[docs]</a>    <span class="k">def</span> <span class="nf">extract_profil</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Extract data along a given profile</span>
+<span class="sd">        </span>
+<span class="sd">        :param pos: correspond to the position of the line np.array([[X0,Y0],[X1,Y1]])</span>
+<span class="sd">        :type pos: np.array dim 2*2</span>
+<span class="sd">        :return: x</span>
+<span class="sd">        :rtype: postion along the profile</span>
+<span class="sd">        :return: out</span>
+<span class="sd">        :rtype: value along the profile</span>
+<span class="sd">        :return: pos</span>
+<span class="sd">        :rtype: starting and ending points</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c"># size of the map</span>
+        <span class="n">ss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="c"># plot the data with phi1 value</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">h</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+            <span class="c"># select initial and final points for the line</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Select initial and final points for the line :&#39;</span><span class="p">)</span>
+            <span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pylab</span><span class="o">.</span><span class="n">ginput</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+        
+        <span class="n">yy</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span>
+        <span class="n">xx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span>
+        
+        <span class="c"># numbers of pixel along the line</span>
+        <span class="n">nb_pixel</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">xx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">yy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">yy</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        
+        <span class="c"># calcul for each pixel</span>
+        <span class="n">out</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">x</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">xi</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">yi</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">nb_pixel</span><span class="p">)):</span>
+            <span class="c"># find the coordinate x an y along the line</span>
+            <span class="n">xi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="p">(</span><span class="n">xx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">nb_pixel</span><span class="o">+</span><span class="n">xx</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="n">yi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="p">(</span><span class="n">yy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">yy</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">nb_pixel</span><span class="o">+</span><span class="n">yy</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="c"># extract phi and phi1</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">xi</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">yi</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">xi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">xi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">yi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">yi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pos</span>
+        
+        
+        
+        
+        </div></div>
 </pre></div>
 
           </div>

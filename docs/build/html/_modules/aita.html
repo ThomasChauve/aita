@@ -61,6 +61,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.mlab</span> <span class="kn">import</span> <span class="n">griddata</span>
 <span class="kn">import</span> <span class="nn">mask2d</span>
 <span class="kn">import</span> <span class="nn">micro2d</span> <span class="kn">as</span> <span class="nn">mi2d</span>
 <span class="kn">import</span> <span class="nn">image2d</span> <span class="kn">as</span> <span class="nn">im2d</span>
@@ -427,7 +428,7 @@
         <span class="n">out_in</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#------------------------------------------------------------</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
         <span class="n">out_in</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     </div>
-<div class="viewcode-block" id="aita.plotpdf"><a class="viewcode-back" href="../index.html#aita.aita.plotpdf">[docs]</a>    <span class="k">def</span> <span class="nf">plotpdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">peigen</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">select_grain</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">grainlist</span><span class="o">=</span><span class="p">[],</span><span class="n">allpixel</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="nb">filter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">nbp</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+<div class="viewcode-block" id="aita.plotpdf"><a class="viewcode-back" href="../index.html#aita.aita.plotpdf">[docs]</a>    <span class="k">def</span> <span class="nf">plotpdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">peigen</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">select_grain</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">grainlist</span><span class="o">=</span><span class="p">[],</span><span class="n">allpixel</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="nb">filter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">nbp</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span><span class="n">contourf</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Plot pole figure for c-axis (0001)</span>
 <span class="sd">        </span>
@@ -443,6 +444,8 @@
 <span class="sd">        :type filter: float</span>
 <span class="sd">        :param nbp: number of pixel plotted</span>
 <span class="sd">        :type nbp: int</span>
+<span class="sd">        :param contourf: Do you want to add contouring to your pole figure ? (Default : False)</span>
+<span class="sd">        :type contourf: bool</span>
 <span class="sd">        :return: eigenvector a1, a2, a3</span>
 <span class="sd">        :rtype: float</span>
 <span class="sd">        :return: pole figure image</span>
@@ -521,7 +524,7 @@
                       
         <span class="c"># plot pixel orientation with density color bar</span>
         <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="p">[</span><span class="n">rand</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">rand</span><span class="p">))</span>
-        <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">yy</span><span class="p">[</span><span class="n">rand</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">rand</span><span class="p">))</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">yy</span><span class="p">[</span><span class="n">rand</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">rand</span><span class="p">))</span> <span class="c"># Is the reshape needed ?</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">(</span><span class="n">xy</span><span class="p">)(</span><span class="n">xy</span><span class="p">)</span>
         
@@ -530,7 +533,18 @@
         <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="n">idf</span><span class="p">]</span>
         <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">idf</span><span class="p">]</span>
         
-        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        
+        
+        <span class="k">if</span> <span class="n">contourf</span><span class="p">:</span>
+            <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+            <span class="n">yi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+            <span class="n">Zc</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">interp</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">)</span>
+            <span class="n">Xc</span><span class="p">,</span> <span class="n">Yc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">Xc</span><span class="p">,</span><span class="n">Yc</span><span class="p">,</span><span class="n">Zc</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        
+        
         <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s">&#39;vertical&#39;</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
         <span class="c"># compute a circle</span>
         <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
@@ -934,7 +948,27 @@
     <span class="n">first</span> <span class="o">=</span> <span class="nb">abs</span> <span class="p">(</span><span class="n">x1</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">x2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">))</span>
     <span class="n">second</span> <span class="o">=</span> <span class="nb">abs</span> <span class="p">(</span><span class="n">x1</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y3</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">y3</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x3</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y</span><span class="p">))</span>
     <span class="n">third</span> <span class="o">=</span> <span class="nb">abs</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y3</span><span class="p">)</span> <span class="o">+</span> <span class="n">x2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y3</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">x3</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y2</span><span class="p">))</span>
-    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">first</span> <span class="o">+</span> <span class="n">second</span> <span class="o">+</span> <span class="n">third</span> <span class="o">-</span> <span class="n">full</span><span class="p">)</span> <span class="o">&lt;</span> <span class="o">.</span><span class="mo">0000001</span></div>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">first</span> <span class="o">+</span> <span class="n">second</span> <span class="o">+</span> <span class="n">third</span> <span class="o">-</span> <span class="n">full</span><span class="p">)</span> <span class="o">&lt;</span> <span class="o">.</span><span class="mo">0000001</span>
+</div>
+<div class="viewcode-block" id="euler2azi"><a class="viewcode-back" href="../index.html#aita.euler2azi">[docs]</a><span class="k">def</span> <span class="nf">euler2azi</span><span class="p">(</span><span class="n">phi1</span><span class="p">,</span><span class="n">phi</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Convert Euler angle to azimuth and colatitude</span>
+<span class="sd">    :param phi1:</span>
+<span class="sd">    :type phi1: array</span>
+<span class="sd">    :param phi:</span>
+<span class="sd">    :type phi: array</span>
+<span class="sd">    :return: azi</span>
+<span class="sd">    :rtype: array</span>
+<span class="sd">    :return: col</span>
+<span class="sd">    :rtype: array</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">col</span><span class="o">=</span><span class="n">phi</span>
+    <span class="n">azi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">((</span><span class="n">phi1</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span><span class="mf">2.</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">azi</span><span class="p">,</span><span class="n">col</span>
+    
+    
+    </div>
 </pre></div>
 
           </div>

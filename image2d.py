@@ -17,9 +17,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import scipy
+import symetricTensorMap
+import TensorMap
 import pylab
 import datetime
 import mask2d
+import math
 
 class image2d(object):
     '''
@@ -191,6 +194,10 @@ class image2d(object):
             return image2d(self.field*other.field,self.res)
         if (type(other) is mask2d.mask2d):
             return image2d(self.field*other.field,self.res)
+        if (type(other) is symetricTensorMap.symetricTensorMap):
+            return other*self
+        if (type(other) is TensorMap.TensorMap):
+            return other*self
         if (type(other) is float):
             return image2d(self.field*other,self.res)
         
@@ -283,7 +290,7 @@ class image2d(object):
             xp=gId
             for i in range(len(gId)):
                 idx=np.where(self.field==gId[i])
-                mask_map[idx]=1    
+                mask_map[idx]=1
         
         return mask2d.mask2d(mask_map,self.res),xp
     
@@ -340,3 +347,149 @@ class image2d(object):
         micro_out.close()
         
         return "vtk file created"
+    
+    def auto_correlation(self,pad=1):
+        '''
+        Compute the auto-correlation function from Dumoulin 2003
+        
+        :param pad: padding with mean data (default 1)
+        :type pad: int
+        
+        :return: res_auto which the auto correlation function
+        :rtype: image2d
+        :return: Cinf see equation 6 Doumalin 2003
+        :rtype: float
+        :return: profil, it correspond to 180 profile taken for along line with direction between 0 and 180°. The profil[i,:] correspond to a line making an angle of i degree from x direction.
+        :rtype: np.array 180*length profile
+        :return: xi, it correspond to the distance along the profile for the variable profile
+        :rtype: np.array 180*length profile
+        :return: cross, it correspond to the length of the autocorrelation radius
+        :rtype: np.array dim=180
+        :Exemple:
+            >>> # Using a fake image
+            >>> data=image2d.image2d(np.eye(200),1)
+            >>> [res_auto,Cinf,profil,xi,cross]=data.auto_correlation(pad=2)
+            >>> # plot the auto correlation function
+            >>> res_auto.plot()
+            >>>plt.show()
+            >>> # plot the auto_correlation radius in function of the angle of the profile
+            >>> plt.plot(cross)
+            >>> plt.xlabel('angle degree')
+            >>> plt.ylabel('auto correlation radius (mm)')
+            >>> plt.show()
+            >>> # extract the max and min auto correlation radius
+            >>> id=np.where(cross==np.min(cross))
+            >>> minC=id[0][0]
+            >>> id=np.where(cross==np.max(cross))
+            >>> maxC=id[0][0]
+            >>> ss=np.shape(xi) 
+            >>> CC=np.ones(ss[1])*Cinf
+            >>> plt.figure()
+            >>> plt.plot(xi[0,:],CC)
+            >>> plt.hold('on')
+            >>> plt.plot(xi[minC,:],profil[minC,:])
+            >>> plt.plot(xi[maxC,:],profil[maxC,:])
+            >>> plt.show()
+            
+        '''
+        # build a square picture nm*nm
+        nm=np.min(np.shape(self.field))
+        data=self.field[0:nm-1,0:nm-1]
+        # mean of the data field
+        mean_data=np.nanmean(data)
+        # if there is nan value in data you need to replace them the choise now is to replace them by the mean value but may be interpolation can be better.
+        id=np.isnan(data)
+        if np.size(id)>0:
+            data[id]=mean_data
+        #
+        fpad=np.ones([pad*nm,pad*nm])*mean_data
+        fpad[0:nm-1,0:nm-1]=data
+        ##
+        FFT_fpad=np.fft.fft2(fpad)
+        abs_FFTpad=np.abs(FFT_fpad)**2
+        An=np.fft.ifft2(abs_FFTpad)
+        mAn=np.nanmax(An)
+        
+        Autocor=np.abs(np.fft.fftshift(An/mAn));
+        Cinf=mean_data**2/np.mean(fpad**2);
+        res_auto=image2d(Autocor,1)
+        
+        
+        # etract min an max direction
+        ss=np.shape(res_auto.field)
+        x0=ss[0]/2
+        y0=x0
+        cross=np.ones(180)
+        for i in list(range(180)):
+            xt=x0+np.cos(i*math.pi/180.)*x0
+            yt=y0+np.sin(i*math.pi/180.)*y0
+            pos=np.array([[x0,y0],[xt,yt]])
+            [x,out,pos]=res_auto.extract_profil(pos=pos)
+            if i==0:
+                l=np.size(x)-1
+                profil=np.ones([180,l])
+                xi=np.ones([180,l])
+            profil[i,:]=out[0:l]
+            xi[i,:]=x[0:l]
+            #
+            id=np.where(profil[i,:]-1.002*Cinf<0)
+            if np.size(id)==0:
+                cross[i]=np.size(x)
+            else:
+                cross[i]=id[0][0]
+            
+        return res_auto,Cinf,profil,xi*self.res,cross*self.res
+    
+    def extract_profil(self,pos=0):
+        '''
+        Extract data along a given profile
+        
+        :param pos: correspond to the position of the line np.array([[X0,Y0],[X1,Y1]])
+        :type pos: np.array dim 2*2
+        :return: x
+        :rtype: postion along the profile
+        :return: out
+        :rtype: value along the profile
+        :return: pos
+        :rtype: starting and ending points
+        '''
+        
+        # size of the map
+        ss=np.shape(self.field)
+        # plot the data with phi1 value
+        if np.size(pos)==1:
+            h=plt.figure()
+            self.plot()
+            # select initial and final points for the line
+            print('Select initial and final points for the line :')
+            pos=np.array(pylab.ginput(2))
+            plt.close(h)
+        
+        yy=np.float32([pos[0][0],pos[1][0]])/self.res
+        xx=np.float32([pos[0][1],pos[1][1]])/self.res
+        
+        # numbers of pixel along the line
+        nb_pixel=np.int32(np.sqrt((xx[1]-xx[0])**2+(yy[1]-yy[0])**2))
+        
+        # calcul for each pixel
+        out=[]
+        x=[]
+        xi=[]
+        yi=[]
+        for i in list(range(nb_pixel)):
+            # find the coordinate x an y along the line
+            xi.append(ss[0]-np.int32(np.round(i*(xx[1]-xx[0])/nb_pixel+xx[0])))
+            yi.append(np.int32(np.round(i*(yy[1]-yy[0])/nb_pixel+yy[0])))
+            # extract phi and phi1
+            out.append(self.field[xi[i],yi[i]])
+            if i>0:
+                x.append(np.sqrt((xi[i]-xi[0])**2+(yi[i]-yi[0])**2))
+            else:
+                x.append(0.0)
+            
+        return x, out, pos
+        
+        
+        
+        
+        

@@ -246,7 +246,7 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nameId</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the prefixe used for craft files</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nameId</strong> (<em>str</em>) &#8211; name of the prefixe used for craft files</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">create file : nameId_micro.vtk, nameId.phase, nameId.in, nameId.load, nameId.output</p>
@@ -308,7 +308,7 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; limit quality value between 0 to 100</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> (<em>int</em>) &#8211; limit quality value between 0 to 100</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">data object with no orientation with quality value under threshold</p>
@@ -363,7 +363,7 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>res</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the new resolution wanted in millimeter (mm)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>res</strong> (<em>float</em>) &#8211; the new resolution wanted in millimeter (mm)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">data with the resolution wanted</p>
@@ -431,9 +431,9 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>plot</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; option for to misorientation profile plot, &#8216;all&#8217; (default), &#8216;mis2o&#8217;, &#8216;mis2p&#8217;</li>
-<li><strong>orientation</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; option for the color code used for the map, False (default) use phi1 and True use colorwheel (take time)</li>
-<li><strong>pos</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; coordinate of the profile line - 0 (default) click on the map to select the 2 points</li>
+<li><strong>plot</strong> (<em>str</em>) &#8211; option for to misorientation profile plot, &#8216;all&#8217; (default), &#8216;mis2o&#8217;, &#8216;mis2p&#8217;</li>
+<li><strong>orientation</strong> (<em>bool</em>) &#8211; option for the color code used for the map, False (default) use phi1 and True use colorwheel (take time)</li>
+<li><strong>pos</strong> (<em>array</em>) &#8211; coordinate of the profile line - 0 (default) click on the map to select the 2 points</li>
 </ul>
 </td>
 </tr>
@@ -481,7 +481,7 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nlut</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of pixel tou want for the 2d LUT (default 512)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nlut</strong> (<em>int</em>) &#8211; number of pixel tou want for the 2d LUT (default 512)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">figure of orientation mapping</p>
@@ -509,19 +509,20 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 
 <dl class="method">
 <dt id="aita.aita.plotpdf">
-<tt class="descname">plotpdf</tt><big>(</big><em>peigen=False</em>, <em>select_grain=False</em>, <em>grainlist=[]</em>, <em>allpixel=False</em>, <em>filter=0</em>, <em>nbp=10000</em><big>)</big><a class="reference internal" href="_modules/aita.html#aita.plotpdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aita.aita.plotpdf" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plotpdf</tt><big>(</big><em>peigen=False</em>, <em>select_grain=False</em>, <em>grainlist=[]</em>, <em>allpixel=False</em>, <em>filter=0</em>, <em>nbp=10000</em>, <em>contourf=False</em><big>)</big><a class="reference internal" href="_modules/aita.html#aita.plotpdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aita.aita.plotpdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot pole figure for c-axis (0001)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>peigen</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; Plot the eigenvalues and eigenvectors on the pole figure (default = False)</li>
-<li><strong>select_grain</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; select the grains use for the pole figure</li>
-<li><strong>grainlist</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; give the list of the grainId you want to plot</li>
-<li><strong>allpixel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; do you want plot all the pixel ?</li>
-<li><strong>filter</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; remove the pixel were the density is the lower, in fact the filter % lower point. (filter between 0 and 100)</li>
-<li><strong>nbp</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of pixel plotted</li>
+<li><strong>peigen</strong> (<em>bool</em>) &#8211; Plot the eigenvalues and eigenvectors on the pole figure (default = False)</li>
+<li><strong>select_grain</strong> (<em>bool</em>) &#8211; select the grains use for the pole figure</li>
+<li><strong>grainlist</strong> (<em>list</em>) &#8211; give the list of the grainId you want to plot</li>
+<li><strong>allpixel</strong> (<em>bool</em>) &#8211; do you want plot all the pixel ?</li>
+<li><strong>filter</strong> (<em>float</em>) &#8211; remove the pixel were the density is the lower, in fact the filter % lower point. (filter between 0 and 100)</li>
+<li><strong>nbp</strong> (<em>int</em>) &#8211; number of pixel plotted</li>
+<li><strong>contourf</strong> (<em>bool</em>) &#8211; Do you want to add contouring to your pole figure ? (Default : False)</li>
 </ul>
 </td>
 </tr>
@@ -581,8 +582,8 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; x cartesian coordinate</li>
-<li><strong>y</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; y cartesian coordinate</li>
+<li><strong>x</strong> (<em>float</em>) &#8211; x cartesian coordinate</li>
+<li><strong>y</strong> (<em>float</em>) &#8211; y cartesian coordinate</li>
 </ul>
 </td>
 </tr>
@@ -602,6 +603,20 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="aita.euler2azi">
+<tt class="descclassname">aita.</tt><tt class="descname">euler2azi</tt><big>(</big><em>phi1</em>, <em>phi</em><big>)</big><a class="reference internal" href="_modules/aita.html#euler2azi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aita.euler2azi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert Euler angle to azimuth and colatitude
+:param phi1:
+:type phi1: array
+:param phi:
+:type phi: array
+:return: azi
+:rtype: array
+:return: col
+:rtype: array</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="aita.isInsideTriangle">
 <tt class="descclassname">aita.</tt><tt class="descname">isInsideTriangle</tt><big>(</big><em>P</em>, <em>p1</em>, <em>p2</em>, <em>p3</em><big>)</big><a class="reference internal" href="_modules/aita.html#isInsideTriangle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aita.isInsideTriangle" title="Permalink to this definition">¶</a></dt>
 <dd><p>test if P is inside the triangle define by p1 p2 p3</p>
@@ -610,10 +625,10 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>P</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; point you want test</li>
-<li><strong>p1</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; one submit of the triangle</li>
-<li><strong>p2</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; one submit of the triangle</li>
-<li><strong>p3</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; one submit of the triangle</li>
+<li><strong>P</strong> (<em>array</em>) &#8211; point you want test</li>
+<li><strong>p1</strong> (<em>array</em>) &#8211; one submit of the triangle</li>
+<li><strong>p2</strong> (<em>array</em>) &#8211; one submit of the triangle</li>
+<li><strong>p3</strong> (<em>array</em>) &#8211; one submit of the triangle</li>
 </ul>
 </td>
 </tr>
@@ -642,8 +657,8 @@ It provide an environnement to plot data, to create inpur for CraFT code,...</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>nx</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of pixel for the colorwheel</li>
-<li><strong>circle</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; do you want create a black circle around</li>
+<li><strong>nx</strong> (<em>int</em>) &#8211; number of pixel for the colorwheel</li>
+<li><strong>circle</strong> (<em>bool</em>) &#8211; do you want create a black circle around</li>
 </ul>
 </td>
 </tr>
@@ -676,9 +691,9 @@ Require to load an image file to get the image dimension nx, ny</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data_adress</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; orientation.dat file</li>
-<li><strong>im_adress</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; any .bmp image file from AITA G50</li>
-<li><strong>micro_adress</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; .bmp (24 bit) with black background and grains boundary in white</li>
+<li><strong>data_adress</strong> (<em>str</em>) &#8211; orientation.dat file</li>
+<li><strong>im_adress</strong> (<em>str</em>) &#8211; any .bmp image file from AITA G50</li>
+<li><strong>micro_adress</strong> (<em>str</em>) &#8211; .bmp (24 bit) with black background and grains boundary in white</li>
 </ul>
 </td>
 </tr>
@@ -701,8 +716,8 @@ Require to load an image file to get the image dimension nx, ny</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data_adress</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; orientation.dat file</li>
-<li><strong>micro_adress</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; .bmp (24 bit) with black background and grains boundary in white</li>
+<li><strong>data_adress</strong> (<em>str</em>) &#8211; orientation.dat file</li>
+<li><strong>micro_adress</strong> (<em>str</em>) &#8211; .bmp (24 bit) with black background and grains boundary in white</li>
 </ul>
 </td>
 </tr>
@@ -759,8 +774,8 @@ Require to load an image file to get the image dimension nx, ny</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>field</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; tabular of scalar data</li>
-<li><strong>resolution</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; step size resolution (millimeters)</li>
+<li><strong>field</strong> (<em>array</em>) &#8211; tabular of scalar data</li>
+<li><strong>resolution</strong> (<em>float</em>) &#8211; step size resolution (millimeters)</li>
 </ul>
 </td>
 </tr>
@@ -787,6 +802,79 @@ Require to load an image file to get the image dimension nx, ny</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="image2d.image2d.auto_correlation">
+<tt class="descname">auto_correlation</tt><big>(</big><em>pad=1</em><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.auto_correlation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.auto_correlation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the auto-correlation function from Dumoulin 2003</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pad</strong> (<em>int</em>) &#8211; padding with mean data (default 1)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">res_auto which the auto correlation function</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">image2d</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Cinf see equation 6 Doumalin 2003</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">profil, it correspond to 180 profile taken for along line with direction between 0 and 180°. The profil[i,:] correspond to a line making an angle of i degree from x direction.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">np.array 180*length profile</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xi, it correspond to the distance along the profile for the variable profile</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">np.array 180*length profile</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">cross, it correspond to the length of the autocorrelation radius</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">np.array dim=180</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Using a fake image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">=</span><span class="n">image2d</span><span class="o">.</span><span class="n">image2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">res_auto</span><span class="p">,</span><span class="n">Cinf</span><span class="p">,</span><span class="n">profil</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">cross</span><span class="p">]</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">auto_correlation</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># plot the auto correlation function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res_auto</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;plt.show()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># plot the auto_correlation radius in function of the angle of the profile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cross</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;angle degree&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;auto correlation radius (mm)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># extract the max and min auto correlation radius</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cross</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cross</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">minC</span><span class="o">=</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cross</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">cross</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maxC</span><span class="o">=</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CC</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">Cinf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">CC</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="s">&#39;on&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xi</span><span class="p">[</span><span class="n">minC</span><span class="p">,:],</span><span class="n">profil</span><span class="p">[</span><span class="n">minC</span><span class="p">,:])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xi</span><span class="p">[</span><span class="n">maxC</span><span class="p">,:],</span><span class="n">profil</span><span class="p">[</span><span class="n">maxC</span><span class="p">,:])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="image2d.image2d.diff">
 <tt class="descname">diff</tt><big>(</big><em>axis</em><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Derive the image along the axis define</p>
@@ -794,7 +882,7 @@ Require to load an image file to get the image dimension nx, ny</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>axis</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; &#8216;x&#8217; to do du/dx or &#8216;y&#8217; to do du/dy</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>axis</strong> (<em>str</em>) &#8211; &#8216;x&#8217; to do du/dx or &#8216;y&#8217; to do du/dy</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">differential of the map in respect to the &#8216;axis&#8217; wanted</td>
 </tr>
@@ -816,7 +904,33 @@ Require to load an image file to get the image dimension nx, ny</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pos</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; array [x,y] position of the data, if pos==[], clic to select the pixel</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pos</strong> (<em>array</em>) &#8211; array [x,y] position of the data, if pos==[], clic to select the pixel</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="image2d.image2d.extract_profil">
+<tt class="descname">extract_profil</tt><big>(</big><em>pos=0</em><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.extract_profil"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.extract_profil" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract data along a given profile</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pos</strong> (<em>np.array dim 2*2</em>) &#8211; correspond to the position of the line np.array([[X0,Y0],[X1,Y1]])</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">x</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">postion along the profile</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">out</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">value along the profile</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">pos</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">starting and ending points</td>
 </tr>
 </tbody>
 </table>
@@ -830,7 +944,7 @@ Require to load an image file to get the image dimension nx, ny</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>res</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; new resolution map wanted (millimeters)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>res</strong> (<em>float</em>) &#8211; new resolution map wanted (millimeters)</td>
 </tr>
 </tbody>
 </table>
@@ -846,8 +960,8 @@ The default mask is a circle of center you choose and radius you define.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>polygone</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; make a polygone mask (&#8216;not yet implemented&#8217;)</li>
-<li><strong>r</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; radius of the circle (warning what is the dimention of r mm ?)</li>
+<li><strong>polygone</strong> (<em>bool</em>) &#8211; make a polygone mask (&#8216;not yet implemented&#8217;)</li>
+<li><strong>r</strong> (<em>float</em>) &#8211; radius of the circle (warning what is the dimention of r mm ?)</li>
 <li><strong>grainId</strong> &#8211; You select the grainId you want in an array</li>
 </ul>
 </td>
@@ -877,16 +991,16 @@ The default mask is a circle of center you choose and radius you define.</p>
 
 <dl class="method">
 <dt id="image2d.image2d.plot">
-<tt class="descname">plot</tt><big>(</big><em>vmin=nan</em>, <em>vmax=nan</em>, <em>colorbarcenter=False</em>, <em>colorbar=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x7f8b9dd72410&gt;</em><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.plot" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot</tt><big>(</big><em>vmin=nan</em>, <em>vmax=nan</em>, <em>colorbarcenter=False</em>, <em>colorbar=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x7f7e7d4df910&gt;</em><big>)</big><a class="reference internal" href="_modules/image2d.html#image2d.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#image2d.image2d.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot the image2d</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>vmin</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; minimum value for the colorbar</li>
-<li><strong>vmax</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; maximun value for the colorbar</li>
-<li><strong>colorbarcenter</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; do you want center the colorbar around 0</li>
+<li><strong>vmin</strong> (<em>float</em>) &#8211; minimum value for the colorbar</li>
+<li><strong>vmax</strong> (<em>float</em>) &#8211; maximun value for the colorbar</li>
+<li><strong>colorbarcenter</strong> (<em>bool</em>) &#8211; do you want center the colorbar around 0</li>
 <li><strong>colorbar</strong> &#8211; colorbar from matplotlib.cm</li>
 </ul>
 </td>
@@ -907,7 +1021,7 @@ The default mask is a circle of center you choose and radius you define.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nb</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nb</strong> (<em>float</em>) &#8211; </td>
 </tr>
 </tbody>
 </table>
@@ -952,8 +1066,8 @@ The default mask is a circle of center you choose and radius you define.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>field</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; tabular of scalar data</li>
-<li><strong>resolution</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; step size resolution (millimeters)</li>
+<li><strong>field</strong> (<em>array</em>) &#8211; tabular of scalar data</li>
+<li><strong>resolution</strong> (<em>float</em>) &#8211; step size resolution (millimeters)</li>
 </ul>
 </td>
 </tr>
@@ -995,7 +1109,7 @@ The default mask is a circle of center you choose and radius you define.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dilatation</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of iteration for the dilation of 1 value - used this to make larger the boundaries (default 2)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dilatation</strong> (<em>int</em>) &#8211; number of iteration for the dilation of 1 value - used this to make larger the boundaries (default 2)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -1020,6 +1134,12 @@ The default mask is a circle of center you choose and radius you define.</p>
 &#64;contact: <a class="reference external" href="mailto:thomas&#46;chauve&#37;&#52;&#48;lgge&#46;obs&#46;ujf-grenoble&#46;fr">thomas<span>&#46;</span>chauve<span>&#64;</span>lgge<span>&#46;</span>obs<span>&#46;</span>ujf-grenoble<span>&#46;</span>fr</a>
 &#64;license: CC-BY-CC</p>
 <dl class="function">
+<dt id="mask2d.complementary">
+<tt class="descclassname">mask2d.</tt><tt class="descname">complementary</tt><big>(</big><em>self</em><big>)</big><a class="reference internal" href="_modules/mask2d.html#complementary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mask2d.complementary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return complementary mask</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="mask2d.load_mask">
 <tt class="descclassname">mask2d.</tt><tt class="descname">load_mask</tt><big>(</big><em>adr_bmp</em>, <em>res=1</em><big>)</big><a class="reference internal" href="_modules/mask2d.html#load_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mask2d.load_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a mask from a black and white bmp image where whith correspond to the selected area</p>
@@ -1028,8 +1148,8 @@ The default mask is a circle of center you choose and radius you define.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>adr_bmp</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; path of the mask bmp file</li>
-<li><strong>res</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; resolution of the picture mm (default 1)</li>
+<li><strong>adr_bmp</strong> (<em>str</em>) &#8211; path of the mask bmp file</li>
+<li><strong>res</strong> (<em>float</em>) &#8211; resolution of the picture mm (default 1)</li>
 </ul>
 </td>
 </tr>
@@ -1055,8 +1175,8 @@ The default mask is a circle of center you choose and radius you define.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>field</strong> (<a class="reference external" href="http://docs.python.org/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) &#8211; tabular of scalar data</li>
-<li><strong>resolution</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; step size resolution (millimeters)</li>
+<li><strong>field</strong> (<em>array</em>) &#8211; tabular of scalar data</li>
+<li><strong>resolution</strong> (<em>float</em>) &#8211; step size resolution (millimeters)</li>
 </ul>
 </td>
 </tr>

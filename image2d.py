@@ -17,8 +17,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import scipy
-import symetricTensorMap
-import TensorMap
 import pylab
 import datetime
 import mask2d
@@ -194,10 +192,6 @@ class image2d(object):
             return image2d(self.field*other.field,self.res)
         if (type(other) is mask2d.mask2d):
             return image2d(self.field*other.field,self.res)
-        if (type(other) is symetricTensorMap.symetricTensorMap):
-            return other*self
-        if (type(other) is TensorMap.TensorMap):
-            return other*self
         if (type(other) is float):
             return image2d(self.field*other,self.res)
         

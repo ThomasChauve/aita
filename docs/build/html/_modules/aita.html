@@ -827,8 +827,8 @@
 <span class="sd">        :param mask:</span>
 <span class="sd">        :type mask: mask2d.mask2d</span>
 <span class="sd">        </span>
-<span class="sd">        :return aita:</span>
-<span class="sd">        :rtype aita: aita</span>
+<span class="sd">        :return: aita object with the mask applied </span>
+<span class="sd">        :rtype: aita</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         
         <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="ow">is</span> <span class="n">mask2d</span><span class="o">.</span><span class="n">mask2d</span><span class="p">):</span>
@@ -853,6 +853,48 @@
             <span class="n">ma</span><span class="o">=</span><span class="bp">False</span>
            
         <span class="k">return</span> <span class="n">ma</span>
+    </div>
+<div class="viewcode-block" id="aita.grelon"><a class="viewcode-back" href="../index.html#aita.aita.grelon">[docs]</a>    <span class="k">def</span> <span class="nf">grelon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Compute the angle between the directions defined by the &quot;center&quot; and the pixel with the c-axis direction</span>
+<span class="sd">        </span>
+<span class="sd">        :return: angle (degree)</span>
+<span class="sd">        :rtype: im2d.image2d</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c"># Find the center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Click on the center of the hailstone&#39;</span><span class="p">)</span>
+        <span class="n">posc</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">ginput</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s">&#39;all&#39;</span><span class="p">)</span>
+        
+        <span class="n">ss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        
+        
+        <span class="n">xc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="n">yc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">field</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="c"># build x y</span>
+        <span class="n">xi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span>
+        <span class="n">yi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ss</span><span class="p">))</span>
+        <span class="n">xl</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">yl</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">xi</span><span class="p">[:,:]</span><span class="o">=</span><span class="n">yl</span>
+        <span class="n">yi</span><span class="p">[:,:]</span><span class="o">=</span><span class="n">xl</span>
+        <span class="n">yi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">yi</span><span class="p">)</span>
+        <span class="c"># center and norm</span>
+        <span class="n">xi</span><span class="o">=</span><span class="n">xi</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">posc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">res</span><span class="p">)</span>
+        <span class="n">yi</span><span class="o">=</span><span class="n">yi</span><span class="o">-</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">posc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">res</span><span class="p">))</span>
+        
+        <span class="n">nn</span><span class="o">=</span><span class="p">(</span><span class="n">xi</span><span class="o">**</span><span class="mf">2.</span><span class="o">+</span><span class="n">yi</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">xi</span><span class="o">=</span><span class="n">xi</span><span class="o">/</span><span class="n">nn</span>
+        <span class="n">yi</span><span class="o">=</span><span class="n">yi</span><span class="o">/</span><span class="n">nn</span>
+        <span class="c">#</span>
+        <span class="n">acos</span><span class="o">=</span><span class="n">xi</span><span class="o">*</span><span class="n">xc</span><span class="o">+</span><span class="n">yi</span><span class="o">*</span><span class="n">yc</span>
+        
+        <span class="n">angle</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">acos</span><span class="p">)</span><span class="o">*</span><span class="mf">180.</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span>
+                
+        <span class="k">return</span> <span class="n">im2d</span><span class="o">.</span><span class="n">image2d</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">res</span><span class="p">)</span>
+                
       
 <span class="c">##########################################################################</span>
 <span class="c">###################### Function need for aita class  #####################</span>
@@ -967,7 +1009,8 @@
     
     <span class="k">return</span> <span class="n">azi</span><span class="p">,</span><span class="n">col</span>
     
-    
+
+        
     </div>
 </pre></div>
 

@@ -778,8 +778,8 @@ class aita(object):
         :param mask:
         :type mask: mask2d.mask2d
         
-        :return aita:
-        :rtype aita: aita
+        :return: aita object with the mask applied 
+        :rtype: aita
         '''
         
         if (type(mask) is mask2d.mask2d):
@@ -804,6 +804,48 @@ class aita(object):
             ma=False
            
         return ma
+    
+    def grelon(self):
+        '''
+        Compute the angle between the directions defined by the "center" and the pixel with the c-axis direction
+        
+        :return: angle (degree)
+        :rtype: im2d.image2d
+        '''
+        
+        # Find the center
+        self.phi1.plot()
+        print('Click on the center of the hailstone')
+        posc=plt.ginput(1)
+        plt.close('all')
+        
+        ss=np.shape(self.phi1.field)
+        
+        
+        xc=np.cos(self.phi1.field-math.pi/2)*np.sin(self.phi.field)
+        yc=np.sin(self.phi1.field-math.pi/2)*np.sin(self.phi.field)
+        # build x y
+        xi=np.zeros(ss)
+        yi=np.transpose(np.zeros(ss))
+        xl=np.arange(ss[0])
+        yl=np.arange(ss[1])
+        xi[:,:]=yl
+        yi[:,:]=xl
+        yi=np.transpose(yi)
+        # center and norm
+        xi=xi-np.int32(posc[0][0]/self.phi1.res)
+        yi=yi-(ss[0]-np.int32(posc[0][1]/self.phi1.res))
+        
+        nn=(xi**2.+yi**2.)**0.5
+        xi=xi/nn
+        yi=yi/nn
+        #
+        acos=xi*xc+yi*yc
+        
+        angle=np.arccos(acos)*180./math.pi
+                
+        return im2d.image2d(angle,self.phi1.res)
+                
       
 ##########################################################################
 ###################### Function need for aita class  #####################
@@ -918,5 +960,6 @@ def euler2azi(phi1,phi):
     
     return azi,col
     
-    
+
+        
     

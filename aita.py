@@ -843,6 +843,8 @@ class aita(object):
         acos=xi*xc+yi*yc
         
         angle=np.arccos(acos)*180./math.pi
+	id=np.where(angle>90)
+        angle[id]=180-angle[id]
                 
         return im2d.image2d(angle,self.phi1.res)
                 

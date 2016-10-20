@@ -821,7 +821,7 @@ class aita(object):
         
         ss=np.shape(self.phi1.field)
         
-        
+        # vecteur C
         xc=np.cos(self.phi1.field-math.pi/2)*np.sin(self.phi.field)
         yc=np.sin(self.phi1.field-math.pi/2)*np.sin(self.phi.field)
         # build x y
@@ -833,17 +833,22 @@ class aita(object):
         yi[:,:]=xl
         yi=np.transpose(yi)
         # center and norm
-        xi=xi-np.int32(posc[0][0]/self.phi1.res)
-        yi=yi-(ss[0]-np.int32(posc[0][1]/self.phi1.res))
+        xv=xi-np.int32(posc[0][0]/self.phi1.res)
+        yv=yi-(ss[0]-np.int32(posc[0][1]/self.phi1.res))
         
-        nn=(xi**2.+yi**2.)**0.5
-        xi=xi/nn
-        yi=yi/nn
+        nn=(xv**2.+yv**2.)**0.5
+        xv=xv/nn
+        yv=yv/nn
+        #
+        plt.figure()
+        plt.quiver(xi,yi,xv,yv,scale=1000)
+        
         #
         acos=xi*xc+yi*yc
         
         angle=np.arccos(acos)*180./math.pi
-	id=np.where(angle>90)
+        
+        id=np.where(angle>90)
         angle[id]=180-angle[id]
                 
         return im2d.image2d(angle,self.phi1.res)

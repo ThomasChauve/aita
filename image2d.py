@@ -426,7 +426,7 @@ class image2d(object):
             profil[i,:]=out[0:l]
             xi[i,:]=x[0:l]
             #
-            id=np.where(profil[i,:]-1.002*Cinf<0)
+            id=np.where(profil[i,:]-Cinf<0)
             if np.size(id)==0:
                 cross[i]=np.size(x)
             else:

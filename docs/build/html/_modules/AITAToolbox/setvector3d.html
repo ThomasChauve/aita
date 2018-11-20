@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AITAToolbox.setvector3d &mdash; AITA Toolbox 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> AITA Toolbox
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installing.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">AITA</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../AITA/firststep.html">1. Fisrt step</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AITA/function.html">2. Function overview</a></li>
+</ul>
+<p class="caption"><span class="caption-text">CLASS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../CLASS/image2d.html">1. image2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CLASS/setvector3d.html">2. setvector3d</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AITA Toolbox</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>AITAToolbox.setvector3d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for AITAToolbox.setvector3d</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">gaussian_kde</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">cm</span>
+<span class="kn">import</span> <span class="nn">matplotlib.tri</span> <span class="k">as</span> <span class="nn">tri</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KernelDensity</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">AITAToolbox.uniform_dist</span> <span class="k">as</span> <span class="nn">uni_dist</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<div class="viewcode-block" id="setvector3d"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d">[docs]</a><span class="k">class</span> <span class="nc">setvector3d</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Object to work on a set of 3d unit vector</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">pass</span>
+
+<div class="viewcode-block" id="setvector3d.__init__"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param data: data is an array of dimention 3</span>
+<span class="sd">        :type data: np.array</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span><span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Your array should have 3 columns X,Y,Z&#39;</span><span class="p">)</span>
+            
+        
+        <span class="n">norm_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">norm_data</span><span class="o">!=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]))):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="c1">#print(&#39;Normalising vector length to 1&#39;)</span>
+                <span class="n">data</span><span class="p">[</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],:]</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],:]</span><span class="o">/</span><span class="n">norm_data</span><span class="p">[</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="o">=</span><span class="n">data</span></div>
+        
+<div class="viewcode-block" id="setvector3d.inv"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d.inv">[docs]</a>    <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new set of vector -v</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">setvector3d</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">)</span></div>
+        
+        
+<div class="viewcode-block" id="setvector3d.OrientationTensor2nd"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d.OrientationTensor2nd">[docs]</a>    <span class="k">def</span> <span class="nf">OrientationTensor2nd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Compute the normelized second order orientation tensor</span>
+
+<span class="sd">        :return eigenvalue: eigen value w[i]</span>
+<span class="sd">        :rtype eigenvalue: np.array</span>
+<span class="sd">        :return eigenvector: eigen vector v[:,i]</span>
+<span class="sd">        :rtype eigenvector: np.array</span>
+<span class="sd">        :note: eigen value w[i] is associate to eigen vector v[:,i] </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">a11</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))))</span>
+        <span class="n">a22</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]))))</span>
+        <span class="n">a33</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]))))</span>
+        <span class="n">a12</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]))))</span>
+        <span class="n">a13</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]))))</span>
+        <span class="n">a23</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]))))</span>
+         
+        <span class="n">Tensor</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">a11</span><span class="p">,</span> <span class="n">a12</span><span class="p">,</span> <span class="n">a13</span><span class="p">],[</span><span class="n">a12</span><span class="p">,</span> <span class="n">a22</span><span class="p">,</span> <span class="n">a23</span><span class="p">],[</span><span class="n">a13</span><span class="p">,</span> <span class="n">a23</span><span class="p">,</span> <span class="n">a33</span><span class="p">]])</span>
+        <span class="n">eigvalue</span><span class="p">,</span><span class="n">eigvector</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">Tensor</span><span class="p">)</span>
+           
+        <span class="k">return</span> <span class="n">eigvalue</span><span class="p">,</span><span class="n">eigvector</span></div>
+        
+        
+<div class="viewcode-block" id="setvector3d.stereoplot"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d.stereoplot">[docs]</a>    <span class="k">def</span> <span class="nf">stereoplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">contourf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span><span class="n">plotOT</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">nbpoints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">projz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">30.</span><span class="p">,</span><span class="mf">60.</span><span class="p">]),</span><span class="n">cm</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Plot a stereographic projection of the vector</span>
+
+<span class="sd">        :param contourf: filled contour plot (default False)</span>
+<span class="sd">        :type contourf: bool</span>
+<span class="sd">        :param bw: bandwidth for Kernel density function (default 0.03)</span>
+<span class="sd">        :type bw: float</span>
+<span class="sd">        :param plotOT: plot the eigen vector on the pole figure (default True)</span>
+<span class="sd">        :type plotOT: bool</span>
+<span class="sd">        :param nbpoints: number of random vector selected to compute the pole figure (default 0, mean every pixel are used) Be careful with to many point the computation can be very slow. Up to 10000 it is still reasonable.</span>
+<span class="sd">        :type nbpoints: int</span>
+<span class="sd">        :param projz: 0 or 1. It choose the type of projection. 0 (1) means projection in the plane z=0 (1).</span>
+<span class="sd">        :type projz: int</span>
+<span class="sd">        :param angle: angle in degree for inner circle between 0 and 90 (0 mean no inner circle, default np.array([30.,60.]))</span>
+<span class="sd">        :type angle: np.array</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+       
+        <span class="k">if</span> <span class="n">nbpoints</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">subset</span><span class="o">=</span><span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="n">nbpoints</span><span class="p">)</span>
+        
+        <span class="n">v1</span><span class="o">=</span><span class="n">subset</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">subset</span><span class="o">.</span><span class="n">inv</span><span class="p">())</span>
+        <span class="c1">#############################</span>
+        <span class="c1">## compute the PDF sklearn ##</span>
+        <span class="c1">#############################</span>
+        <span class="c1"># http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KernelDensity.html</span>
+        <span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="n">v1</span><span class="o">.</span><span class="n">cart2spher</span><span class="p">()</span>
+        <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+        
+        <span class="n">kde2</span> <span class="o">=</span> <span class="n">KernelDensity</span><span class="p">(</span><span class="n">bandwidth</span><span class="o">=</span><span class="n">bw</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;haversine&#39;</span><span class="p">,</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;ball_tree&#39;</span><span class="p">)</span>
+        <span class="n">kde2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">])))</span>
+        
+        <span class="c1"># Evaluate the KDE in a given set of direction</span>
+        <span class="k">if</span> <span class="n">contourf</span><span class="p">:</span>
+            <span class="n">val</span><span class="o">=</span><span class="n">uni_dist</span><span class="o">.</span><span class="n">unidist</span>
+            <span class="n">dim</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">xx</span><span class="o">=</span><span class="n">val</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">dim</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">xx</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">xxuse</span><span class="o">=</span><span class="n">xx</span><span class="p">[</span><span class="nb">id</span><span class="p">[</span><span class="mi">0</span><span class="p">],:]</span>
+            <span class="n">viso</span><span class="o">=</span><span class="n">setvector3d</span><span class="p">(</span><span class="n">xxuse</span><span class="p">)</span>
+            <span class="c1"># add point on the disc for contourf</span>
+            <span class="n">tot</span><span class="o">=</span><span class="mi">1000</span>
+            <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">tot</span><span class="p">)</span>
+            <span class="n">zcir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">tot</span><span class="p">)</span>
+            <span class="n">xcir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+            <span class="n">ycir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+            
+            <span class="n">vcir</span><span class="o">=</span><span class="n">setvector3d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xcir</span><span class="p">,</span><span class="n">ycir</span><span class="p">,</span><span class="n">zcir</span><span class="p">])))</span>
+            
+            <span class="n">vtot</span><span class="o">=</span><span class="n">viso</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">vcir</span><span class="p">)</span>
+            
+            <span class="n">phie</span><span class="p">,</span><span class="n">thetae</span><span class="o">=</span><span class="n">vtot</span><span class="o">.</span><span class="n">cart2spher</span><span class="p">()</span>
+            <span class="n">thetae</span><span class="o">=</span><span class="n">thetae</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+            <span class="n">phie</span><span class="o">=</span><span class="n">phie</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">weights</span><span class="o">=</span><span class="n">kde2</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">phie</span><span class="p">,</span><span class="n">thetae</span><span class="p">])))</span>
+            <span class="n">X</span><span class="o">=</span><span class="n">vtot</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">Y</span><span class="o">=</span><span class="n">vtot</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">Z</span><span class="o">=</span><span class="n">vtot</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">phie</span><span class="p">,</span><span class="n">thetae</span><span class="o">=</span><span class="n">subset</span><span class="o">.</span><span class="n">cart2spher</span><span class="p">()</span>
+            <span class="n">thetae</span><span class="o">=</span><span class="n">thetae</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+            <span class="n">phie</span><span class="o">=</span><span class="n">phie</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">weights</span><span class="o">=</span><span class="n">kde2</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">phie</span><span class="p">,</span><span class="n">thetae</span><span class="p">])))</span>
+            <span class="n">X</span><span class="o">=</span><span class="n">subset</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">Y</span><span class="o">=</span><span class="n">subset</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">Z</span><span class="o">=</span><span class="n">subset</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+                
+        <span class="c1"># put all the direction in the upper hemisphere as we consider v ans -v equivalent</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Z</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">X</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">=-</span><span class="n">X</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+        <span class="n">Y</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">=-</span><span class="n">Y</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+        <span class="n">Z</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">=-</span><span class="n">Z</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+        
+        
+        <span class="c1"># Choose the type of projection</span>
+        <span class="k">if</span> <span class="n">projz</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">LpL</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">Z</span><span class="p">)</span>
+            <span class="n">xx</span><span class="o">=</span><span class="n">LpL</span><span class="o">*</span><span class="n">X</span>
+            <span class="n">yy</span><span class="o">=</span><span class="n">LpL</span><span class="o">*</span><span class="n">Y</span>
+            <span class="n">rci</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="mi">90</span><span class="o">-</span><span class="n">angle</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="mi">90</span><span class="o">-</span><span class="n">angle</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span><span class="p">))</span>
+            <span class="n">rco</span><span class="o">=</span><span class="mf">1.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">vz1</span><span class="o">=</span><span class="n">setvector3d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">])))</span>
+            <span class="n">phip</span><span class="p">,</span><span class="n">thetap</span><span class="o">=</span><span class="n">vz1</span><span class="o">.</span><span class="n">cart2spher</span><span class="p">()</span>
+            <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phip</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">thetap</span><span class="p">))</span>
+            <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phip</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">thetap</span><span class="p">))</span>
+            <span class="n">rci</span><span class="o">=</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span><span class="p">)</span>
+            <span class="n">rco</span><span class="o">=</span><span class="mf">2.</span><span class="o">**</span><span class="mf">0.5</span>
+        
+        <span class="c1"># Prepare the contour plot</span>
+        <span class="c1">#plt.figure(figsize=(10,10),dpi=160)</span>
+        
+        <span class="k">if</span> <span class="n">contourf</span><span class="p">:</span>
+            <span class="n">triang</span> <span class="o">=</span> <span class="n">tri</span><span class="o">.</span><span class="n">Triangulation</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">tricontour</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="mi">15</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">tricontourf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="mi">15</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">shrink</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="c1"># Compute the outer circle</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="n">x_circle</span> <span class="o">=</span> <span class="n">rco</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+        <span class="n">y_circle</span> <span class="o">=</span> <span class="n">rco</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_circle</span><span class="p">,</span> <span class="n">y_circle</span><span class="p">,</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="c1"># compute a 3 circle</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rci</span><span class="p">))):</span>
+                <span class="n">x_circle</span> <span class="o">=</span> <span class="n">rci</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+                <span class="n">y_circle</span> <span class="o">=</span> <span class="n">rci</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
+                
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_circle</span><span class="p">,</span> <span class="n">y_circle</span><span class="p">,</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_circle</span><span class="p">[</span><span class="mi">200</span><span class="p">],</span> <span class="n">y_circle</span><span class="p">[</span><span class="mi">300</span><span class="p">]</span><span class="o">+</span><span class="mf">0.04</span><span class="p">,</span><span class="s1">&#39;$\phi$=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">angle</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;°&#39;</span><span class="p">)</span>
+            <span class="c1"># plot Theta line</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">rco</span><span class="p">,</span><span class="mi">1</span><span class="o">*</span><span class="n">rco</span><span class="p">],</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">rco</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">0</span><span class="o">+</span><span class="mf">0.06</span><span class="p">,</span><span class="s1">&#39;$\Theta$=0°&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="n">rco</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">0</span><span class="o">-</span><span class="mf">0.06</span><span class="p">,</span><span class="s1">&#39;$\Theta$=180°&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="n">rco</span><span class="p">,</span><span class="n">rco</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">rco</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span><span class="s1">&#39;$\Theta$=90°&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="o">-</span><span class="n">rco</span><span class="o">+</span><span class="mf">0.15</span><span class="p">,</span><span class="s1">&#39;$\Theta$=270°&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mf">0.7071</span><span class="o">*</span><span class="n">rco</span><span class="p">,</span><span class="mf">0.7071</span><span class="o">*</span><span class="n">rco</span><span class="p">],[</span><span class="o">-</span><span class="mf">0.7071</span><span class="o">*</span><span class="n">rco</span><span class="p">,</span><span class="mf">0.7071</span><span class="o">*</span><span class="n">rco</span><span class="p">],</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mf">0.7071</span><span class="o">*</span><span class="n">rco</span><span class="p">,</span><span class="mf">0.7071</span><span class="o">*</span><span class="n">rco</span><span class="p">],[</span><span class="mf">0.7071</span><span class="o">*</span><span class="n">rco</span><span class="p">,</span><span class="o">-</span><span class="mf">0.7071</span><span class="o">*</span><span class="n">rco</span><span class="p">],</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+          
+            
+        <span class="c1"># draw a cross for x and y direction</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="o">*</span><span class="n">rco</span><span class="p">,</span> <span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">*</span><span class="n">rco</span><span class="p">],</span><span class="s1">&#39;+k&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+        <span class="c1"># write axis</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">1.05</span><span class="o">*</span><span class="n">rco</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;X&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.05</span><span class="o">*</span><span class="n">rco</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+                   
+        
+        <span class="k">if</span> <span class="n">plotOT</span><span class="p">:</span>
+            <span class="n">eigvalue</span><span class="p">,</span><span class="n">eigvector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">OrientationTensor2nd</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)):</span> <span class="c1"># Loop on the 3 eigenvalue</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">eigvector</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">):</span>
+                    <span class="n">v</span><span class="o">=-</span><span class="n">eigvector</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">v</span><span class="o">=</span><span class="n">eigvector</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span>
+                    
+                    
+                <span class="k">if</span> <span class="n">projz</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>    
+                    <span class="n">LpLv</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                    <span class="n">xxv</span><span class="o">=</span><span class="n">LpLv</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">yyv</span><span class="o">=</span><span class="n">LpLv</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">phiee</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                    <span class="n">thetaee</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">xxv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phiee</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">thetaee</span><span class="p">))</span>
+                    <span class="n">yyv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phiee</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">thetaee</span><span class="p">))</span>
+                    
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xxv</span><span class="p">,</span><span class="n">yyv</span><span class="p">,</span><span class="s1">&#39;sk&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xxv</span><span class="o">+</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">yyv</span><span class="o">+</span><span class="mf">0.04</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">eigvalue</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="mi">2</span><span class="p">)))</span>
+        
+        <span class="k">return</span></div>
+    
+<div class="viewcode-block" id="setvector3d.cart2spher"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d.cart2spher">[docs]</a>    <span class="k">def</span> <span class="nf">cart2spher</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return vector on spherical coordinate phi theta</span>
+
+<span class="sd">        :return phi: Angle from the z axis</span>
+<span class="sd">        :rtype phi: np.array</span>
+<span class="sd">        :return theta: Angle within the xOy plane</span>
+<span class="sd">        :rtype theta: np.array</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="n">phi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+        
+        <span class="k">return</span> <span class="n">phi</span><span class="p">,</span><span class="n">theta</span></div>
+    
+<div class="viewcode-block" id="setvector3d.concatenate"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d.concatenate">[docs]</a>    <span class="k">def</span> <span class="nf">concatenate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v1</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Concatenate 2 set of vector3d</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">return</span> <span class="n">setvector3d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">,</span><span class="n">v1</span><span class="o">.</span><span class="n">vector</span><span class="p">)))</span></div>
+    
+<div class="viewcode-block" id="setvector3d.subset"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d.subset">[docs]</a>    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nbpoints</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Select a random subset of the set of vector 3d</span>
+
+<span class="sd">        :param nbpoints: number of point</span>
+<span class="sd">        :type nbpoints: int</span>
+<span class="sd">        :return v:</span>
+<span class="sd">        rtype v: setvector3d</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="nb">id</span><span class="o">=</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nbpoints</span><span class="p">)]</span>
+        
+        <span class="k">return</span> <span class="n">setvector3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="nb">id</span><span class="p">,:])</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright CC-BY-CC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

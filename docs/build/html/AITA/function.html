@@ -1,0 +1,850 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2. Function overview &mdash; AITA Toolbox 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. image2d" href="../CLASS/image2d.html" />
+    <link rel="prev" title="1. Fisrt step" href="firststep.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> AITA Toolbox
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">AITA</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="firststep.html">1. Fisrt step</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Function overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-AITAToolbox.loadData_aita">2.1. loadData_aita</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-AITAToolbox.aita">2.2. aita</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">CLASS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../CLASS/image2d.html">1. image2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CLASS/setvector3d.html">2. setvector3d</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AITA Toolbox</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>2. Function overview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/AITA/function.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="function-overview">
+<h1>2. Function overview<a class="headerlink" href="#function-overview" title="Permalink to this headline">¶</a></h1>
+<p>Here we presente the function associated with the class aita</p>
+<div class="section" id="module-AITAToolbox.loadData_aita">
+<span id="loaddata-aita"></span><h2>2.1. loadData_aita<a class="headerlink" href="#module-AITAToolbox.loadData_aita" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="AITAToolbox.loadData_aita.aita3col">
+<code class="descclassname">AITAToolbox.loadData_aita.</code><code class="descname">aita3col</code><span class="sig-paren">(</span><em>data_adress</em>, <em>im_adress</em>, <em>micro_adress=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/loadData_aita.html#aita3col"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.loadData_aita.aita3col" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to open data from AITA analyser using ‘cistodat’ which give output file with 3 column azi,col,qua)
+Require to load an image file to get the image dimension nx, ny</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_adress</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – orientation.dat file</li>
+<li><strong>im_adress</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – any .bmp image file from AITA G50</li>
+<li><strong>micro_adress</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – .bmp (24 bit) with black background and grains boundary in white</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aita object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="AITAToolbox.loadData_aita.aita5col">
+<code class="descclassname">AITAToolbox.loadData_aita.</code><code class="descname">aita5col</code><span class="sig-paren">(</span><em>data_adress</em>, <em>micro_adress=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/loadData_aita.html#aita5col"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.loadData_aita.aita5col" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to open data from AITA analyser using ‘cistodat’ which give output file with 5 column (x,y,azi,col,qua)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_adress</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – orientation.dat file</li>
+<li><strong>micro_adress</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – .bmp (24 bit) with black background and grains boundary in white</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aita object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-AITAToolbox.aita">
+<span id="aita"></span><h2>2.2. aita<a class="headerlink" href="#module-AITAToolbox.aita" title="Permalink to this headline">¶</a></h2>
+<p>Created on 3 juil. 2015
+Toolbox for data obtained using G50 Automatique Ice Texture Analyser (AITA) provide by :
+Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quartz and ice. J. Glaciol. 24, 117–130</p>
+<p>&#64;author: Thomas Chauve
+&#64;contact: <a class="reference external" href="mailto:thomas&#46;chauve&#37;&#52;&#48;univ-grenoble-alpes&#46;fr">thomas<span>&#46;</span>chauve<span>&#64;</span>univ-grenoble-alpes<span>&#46;</span>fr</a>
+&#64;license: CC-BY-CC</p>
+<dl class="class">
+<dt id="AITAToolbox.aita.aita">
+<em class="property">class </em><code class="descclassname">AITAToolbox.aita.</code><code class="descname">aita</code><span class="sig-paren">(</span><em>phi1_field</em>, <em>phi_field</em>, <em>qua_field</em>, <em>micro_field</em>, <em>resolution=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita" title="Permalink to this definition">¶</a></dt>
+<dd><p>“aita” is a python class to analyse output from G50-AITA analyser.
+It provide an environnement to plot data, to create inpur for CraFT code,…</p>
+<p>This toolbox is running on python3 and need various packages :</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">library:</th><td class="field-body">numpy</td>
+</tr>
+<tr class="field-even field"><th class="field-name">library:</th><td class="field-body">matplotlib</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">library:</th><td class="field-body">math</td>
+</tr>
+<tr class="field-even field"><th class="field-name">library:</th><td class="field-body">pylab</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">library:</th><td class="field-body">skimage</td>
+</tr>
+<tr class="field-even field"><th class="field-name">library:</th><td class="field-body">datetime</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">library:</th><td class="field-body">random</td>
+</tr>
+<tr class="field-even field"><th class="field-name">library:</th><td class="field-body">colosys</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">library:</th><td class="field-body">image2d (see below)</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>phi1_field</em>, <em>phi_field</em>, <em>qua_field</em>, <em>micro_field</em>, <em>resolution=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>phi1_field</strong> – Euler angle phi1 map</li>
+<li><strong>phi_field</strong> – Euler angle phi map</li>
+<li><strong>qua_field</strong> – quality facteur map</li>
+<li><strong>resolution</strong> – spatial step size (mm); default = 1 mm</li>
+<li><strong>micro_field</strong> – microstructure (0 background, 1 grain boundary)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:type phi1_field np.array
+:type phi_field np.array
+:type qua_field: np.array
+:type resolution: float
+:type micro_adress: np.array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">aita object output</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Bunge Euler Angle convention is used (phi1,phi,phi2) ,phi2 is not compute as during optical measurement phi2 is not know.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="AITAToolbox.aita.aita.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#AITAToolbox.aita.aita.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.addgrain">
+<code class="descname">addgrain</code><span class="sig-paren">(</span><em>ori=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.addgrain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.addgrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a grain inside the microstructure</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ori</strong> (<em>array</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – orienation of the new grain [phi1 phi] (default random value)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">new_micro, object with the new grain include</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">addgrain</span><span class="p">()</span>      
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.craft">
+<code class="descname">craft</code><span class="sig-paren">(</span><em>nameId</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.craft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.craft" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the inputs for craft</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nameId</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the prefixe used for craft files</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">create file : nameId_micro.vtk, nameId.phase, nameId.in, nameId.load, nameId.output</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">craft</span><span class="p">(</span><span class="s1">&#39;manip01&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">nameId.load, nameId.output need to be rewrite to get a correct loading and the output wanted</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">nameId.in need to be adapt depending of your folder structure used for craft</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">NaN orientation value are removed by the closest orientation</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.crop">
+<code class="descname">crop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.crop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.crop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crop function to select the area of interest</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">crop aita object</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">crop</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">clic on the top left corner and bottom right corner to select the area</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.filter">
+<code class="descname">filter</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove data of bad quality</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – limit quality value between 0 to 100</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">data object with no orientation with quality value under threshold</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.fliplr">
+<code class="descname">fliplr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.fliplr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.fliplr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applied an horizontal miror to the data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aita object with an horizontal miror</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">fliplr</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.grain_ori">
+<code class="descname">grain_ori</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.grain_ori"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.grain_ori" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give the grain orientation output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.grelon">
+<code class="descname">grelon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.grelon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.grelon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the angle between the directions defined by the “center” and the pixel with the c-axis direction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">angle (degree)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">im2d.image2d</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.imresize">
+<code class="descname">imresize</code><span class="sig-paren">(</span><em>res</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.imresize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.imresize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resize the data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>res</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – the new resolution wanted in millimeter (mm)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">data with the resolution wanted</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">imresize</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.mask">
+<code class="descname">mask</code><span class="sig-paren">(</span><em>mask</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applied mask on aita data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mask</strong> (<em>im2d.mask2d</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">aita object with the mask applied</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.mean_grain">
+<code class="descname">mean_grain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.mean_grain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.mean_grain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the mean orientation inside the grain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">data with only one orientation per grains, the mean orientation</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">mean_orientation</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.misorientation_profile">
+<code class="descname">misorientation_profile</code><span class="sig-paren">(</span><em>plot='all'</em>, <em>orientation=False</em>, <em>pos=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.misorientation_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.misorientation_profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the misorientation profile along a line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – option for to misorientation profile plot, ‘all’ (default), ‘mis2o’, ‘mis2p’</li>
+<li><strong>orientation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – option for the color code used for the map, False (default) use phi1 and True use colorwheel (take time)</li>
+<li><strong>pos</strong> (<em>array</em>) – coordinate of the profile line - 0 (default) click on the map to select the 2 points</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">x - coordinate along the line</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">array, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">mis2o,mis2p - misorientation angle to the origin, and misorientation angle to the previous pixel</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">array, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">h - matplotlib image with line draw on the orientation map, subplot with mis2o and/or mis2p profile</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">pos - coordinate of the profile line</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">mis2o</span><span class="p">,</span><span class="n">mis2p</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">pos</span><span class="p">]</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">misorientation_profile</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rpos</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">mis2o</span><span class="p">,</span><span class="n">mis2p</span><span class="p">,</span><span class="n">hr</span><span class="p">,</span><span class="n">pos</span><span class="p">]</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">misorientation_profile</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">rpos</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.new_ori_TJ">
+<code class="descname">new_ori_TJ</code><span class="sig-paren">(</span><em>mask</em>, <em>mean=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.new_ori_TJ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.new_ori_TJ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract orientation to compare with CraFT simulation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>nlut=512</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the data using a 2d lut</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nlut</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of pixel tou want for the 2d LUT (default 512)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">figure of orientation mapping</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">matplotlib figure</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># print the associated color wheel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lut</span><span class="o">=</span><span class="n">lut</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It takes time to build the colormap</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.plotpdf">
+<code class="descname">plotpdf</code><span class="sig-paren">(</span><em>peigen=True</em>, <em>select_grain=False</em>, <em>grainlist=[]</em>, <em>nbp=10000</em>, <em>contourf=False</em>, <em>cm2=&lt;matplotlib.colors.ListedColormap object&gt;</em>, <em>bw=0.1</em>, <em>projz=1</em>, <em>angle=array([30.</em>, <em>60.])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.plotpdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.plotpdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot pole figure for c-axis (0001)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>peigen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Plot the eigenvalues and eigenvectors on the pole figure (default = False)</li>
+<li><strong>select_grain</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – select the grains use for the pole figure</li>
+<li><strong>grainlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – give the list of the grainId you want to plot</li>
+<li><strong>nbp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of pixel plotted</li>
+<li><strong>contourf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Do you want to add contouring to your pole figure ? (Default : False)</li>
+<li><strong>bw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – bandwidth to compute kernel density (default : 0.1)</li>
+<li><strong>angle</strong> (<em>np.array</em>) – plot circle for this angle value (default : np.array([30.,60.])) 0 if you don’t want inner circle.</li>
+<li><strong>cm2</strong> (<em>cm</em>) – colorbar (default : cm.viridis)</li>
+<li><strong>projz</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – 0 or 1. It choose the type of projection. 0 (1) means projection in the plane z=0 (1).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">pole figure image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">matplotlib figure</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">eigenvalue</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eigenvalue</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">peigen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="AITAToolbox.aita.aita.rot180">
+<code class="descname">rot180</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.rot180"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.rot180" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate the data of 180 degree</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">crop aita object</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#AITAToolbox.aita.aita" title="AITAToolbox.aita.aita">aita</a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">rot180</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="AITAToolbox.aita.cart2pol">
+<code class="descclassname">AITAToolbox.aita.</code><code class="descname">cart2pol</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#cart2pol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.cart2pol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert cartesien coordinate x,y into polar coordinate rho, theta</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – x cartesian coordinate</li>
+<li><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – y cartesian coordinate</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">rho (radius), theta (angle)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rho</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="n">cart2pol</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="AITAToolbox.aita.euler2azi">
+<code class="descclassname">AITAToolbox.aita.</code><code class="descname">euler2azi</code><span class="sig-paren">(</span><em>phi1</em>, <em>phi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#euler2azi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.euler2azi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert Euler angle to azimuth and colatitude
+:param phi1:
+:type phi1: array
+:param phi:
+:type phi: array
+:return: azi
+:rtype: array
+:return: col
+:rtype: array</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="AITAToolbox.aita.isInsideTriangle">
+<code class="descclassname">AITAToolbox.aita.</code><code class="descname">isInsideTriangle</code><span class="sig-paren">(</span><em>P</em>, <em>p1</em>, <em>p2</em>, <em>p3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#isInsideTriangle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.isInsideTriangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>test if P is inside the triangle define by p1 p2 p3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>P</strong> (<em>array</em>) – point you want test</li>
+<li><strong>p1</strong> (<em>array</em>) – one submit of the triangle</li>
+<li><strong>p2</strong> (<em>array</em>) – one submit of the triangle</li>
+<li><strong>p3</strong> (<em>array</em>) – one submit of the triangle</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">isIn</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isInsideTriangle</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">isInsideTriangle</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.1</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="AITAToolbox.aita.lut">
+<code class="descclassname">AITAToolbox.aita.</code><code class="descname">lut</code><span class="sig-paren">(</span><em>nx=512</em>, <em>circle=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#lut"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a 2D colorwheel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of pixel for the colorwheel</li>
+<li><strong>circle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – do you want create a black circle around</li>
+<li><strong>semi</strong> – do you want a semi LUT</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">lut</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">array of size [nx,nx,3]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Exemple:</th><td class="field-body"><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lut2d</span><span class="o">=</span><span class="n">lut</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">lut</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../CLASS/image2d.html" class="btn btn-neutral float-right" title="1. image2d" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="firststep.html" class="btn btn-neutral" title="1. Fisrt step" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright CC-BY-CC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,9 +1,3 @@
-'''
-.. module:: loadData_aita
-'''
-
-
-
 import AITAToolbox.aita as aita
 import numpy as np
 import math

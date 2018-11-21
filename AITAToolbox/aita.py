@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
-.. module:: aita
+.. py:module:: AITA G50
+
 Created on 3 juil. 2015
 Toolbox for data obtained using G50 Automatique Ice Texture Analyser (AITA) provide by :
 Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quartz and ice. J. Glaciol. 24, 117–130
@@ -27,20 +28,10 @@ import AITAToolbox.setvector3d as vec3d
 
 class aita(object):
     '''
+	.. py:class:: aita
+	
 	"aita" is a python class to analyse output from G50-AITA analyser.
-	It provide an environnement to plot data, to create inpur for CraFT code,...
-	
-	This toolbox is running on python3 and need various packages :
-	
-	    :library: numpy	    
-	    :library: matplotlib
-	    :library: math
-	    :library: pylab
-	    :library: skimage
-	    :library: datetime
-	    :library: random
-	    :library: colosys
-	    :library: image2d (see below)	    
+	It provide an environnement to plot data, to create inpur for CraFT code,...    
     '''
     pass
     

@@ -2,8 +2,6 @@
 '''
 Created on 3 juil. 2015
 
-.. module:: image2d
-
 image2d is a class used to manipulate image under matrix shape and to do the analyses on the picture
 
 .. note:: It has been build to manipulate both aita data and dic data

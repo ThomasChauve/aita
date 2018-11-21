@@ -1,7 +1,3 @@
-'''
-.. module:: setvector3d
-'''
-
 import numpy as np
 from scipy.stats import gaussian_kde
 import matplotlib.pyplot as plt
@@ -15,6 +11,8 @@ import os
 
 class setvector3d(object):
     '''
+    .. py:module:: setvector3d
+
     Object to work on a set of 3d unit vector
     '''
     
@@ -259,8 +257,8 @@ class setvector3d(object):
 
         :param nbpoints: number of point
         :type nbpoints: int
-        :return v:
-        rtype v: setvector3d
+        :return v: 
+        :rtype v: setvector3d
         '''
         
         id=[random.randint(0, np.shape(self.vector)[0]-1) for p in range(0, nbpoints)]

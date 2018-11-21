@@ -13,7 +13,25 @@ AITA Toolbox is a python tools created to work on orientation map such as the on
    :maxdepth: 1
    :caption: Documentation:
 
-    installing
+
+Installation
+============
+
+From github master
+******************
+
+Download the package on github : https://github.com/ThomasChauve/aita
+
+.. code:: bash
+
+    git clone https://github.com/ThomasChauve/aita
+    pip install .
+
+Then you will find all the package in python using
+
+.. code:: python
+
+    import AITAToolbox
 
 
 .. toctree::

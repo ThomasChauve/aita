@@ -23,6 +23,7 @@ For simple user
 If you want just to use the toolbox without doing any devellopement
 
 .. code:: bash
+
 	pip install git+https://github.com/ThomasChauve/aita
 
 
@@ -42,6 +43,13 @@ Then you will find all the package in python using
 .. code:: python
 
     import AITAToolbox
+
+Uninstall
+*********
+
+.. code:: bash
+    
+    pip uninstall AITAToolbox
 
 
 .. toctree::

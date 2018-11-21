@@ -1,0 +1,1 @@
+AITA Toolbox is a python tools created to work on orientation map such as the one obtained using optical measurement (birefringence). It is an open source code under CC-BY-CC licence (https://creativecommons.org/licenses/by/2.0/fr/deed.en). There is no guarantee if you are using it. It has been tested with python 3.7

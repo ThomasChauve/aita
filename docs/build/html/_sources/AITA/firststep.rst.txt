@@ -50,6 +50,7 @@ You can plot Euler angle map.
     plt.figure()
     data.phi1.plot()
     plt.title('phi Euler angle')
+    plt.plot()
 
 You can plot grains if you have include a microstructure when you load the data.
 
@@ -58,6 +59,7 @@ You can plot grains if you have include a microstructure when you load the data.
     plt.figure()
     data.grains.plot()
     plt.title('Grains')
+    plt.plot()
 
 You can plot a colormap associated with a colorwheel
 
@@ -65,7 +67,8 @@ You can plot a colormap associated with a colorwheel
     
     plt.figure()
     data.plot()
-    
+    plt.plot()
+
 The colorwheel
 
 .. code:: python
@@ -73,7 +76,7 @@ The colorwheel
     import IGETools.aita as aita
     lut2d=aita.lut()
     plt.imshow(lut)
-
+    plt.plot()
 
 Plot pole figure
 ****************
@@ -84,9 +87,9 @@ Various options can be used to plot pole figure. Projection plane, add circle at
 .. code:: python
 	
     data.plotpdf(contourf=True,angle=0)
+    plt.plot()
 
 Others
 ******
 
 There is more function. To have a look into it look at the function overview.
-    

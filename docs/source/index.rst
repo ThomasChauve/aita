@@ -17,8 +17,19 @@ AITA Toolbox is a python tools created to work on orientation map such as the on
 Installation
 ============
 
-From github master
-******************
+For simple user
+***************
+
+If you want just to use the toolbox without doing any devellopement
+
+.. code:: bash
+	pip install git+https://github.com/ThomasChauve/aita
+
+
+For develloper
+**************
+
+If you want to access the code and be able to do some modification
 
 .. code:: bash
 

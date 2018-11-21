@@ -10,7 +10,7 @@ Loading data from G50 analyser after you convert binary file into ASCII file wit
 
 .. code:: python
     
-    import AITATools.loadData_aita as lda
+    import AITATool.loadData_aita as lda
     # The inputs come from G50 analyseur
     adr_data='orientation_test.dat'
     adr_micro='micro_test.bmp'

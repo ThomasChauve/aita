@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to AITA Toolbox’s documentation! &mdash; AITA Toolbox 2.0 documentation</title>
+  <title>Installation &mdash; AITA Toolbox 2.0 documentation</title>
   
 
   
@@ -28,7 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation" href="installing.html" /> 
+    <link rel="next" title="1. Fisrt step" href="AITA/firststep.html" />
+    <link rel="prev" title="Welcome to AITA Toolbox’s documentation!" href="index.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -47,7 +48,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> AITA Toolbox
+            <a href="index.html" class="icon icon-home"> AITA Toolbox
           
 
           
@@ -78,8 +79,11 @@
             
             
               <p class="caption"><span class="caption-text">Documentation:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#via-python-package">Via Python Package</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">AITA</span></p>
 <ul>
@@ -104,7 +108,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">AITA Toolbox</a>
+          <a href="index.html">AITA Toolbox</a>
         
       </nav>
 
@@ -133,15 +137,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#">Docs</a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Welcome to AITA Toolbox’s documentation!</li>
+      <li>Installation</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/installing.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -154,56 +158,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-aita-toolbox-s-documentation">
-<h1>Welcome to AITA Toolbox’s documentation!<a class="headerlink" href="#welcome-to-aita-toolbox-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>AITA Toolbox is a python tools created to work on orientation map such as the one obtained using optical measurement (birefringence). It is an open source code under CC-BY-CC licence (<a class="reference external" href="https://creativecommons.org/licenses/by/2.0/fr/deed.en">https://creativecommons.org/licenses/by/2.0/fr/deed.en</a>). There is no guarantee if you are using it. It has been tested with python 3.7</p>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Documentation:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
-</ul>
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="via-python-package">
+<h2>Via Python Package<a class="headerlink" href="#via-python-package" title="Permalink to this headline">¶</a></h2>
+<p>Download the package on github : <a class="reference external" href="https://github.com/ThomasChauve/aita">https://github.com/ThomasChauve/aita</a></p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">src</span><span class="o">/</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">AITA</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="AITA/firststep.html">1. Fisrt step</a></li>
-<li class="toctree-l1"><a class="reference internal" href="AITA/function.html">2. Function overview</a></li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">CLASS</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="CLASS/image2d.html">1. image2d</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CLASS/setvector3d.html">2. setvector3d</a></li>
-</ul>
+<p>Then you will find all the package in python using</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">AITAToolbox</span>
+</pre></div>
 </div>
 </div>
-<div class="section" id="contact">
-<h1>Contact<a class="headerlink" href="#contact" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Thomas Chauve</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:thomas&#46;chauve&#37;&#52;&#48;univ-grenoble-alpes&#46;fr">thomas<span>&#46;</span>chauve<span>&#64;</span>univ-grenoble-alpes<span>&#46;</span>fr</a></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">organization:</th><td class="field-body">UiO</td>
-</tr>
-<tr class="field-even field"><th class="field-name">status:</th><td class="field-body">This is a “work in progress”</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">version:</th><td class="field-body">2.0</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
 </div>
 
 
@@ -214,8 +182,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="installing.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="AITA/firststep.html" class="btn btn-neutral float-right" title="1. Fisrt step" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to AITA Toolbox’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

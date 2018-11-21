@@ -6,7 +6,7 @@ Here we presente the function associated with the class aita
 loadData_aita
 *************
 
-.. automodule:: src/AITAToolbox/loadData_aita
+.. automodule:: AITAToolbox.loadData_aita
 	:special-members:
 	:members: 
 
@@ -14,6 +14,6 @@ loadData_aita
 aita
 ****
 
-.. automodule:: src/AITAToolbox/aita
+.. automodule:: AITAToolbox.aita
 	:special-members:
 	:members: 

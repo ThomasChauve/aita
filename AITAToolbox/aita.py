@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-.. py:module:: AITA toolbox
+.. module:: aita
 Created on 3 juil. 2015
 Toolbox for data obtained using G50 Automatique Ice Texture Analyser (AITA) provide by :
 Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quartz and ice. J. Glaciol. 24, 117–130

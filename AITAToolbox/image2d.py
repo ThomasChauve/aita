@@ -2,7 +2,7 @@
 '''
 Created on 3 juil. 2015
 
-.. py:module:: image2d class
+.. module:: image2d
 
 image2d is a class used to manipulate image under matrix shape and to do the analyses on the picture
 

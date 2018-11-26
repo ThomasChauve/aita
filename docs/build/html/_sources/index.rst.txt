@@ -35,6 +35,7 @@ If you want to access the code and be able to do some modification
 .. code:: bash
 
     git clone https://github.com/ThomasChauve/aita
+    cd aita/
     pip install -r requirements.txt
     pip install .
 

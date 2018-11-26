@@ -441,6 +441,7 @@ class aita(object):
         
         v=vec3d.setvector3d(np.transpose(np.array([xc[:,0],yc[:,0],zc[:,0]])))
         v.stereoplot(nbpoints=nbp,contourf=contourf,bw=bw,cm=cm2,angle=angle,plotOT=peigen,projz=projz)
+	plt.text(-1.4, 1.4, r'[0001]')
         
         eigvalue,eigvector=v.OrientationTensor2nd()
         

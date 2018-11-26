@@ -10,7 +10,7 @@ Loading data from G50 analyser after you convert binary file into ASCII file wit
 
 .. code:: python
     
-    import AITATool.loadData_aita as lda
+    import AITAToolbox.loadData_aita as lda
     # The inputs come from G50 analyseur
     adr_data='orientation_test.dat'
     adr_micro='micro_test.bmp'
@@ -73,7 +73,7 @@ The colorwheel
 
 .. code:: python
     
-    import IGETools.aita as aita
+    import AITAToolbox.aita as aita
     lut2d=aita.lut()
     plt.imshow(lut)
     plt.plot()

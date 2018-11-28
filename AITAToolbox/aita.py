@@ -370,7 +370,7 @@ class aita(object):
         out_in.write('#------------------------------------------------------------\n')
         out_in.close()
     
-    def plotpdf(self,peigen=True,select_grain=False,grainlist=[],nbp=10000,contourf=False,cm2=cm.viridis,bw=0.1,projz=1,angle=np.array([30.,60.])):
+    def plotpdf(self,peigen=True,select_grain=False,grainlist=[],nbp=10000,contourf=False,cm2=cm.viridis,bw=0.1,projz=1,angle=np.array([30.,60.]),cline=15,n_jobs=-1):
         '''
         Plot pole figure for c-axis (0001)
         
@@ -384,14 +384,18 @@ class aita(object):
         :type nbp: int
         :param contourf: Do you want to add contouring to your pole figure ? (Default : False)
         :type contourf: bool
-        :param bw: bandwidth to compute kernel density (default : 0.1)
-        :type bw: float
-        :param angle: plot circle for this angle value (default : np.array([30.,60.])) 0 if you don't want inner circle.
-        :type angle: np.array
         :param cm2: colorbar (default : cm.viridis)
         :type cm2: cm
+        :param bw: bandwidth to compute kernel density (default : 0.1) bw=0 mean find the best fit between 0.01 and 1
+        :type bw: float
         :param projz: 0 or 1. It choose the type of projection. 0 (1) means projection in the plane z=0 (1).
         :type projz: int
+        :param angle: plot circle for this angle value (default : np.array([30.,60.])) 0 if you don't want inner circle.
+        :type angle: np.array
+        :param cline: Number of line in contourf (default 15) Used only when contourf=True.
+        :type cline: int
+        :param n_jobs: number of job in parellel (CPU). Only use when bw=0 (best fit) (default : -1 mean all processor)
+        :type n_jobs: int
         :return: pole figure image
         :rtype: matplotlib figure
         :return: eigenvalue
@@ -440,7 +444,7 @@ class aita(object):
         zc = np.cos(col)  
         
         v=vec3d.setvector3d(np.transpose(np.array([xc[:,0],yc[:,0],zc[:,0]])))
-        v.stereoplot(nbpoints=nbp,contourf=contourf,bw=bw,cm=cm2,angle=angle,plotOT=peigen,projz=projz)
+        v.stereoplot(nbpoints=nbp,contourf=contourf,bw=bw,cm=cm2,angle=angle,plotOT=peigen,projz=projz,cline=cline,n_jobs=n_jobs)
 
         plt.text(-1.4, 1.4, r'[0001]')
         

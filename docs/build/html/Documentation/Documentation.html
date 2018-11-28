@@ -264,7 +264,7 @@ value. If you set nbp to 0 it use all the data.</p>
 </div>
 <div class="section" id="kernel-density-estimation">
 <h2>4.2. Kernel Density Estimation<a class="headerlink" href="#kernel-density-estimation" title="Permalink to this headline">¶</a></h2>
-<p>If you want to have an idea of a basic KDE in dimention refer to
+<p>If you want to have an idea of a basic KDE in one dimention refer to
 <a class="reference external" href="https://mathisonian.github.io/kde/">https://mathisonian.github.io/kde/</a></p>
 <p>Here there is some specificities du to the fact that we are computing
 KDE on a sphere. To do so we are using sklearn.neighbors.KernelDensity
@@ -275,8 +275,9 @@ exemple see
 <p>We are using a gaussian kernel.</p>
 <p><strong>Warning :</strong> The ‘bandwidth’ parameter is crutial parameter to set. It
 can have a strong influence on your pole figure and you interpretation.
-You should set it up carefully and be critic on your PDF. Here we show
-different pole figure for different bandwidth value</p>
+You should set it up carefully and be critic on your pole figure. Here
+we show different pole figure for different bandwidth value using the
+same data as input.</p>
 <div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>

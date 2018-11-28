@@ -147,7 +147,7 @@ value. If you set nbp to 0 it use all the data.
 Kernel Density Estimation
 -------------------------
 
-If you want to have an idea of a basic KDE in dimention refer to
+If you want to have an idea of a basic KDE in one dimention refer to
 https://mathisonian.github.io/kde/
 
 Here there is some specificities du to the fact that we are computing
@@ -162,8 +162,9 @@ We are using a gaussian kernel.
 
 **Warning :** The 'bandwidth' parameter is crutial parameter to set. It
 can have a strong influence on your pole figure and you interpretation.
-You should set it up carefully and be critic on your PDF. Here we show
-different pole figure for different bandwidth value
+You should set it up carefully and be critic on your pole figure. Here
+we show different pole figure for different bandwidth value using the
+same data as input.
 
 .. code:: ipython3
 

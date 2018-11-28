@@ -59,6 +59,7 @@ Uninstall
     :caption: AITA
 
     AITA/firststep
+    ExempleAITA/ExempleAITA
     AITA/function
 
 .. toctree::

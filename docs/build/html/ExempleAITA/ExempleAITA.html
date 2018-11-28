@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2. How to use aita toolbox &mdash; AITAToolbox 2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. Function overview" href="../AITA/function.html" />
+    <link rel="prev" title="1. Fisrt step" href="../AITA/firststep.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> AITAToolbox
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">AITA</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../AITA/firststep.html">1. Fisrt step</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. How to use aita toolbox</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#load-data-from-g50-analyser">2.1. Load data from G50 analyser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filter-the-data">2.2. Filter the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plot-a-colormap">2.3. Plot a colormap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plot-pole-figure">2.4. Plot pole figure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bw-0-1-default">2.4.1. bw=0.1 (default)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bw-0-3">2.4.2. bw=0.3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bw-10">2.4.3. bw=10</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bw-0-05">2.4.4. bw=0.05</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-bw-selection-bw-0">2.4.5. Automatic bw selection, bw=0</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#plot-misorientation-profil">2.5. Plot misorientation profil</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../AITA/function.html">3. Function overview</a></li>
+</ul>
+<p class="caption"><span class="caption-text">CLASS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../CLASS/image2d.html">1. image2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CLASS/setvector3d.html">2. setvector3d</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AITAToolbox</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>2. How to use aita toolbox</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ExempleAITA/ExempleAITA.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="how-to-use-aita-toolbox">
+<h1>2. How to use aita toolbox<a class="headerlink" href="#how-to-use-aita-toolbox" title="Permalink to this headline">¶</a></h1>
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">AITAToolbox.loadData_aita</span> <span class="k">as</span> <span class="nn">lda</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<div class="section" id="load-data-from-g50-analyser">
+<h2>2.1. Load data from G50 analyser<a class="headerlink" href="#load-data-from-g50-analyser" title="Permalink to this headline">¶</a></h2>
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">=</span><span class="n">lda</span><span class="o">.</span><span class="n">aita5col</span><span class="p">(</span><span class="s1">&#39;orientation_test.dat&#39;</span><span class="p">,</span><span class="s1">&#39;micro_test.bmp&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Sucessfull aita build !
+</pre></div>
+</div>
+</div>
+<div class="section" id="filter-the-data">
+<h2>2.2. Filter the data<a class="headerlink" href="#filter-the-data" title="Permalink to this headline">¶</a></h2>
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot-a-colormap">
+<h2>2.3. Plot a colormap<a class="headerlink" href="#plot-a-colormap" title="Permalink to this headline">¶</a></h2>
+<p>Here we plot colormap and the color wheel associated</p>
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">data</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">plotBoundary</span><span class="p">(</span><span class="n">dilatation</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Colormap&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;Colormap&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_7_1.png" src="../_images/output_7_1.png" />
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">lda</span><span class="o">.</span><span class="n">aita</span><span class="o">.</span><span class="n">lut</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;LUT&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;LUT&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_8_1.png" src="../_images/output_8_1.png" />
+</div>
+<div class="section" id="plot-pole-figure">
+<h2>2.4. Plot pole figure<a class="headerlink" href="#plot-pole-figure" title="Permalink to this headline">¶</a></h2>
+<p><strong>Warning</strong> The choise of the bandwidth value can be very important. It
+can have a significative impact on the result. A higher value of bw will
+smooth the data.</p>
+<div class="section" id="bw-0-1-default">
+<h3>2.4.1. bw=0.1 (default)<a class="headerlink" href="#bw-0-1-default" title="Permalink to this headline">¶</a></h3>
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">0.29090318</span><span class="p">,</span> <span class="mf">0.36842623</span><span class="p">,</span> <span class="mf">0.3406706</span> <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_10_1.png" src="../_images/output_10_1.png" />
+</div>
+<div class="section" id="bw-0-3">
+<h3>2.4.2. bw=0.3<a class="headerlink" href="#bw-0-3" title="Permalink to this headline">¶</a></h3>
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">0.29090318</span><span class="p">,</span> <span class="mf">0.36842623</span><span class="p">,</span> <span class="mf">0.3406706</span> <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_12_1.png" src="../_images/output_12_1.png" />
+</div>
+<div class="section" id="bw-10">
+<h3>2.4.3. bw=10<a class="headerlink" href="#bw-10" title="Permalink to this headline">¶</a></h3>
+<p>Be careful with the colorbar. Here all the color have similar value.</p>
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">0.29090318</span><span class="p">,</span> <span class="mf">0.36842623</span><span class="p">,</span> <span class="mf">0.3406706</span> <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_14_1.png" src="../_images/output_14_1.png" />
+</div>
+<div class="section" id="bw-0-05">
+<h3>2.4.4. bw=0.05<a class="headerlink" href="#bw-0-05" title="Permalink to this headline">¶</a></h3>
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">0.29090318</span><span class="p">,</span> <span class="mf">0.36842623</span><span class="p">,</span> <span class="mf">0.3406706</span> <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_16_1.png" src="../_images/output_16_1.png" />
+</div>
+<div class="section" id="automatic-bw-selection-bw-0">
+<h3>2.4.5. Automatic bw selection, bw=0<a class="headerlink" href="#automatic-bw-selection-bw-0" title="Permalink to this headline">¶</a></h3>
+<p>It is going to test 10 value for bw between 0.01 and 1 and select the
+best one. This can be time conssuming depending of you computer. It
+using parallel computation. Option ‘n_jobs=-1’ by default use all the
+cpu. If you want to limite the cpu to n cores use ‘n_jobs=n’.</p>
+<p>For now the range of bw and the number of value tested is limitated
+(bw=np.linspace(0.01, 1., 10)). This can be change within the code or
+add as option (ask me if you think it is need).</p>
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">0.29090318</span><span class="p">,</span> <span class="mf">0.36842623</span><span class="p">,</span> <span class="mf">0.3406706</span> <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_18_2.png" src="../_images/output_18_2.png" />
+</div>
+</div>
+<div class="section" id="plot-misorientation-profil">
+<h2>2.5. Plot misorientation profil<a class="headerlink" href="#plot-misorientation-profil" title="Permalink to this headline">¶</a></h2>
+<div class="code ipython3 highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">mis2o</span><span class="p">,</span><span class="n">mis2p</span><span class="p">,</span><span class="n">pos</span><span class="p">]</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">misorientation_profile</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">],[</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">]]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Misorientation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/output_20_1.png" src="../_images/output_20_1.png" />
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../AITA/function.html" class="btn btn-neutral float-right" title="3. Function overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../AITA/firststep.html" class="btn btn-neutral" title="1. Fisrt step" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright CC-BY-CC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

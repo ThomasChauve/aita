@@ -6,7 +6,7 @@ from sklearn.neighbors import KernelDensity
 from sklearn.model_selection import GridSearchCV
 import random
 import sys
-import setvector3d.uniform_dist as uni_dist
+import AITAToolbox.uniform_dist as uni_dist
 import os
 
 class setvector3d(object):

@@ -587,7 +587,7 @@ It provide an environnement to plot data, to create inpur for CraFT code,…</p>
 
 <dl class="method">
 <dt id="AITAToolbox.aita.aita.plotpdf">
-<code class="descname">plotpdf</code><span class="sig-paren">(</span><em>peigen=True</em>, <em>select_grain=False</em>, <em>grainlist=[]</em>, <em>nbp=10000</em>, <em>contourf=False</em>, <em>cm2=&lt;matplotlib.colors.ListedColormap object&gt;</em>, <em>bw=0.1</em>, <em>projz=1</em>, <em>angle=array([30.</em>, <em>60.])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.plotpdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.plotpdf" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plotpdf</code><span class="sig-paren">(</span><em>peigen=True</em>, <em>select_grain=False</em>, <em>grainlist=[]</em>, <em>nbp=10000</em>, <em>contourf=False</em>, <em>cm2=&lt;matplotlib.colors.ListedColormap object&gt;</em>, <em>bw=0.1</em>, <em>projz=1</em>, <em>angle=array([30.</em>, <em>60.])</em>, <em>cline=15</em>, <em>n_jobs=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.plotpdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.plotpdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot pole figure for c-axis (0001)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -599,10 +599,12 @@ It provide an environnement to plot data, to create inpur for CraFT code,…</p>
 <li><strong>grainlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – give the list of the grainId you want to plot</li>
 <li><strong>nbp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of pixel plotted</li>
 <li><strong>contourf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Do you want to add contouring to your pole figure ? (Default : False)</li>
-<li><strong>bw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – bandwidth to compute kernel density (default : 0.1)</li>
-<li><strong>angle</strong> (<em>np.array</em>) – plot circle for this angle value (default : np.array([30.,60.])) 0 if you don’t want inner circle.</li>
 <li><strong>cm2</strong> (<em>cm</em>) – colorbar (default : cm.viridis)</li>
+<li><strong>bw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – bandwidth to compute kernel density (default : 0.1) bw=0 mean find the best fit between 0.01 and 1</li>
 <li><strong>projz</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – 0 or 1. It choose the type of projection. 0 (1) means projection in the plane z=0 (1).</li>
+<li><strong>angle</strong> (<em>np.array</em>) – plot circle for this angle value (default : np.array([30.,60.])) 0 if you don’t want inner circle.</li>
+<li><strong>cline</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Number of line in contourf (default 15) Used only when contourf=True.</li>
+<li><strong>n_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of job in parellel (CPU). Only use when bw=0 (best fit) (default : -1 mean all processor)</li>
 </ul>
 </td>
 </tr>
@@ -807,7 +809,6 @@ It provide an environnement to plot data, to create inpur for CraFT code,…</p>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
   

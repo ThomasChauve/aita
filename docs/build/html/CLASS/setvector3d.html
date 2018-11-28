@@ -166,7 +166,7 @@
 <dl class="class">
 <dt id="AITAToolbox.setvector3d.setvector3d">
 <em class="property">class </em><code class="descclassname">AITAToolbox.setvector3d.</code><code class="descname">setvector3d</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/setvector3d.html#setvector3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.setvector3d.setvector3d" title="Permalink to this definition">¶</a></dt>
-<dd><span class="target" id="module-setvector3d"></span><p>Object to work on a set of 3d unit vector</p>
+<dd><p>Object to work on a set of 3d unit vector</p>
 <dl class="method">
 <dt id="AITAToolbox.setvector3d.setvector3d.OrientationTensor2nd">
 <code class="descname">OrientationTensor2nd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/setvector3d.html#setvector3d.OrientationTensor2nd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.setvector3d.setvector3d.OrientationTensor2nd" title="Permalink to this definition">¶</a></dt>
@@ -175,16 +175,15 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Return eigenvalue:</th></tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Return eigvalue:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">eigen value w[i]</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Rtype eigenvalue:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">np.array</td>
+<tr class="field-even field"><th class="field-name">Rtype eigvalue:</th><td class="field-body">np.array</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">Return eigenvector:</th></tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Return eigvector:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">eigen vector v[:,i]</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Rtype eigenvector:</th></tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Rtype eigvector:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">np.array</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Note:</th><td class="field-body">eigen value w[i] is associate to eigen vector v[:,i]</td>
@@ -246,7 +245,7 @@
 
 <dl class="method">
 <dt id="AITAToolbox.setvector3d.setvector3d.stereoplot">
-<code class="descname">stereoplot</code><span class="sig-paren">(</span><em>contourf=False</em>, <em>bw=0.03</em>, <em>plotOT=True</em>, <em>nbpoints=0</em>, <em>projz=1</em>, <em>angle=array([30.</em>, <em>60.])</em>, <em>cm=&lt;matplotlib.colors.ListedColormap object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/setvector3d.html#setvector3d.stereoplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.setvector3d.setvector3d.stereoplot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stereoplot</code><span class="sig-paren">(</span><em>contourf=False</em>, <em>bw=0.03</em>, <em>plotOT=True</em>, <em>nbpoints=0</em>, <em>projz=1</em>, <em>angle=array([30.</em>, <em>60.])</em>, <em>cm=&lt;matplotlib.colors.ListedColormap object&gt;</em>, <em>cline=15</em>, <em>n_jobs=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/setvector3d.html#setvector3d.stereoplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.setvector3d.setvector3d.stereoplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a stereographic projection of the vector</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -254,11 +253,14 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>contourf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – filled contour plot (default False)</li>
-<li><strong>bw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – bandwidth for Kernel density function (default 0.03)</li>
+<li><strong>bw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – bandwidth for Kernel density function (default 0.03). bw=0 mean find the best fit between 0.01 and 1</li>
 <li><strong>plotOT</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – plot the eigen vector on the pole figure (default True)</li>
 <li><strong>nbpoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of random vector selected to compute the pole figure (default 0, mean every pixel are used) Be careful with to many point the computation can be very slow. Up to 10000 it is still reasonable.</li>
 <li><strong>projz</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – 0 or 1. It choose the type of projection. 0 (1) means projection in the plane z=0 (1).</li>
 <li><strong>angle</strong> (<em>np.array</em>) – angle in degree for inner circle between 0 and 90 (0 mean no inner circle, default np.array([30.,60.]))</li>
+<li><strong>cm</strong> (<em>cm</em>) – colorbar</li>
+<li><strong>cline</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Number of line in contourf (default 15) Used only when contourf=True.</li>
+<li><strong>n_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of job in parellel (CPU). Only use when bw=0 (best fit) (default : -1 mean all processor)</li>
 </ul>
 </td>
 </tr>
@@ -332,7 +334,6 @@
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
   

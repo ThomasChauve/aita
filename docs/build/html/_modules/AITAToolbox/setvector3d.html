@@ -149,20 +149,18 @@
             
   <h1>Source code for AITAToolbox.setvector3d</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">gaussian_kde</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">cm</span>
 <span class="kn">import</span> <span class="nn">matplotlib.tri</span> <span class="k">as</span> <span class="nn">tri</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KernelDensity</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">AITAToolbox.uniform_dist</span> <span class="k">as</span> <span class="nn">uni_dist</span>
+<span class="kn">import</span> <span class="nn">setvector3d.uniform_dist</span> <span class="k">as</span> <span class="nn">uni_dist</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <div class="viewcode-block" id="setvector3d"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d">[docs]</a><span class="k">class</span> <span class="nc">setvector3d</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    .. py:module:: setvector3d</span>
-
 <span class="sd">    Object to work on a set of 3d unit vector</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
@@ -200,10 +198,10 @@
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Compute the normelized second order orientation tensor</span>
 
-<span class="sd">        :return eigenvalue: eigen value w[i]</span>
-<span class="sd">        :rtype eigenvalue: np.array</span>
-<span class="sd">        :return eigenvector: eigen vector v[:,i]</span>
-<span class="sd">        :rtype eigenvector: np.array</span>
+<span class="sd">        :return eigvalue: eigen value w[i]</span>
+<span class="sd">        :rtype eigvalue: np.array</span>
+<span class="sd">        :return eigvector: eigen vector v[:,i]</span>
+<span class="sd">        :rtype eigvector: np.array</span>
 <span class="sd">        :note: eigen value w[i] is associate to eigen vector v[:,i] </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">a11</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))))</span>
@@ -219,13 +217,13 @@
         <span class="k">return</span> <span class="n">eigvalue</span><span class="p">,</span><span class="n">eigvector</span></div>
         
         
-<div class="viewcode-block" id="setvector3d.stereoplot"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d.stereoplot">[docs]</a>    <span class="k">def</span> <span class="nf">stereoplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">contourf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span><span class="n">plotOT</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">nbpoints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">projz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">30.</span><span class="p">,</span><span class="mf">60.</span><span class="p">]),</span><span class="n">cm</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">):</span>
+<div class="viewcode-block" id="setvector3d.stereoplot"><a class="viewcode-back" href="../../CLASS/setvector3d.html#AITAToolbox.setvector3d.setvector3d.stereoplot">[docs]</a>    <span class="k">def</span> <span class="nf">stereoplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">contourf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span><span class="n">plotOT</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">nbpoints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">projz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">30.</span><span class="p">,</span><span class="mf">60.</span><span class="p">]),</span><span class="n">cm</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">,</span><span class="n">cline</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Plot a stereographic projection of the vector</span>
 
 <span class="sd">        :param contourf: filled contour plot (default False)</span>
 <span class="sd">        :type contourf: bool</span>
-<span class="sd">        :param bw: bandwidth for Kernel density function (default 0.03)</span>
+<span class="sd">        :param bw: bandwidth for Kernel density function (default 0.03). bw=0 mean find the best fit between 0.01 and 1</span>
 <span class="sd">        :type bw: float</span>
 <span class="sd">        :param plotOT: plot the eigen vector on the pole figure (default True)</span>
 <span class="sd">        :type plotOT: bool</span>
@@ -235,6 +233,12 @@
 <span class="sd">        :type projz: int</span>
 <span class="sd">        :param angle: angle in degree for inner circle between 0 and 90 (0 mean no inner circle, default np.array([30.,60.]))</span>
 <span class="sd">        :type angle: np.array</span>
+<span class="sd">        :param cm: colorbar</span>
+<span class="sd">        :type cm: cm</span>
+<span class="sd">        :param cline: Number of line in contourf (default 15) Used only when contourf=True.</span>
+<span class="sd">        :type cline: int</span>
+<span class="sd">        :param n_jobs: number of job in parellel (CPU). Only use when bw=0 (best fit) (default : -1 mean all processor)</span>
+<span class="sd">        :type n_jobs: int</span>
 <span class="sd">        &#39;&#39;&#39;</span>
        
         <span class="k">if</span> <span class="n">nbpoints</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
@@ -250,9 +254,15 @@
         <span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="n">v1</span><span class="o">.</span><span class="n">cart2spher</span><span class="p">()</span>
         <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
         <span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
-        
-        <span class="n">kde2</span> <span class="o">=</span> <span class="n">KernelDensity</span><span class="p">(</span><span class="n">bandwidth</span><span class="o">=</span><span class="n">bw</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;haversine&#39;</span><span class="p">,</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;ball_tree&#39;</span><span class="p">)</span>
-        <span class="n">kde2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">])))</span>
+
+        <span class="k">if</span> <span class="n">bw</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="c1">#it means automatically compute bw value. See https://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/</span>
+            <span class="n">grid</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">KernelDensity</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="s1">&#39;haversine&#39;</span><span class="p">,</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;ball_tree&#39;</span><span class="p">),{</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">10</span><span class="p">)},</span><span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span> <span class="c1"># 20-fold cross-validation</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">])))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+            <span class="n">kde2</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">best_estimator_</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kde2</span> <span class="o">=</span> <span class="n">KernelDensity</span><span class="p">(</span><span class="n">bandwidth</span><span class="o">=</span><span class="n">bw</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;haversine&#39;</span><span class="p">,</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;ball_tree&#39;</span><span class="p">)</span>
+            <span class="n">kde2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">])))</span>
         
         <span class="c1"># Evaluate the KDE in a given set of direction</span>
         <span class="k">if</span> <span class="n">contourf</span><span class="p">:</span>
@@ -316,8 +326,8 @@
         
         <span class="k">if</span> <span class="n">contourf</span><span class="p">:</span>
             <span class="n">triang</span> <span class="o">=</span> <span class="n">tri</span><span class="o">.</span><span class="n">Triangulation</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">tricontour</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="mi">15</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">tricontourf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="mi">15</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">tricontour</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="n">cline</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">tricontourf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="n">cline</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">weights</span><span class="p">),</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span>
         
@@ -451,7 +461,6 @@
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
   

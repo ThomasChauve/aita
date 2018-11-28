@@ -1,18 +1,16 @@
 import numpy as np
-from scipy.stats import gaussian_kde
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.tri as tri
 from sklearn.neighbors import KernelDensity
+from sklearn.model_selection import GridSearchCV
 import random
 import sys
-import AITAToolbox.uniform_dist as uni_dist
+import setvector3d.uniform_dist as uni_dist
 import os
 
 class setvector3d(object):
     '''
-    .. py:module:: setvector3d
-
     Object to work on a set of 3d unit vector
     '''
     
@@ -50,10 +48,10 @@ class setvector3d(object):
         '''
         Compute the normelized second order orientation tensor
 
-        :return eigenvalue: eigen value w[i]
-        :rtype eigenvalue: np.array
-        :return eigenvector: eigen vector v[:,i]
-        :rtype eigenvector: np.array
+        :return eigvalue: eigen value w[i]
+        :rtype eigvalue: np.array
+        :return eigvector: eigen vector v[:,i]
+        :rtype eigvector: np.array
         :note: eigen value w[i] is associate to eigen vector v[:,i] 
         '''
         a11 = np.float32(np.nanmean(np.float128(np.multiply(self.vector[:,0],self.vector[:,0]))))
@@ -69,13 +67,13 @@ class setvector3d(object):
         return eigvalue,eigvector
         
         
-    def stereoplot(self,contourf=False,bw=0.03,plotOT=True,nbpoints=0,projz=1,angle=np.array([30.,60.]),cm=cm.viridis):
+    def stereoplot(self,contourf=False,bw=0.03,plotOT=True,nbpoints=0,projz=1,angle=np.array([30.,60.]),cm=cm.viridis,cline=15,n_jobs=-1):
         '''
         Plot a stereographic projection of the vector
 
         :param contourf: filled contour plot (default False)
         :type contourf: bool
-        :param bw: bandwidth for Kernel density function (default 0.03)
+        :param bw: bandwidth for Kernel density function (default 0.03). bw=0 mean find the best fit between 0.01 and 1
         :type bw: float
         :param plotOT: plot the eigen vector on the pole figure (default True)
         :type plotOT: bool
@@ -85,6 +83,12 @@ class setvector3d(object):
         :type projz: int
         :param angle: angle in degree for inner circle between 0 and 90 (0 mean no inner circle, default np.array([30.,60.]))
         :type angle: np.array
+        :param cm: colorbar
+        :type cm: cm
+        :param cline: Number of line in contourf (default 15) Used only when contourf=True.
+        :type cline: int
+        :param n_jobs: number of job in parellel (CPU). Only use when bw=0 (best fit) (default : -1 mean all processor)
+        :type n_jobs: int
         '''
        
         if nbpoints==0:
@@ -100,9 +104,15 @@ class setvector3d(object):
         phi,theta=v1.cart2spher()
         theta=theta-np.pi
         phi=phi-np.pi/2
-        
-        kde2 = KernelDensity(bandwidth=bw, metric='haversine',kernel='gaussian', algorithm='ball_tree')
-        kde2.fit(np.transpose(np.array([phi,theta])))
+
+        if bw==0: #it means automatically compute bw value. See https://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/
+            grid = GridSearchCV(KernelDensity(metric='haversine',kernel='gaussian', algorithm='ball_tree'),{'bandwidth': np.linspace(0.01, 1., 10)},cv=5,n_jobs=n_jobs) # 20-fold cross-validation
+            grid.fit(np.transpose(np.array([phi,theta])))
+            print(grid.best_params_)
+            kde2 = grid.best_estimator_
+        else:
+            kde2 = KernelDensity(bandwidth=bw, metric='haversine',kernel='gaussian', algorithm='ball_tree')
+            kde2.fit(np.transpose(np.array([phi,theta])))
         
         # Evaluate the KDE in a given set of direction
         if contourf:
@@ -166,8 +176,8 @@ class setvector3d(object):
         
         if contourf:
             triang = tri.Triangulation(xx, yy)
-            plt.tricontour(xx, yy, np.exp(weights), 15, linewidths=0.5, colors='k')
-            plt.tricontourf(xx, yy, np.exp(weights), 15)
+            plt.tricontour(xx, yy, np.exp(weights), cline, linewidths=0.5, colors='k')
+            plt.tricontourf(xx, yy, np.exp(weights), cline)
         else:
             plt.scatter(xx, yy, c=np.exp(weights), s=20, edgecolor='',cmap=cm)
         

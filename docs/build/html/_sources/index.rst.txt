@@ -56,10 +56,9 @@ Uninstall
 .. toctree::
     :maxdepth: 1
     :numbered:
-    :caption: AITA
+    :caption: Documentation
 
-    AITA/firststep
-    ExempleAITA/ExempleAITA
+    Documentation/Documentation
     AITA/function
 
 .. toctree::

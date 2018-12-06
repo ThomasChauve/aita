@@ -63,8 +63,10 @@ class setvector3d(object):
          
         Tensor=np.array([[a11, a12, a13],[a12, a22, a23],[a13, a23, a33]])
         eigvalue,eigvector=np.linalg.eig(Tensor)
+        
+        idx = eigvalue.argsort()[::-1]
            
-        return eigvalue,eigvector
+        return eigvalue[idx],eigvector[:,idx]
         
         
     def stereoplot(self,contourf=False,bw=0.03,plotOT=True,nbpoints=0,projz=1,angle=np.array([30.,60.]),cm=cm.viridis,cline=15,n_jobs=-1):

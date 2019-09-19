@@ -191,7 +191,7 @@ class image2d(object):
         '''
         if (type(other) is image2d):
             return image2d(self.field*other.field,self.res)
-        if (type(other) is mask2d.mask2d):
+        if (type(other) is mask2d):
             return image2d(self.field*other.field,self.res)
         if (type(other) is float):
             return image2d(self.field*other,self.res)

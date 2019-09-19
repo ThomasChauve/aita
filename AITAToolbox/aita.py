@@ -14,7 +14,6 @@ Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quart
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from matplotlib.mlab import griddata
 import math
 import pylab
 from skimage import io

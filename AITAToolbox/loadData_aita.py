@@ -46,9 +46,9 @@ def aita5col(data_adress,micro_adress=0):
         micro_bmp = io.imread(micro_adress)
         mm=np.max(micro_bmp)
 	if len(micro_bmp.shape)==3:
-        	micro_field=micro_bmp[:,:,0]/mm
+            micro_field=micro_bmp[:,:,0]/mm
 	elif len(micro_bmp.shape)==2:
-		micro_field=micro_bmp[:,:]/mm
+	    micro_field=micro_bmp[:,:]/mm
         
     return aita.aita(phi1_field,phi_field,qua_field,micro_field,resolution=resolution)
 
@@ -94,8 +94,8 @@ def aita3col(data_adress, im_adress, micro_adress=0):
         micro_bmp = io.imread(micro_adress)
         mm=np.max(micro_bmp)
         if len(micro_bmp.shape)==3:
-        	micro_field=micro_bmp[:,:,0]/mm
+            micro_field=micro_bmp[:,:,0]/mm
 	elif len(micro_bmp.shape)==2:
-		micro_field=micro_bmp[:,:]/mm
+	    micro_field=micro_bmp[:,:]/mm
     
     return aita.aita(phi1_field,phi_field,qua_field,micro_field,resolution=resolution)

@@ -181,7 +181,7 @@ class setvector3d(object):
             plt.tricontour(xx, yy, np.exp(weights), cline, linewidths=0.5, colors='k')
             plt.tricontourf(xx, yy, np.exp(weights), cline)
         else:
-            plt.scatter(xx, yy, c=np.exp(weights), s=20, edgecolor='',cmap=cm)
+            plt.scatter(xx, yy, c=np.exp(weights), s=20,cmap=cm)
         
         plt.colorbar(orientation='vertical',aspect=4,shrink=0.5)
         # Compute the outer circle

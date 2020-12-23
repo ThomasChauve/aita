@@ -70,7 +70,7 @@ class aita(object):
 
         print("Sucessfull aita build !")  
         
-    def crop(self):
+    def crop(self,xmin=0,xmax=0,ymin=0,ymax=0):
         '''
         Crop function to select the area of interest
         
@@ -81,23 +81,29 @@ class aita(object):
         .. note:: clic on the top left corner and bottom right corner to select the area
         '''
         
-        # plot the data
-        h=self.phi.plot()
-        # select top left and bottom right corner for crop
-        print('Select top left and bottom right corner for crop :')
-        x=np.array(pylab.ginput(2))/self.phi.res
-        plt.close("all")
-        # create x and Y coordinate
         
-        xx=[x[0][0],x[1][0]]
-        yy=[x[0][1],x[1][1]]
-        # size of the initial map
-        ss=np.shape(self.phi.field)
-        # find xmin xmax ymin and ymax
-        xmin=int(np.ceil(np.min(xx)))
-        xmax=int(np.floor(np.max(xx)))
-        ymin=int(ss[0]-np.ceil(np.max(yy)))
-        ymax=int(ss[0]-np.floor(np.min(yy)))
+        if (xmin+xmax+ymin+ymax)==0:
+            
+            print('Warning : if you are using jupyter notebook with %matplotlib inline option, you should add %matplotlib qt to have a pop up figure before this function. You can add %matplotlib inline after if you want to come back to the initial configuration')
+            
+            # plot the data
+            h=self.phi.plot()
+            # select top left and bottom right corner for crop
+            print('Select top left and bottom right corner for crop :')
+            x=np.array(pylab.ginput(2))/self.phi.res
+            plt.close("all")
+            # create x and Y coordinate
+
+            xx=[x[0][0],x[1][0]]
+            yy=[x[0][1],x[1][1]]
+            # size of the initial map
+            ss=np.shape(self.phi.field)
+            # find xmin xmax ymin and ymax
+            xmin=int(np.ceil(np.min(xx)))
+            xmax=int(np.floor(np.max(xx)))
+            ymin=int(ss[0]-np.ceil(np.max(yy)))
+            ymax=int(ss[0]-np.floor(np.min(yy)))
+            
         
         # crop the map
         self.phi.field=self.phi.field[ymin:ymax, xmin:xmax]
@@ -110,6 +116,8 @@ class aita(object):
         self.grains.field=np.array(self.grains.field,float)
         idx=np.where(self.micro.field==1)
         self.grains.field[idx]=np.nan
+        
+        return np.array([xmin,xmax,ymin,ymax])
         
     def fliplr(self):
         '''

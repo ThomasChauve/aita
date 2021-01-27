@@ -20,11 +20,14 @@ import pylab
 from skimage import io
 import skimage.morphology
 import skimage.measure
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 import datetime
 import random
 import scipy
 import colorsys
+
+import vtk
+from vtk.util.numpy_support import numpy_to_vtk, vtk_to_numpy
 
 import AITAToolbox.image2d as im2d
 import AITAToolbox.setvector3d as vec3d
@@ -976,6 +979,36 @@ class aita(object):
             mesh = geom.generate_mesh()
             
         mesh.write(name+'.vtk')
+        
+        # Use vtk to add grainId value
+        reader = vtk.vtkUnstructuredGridReader()
+        reader.SetFileName(name+'.vtk')
+        reader.Update()
+        polydata = reader.GetOutput()
+        # compute grainId
+        mesh_grains=vtk.vtkIntArray()
+        mesh_grains.SetNumberOfComponents(0)
+        mesh_grains.SetName("GrainsId")
+
+        ss=np.shape(self.grains.field)
+
+        for i in list(range(polydata.GetNumberOfCells())):
+            if polydata.GetCellType(i)==5:
+                tri=polydata.GetCell(i)
+                center=np.zeros(3)
+                tri.TriangleCenter(tri.GetPoints().GetPoint(0),tri.GetPoints().GetPoint(1),tri.GetPoints().GetPoint(2),center)
+                mesh_grains.InsertNextValue(np.int(grainId[np.int(ss[0]-center[1]/res),np.int(center[0]/res)]))
+            else:
+                mesh_grains.InsertNextValue(0)
+                
+        polydata.GetCellData().AddArray(mesh_grains)
+        
+        writer = vtk.vtkXMLUnstructuredGridWriter()
+        writer.SetFileName(name+'.vtu')
+        writer.SetInputData(polydata)
+        writer.Write()
+        
+        return polydata
             
     
             

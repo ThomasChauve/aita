@@ -11,6 +11,7 @@ Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quart
 @license: CC-BY-CC
 '''
 
+import pygmsh
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -794,7 +795,7 @@ class aita(object):
         
         
 
-    def meshing(self,name,resGB=1,resInG=20,LcMin=3,LcMax=4):
+    def gmsh_geo(self,name,resGB=1,resInG=20,DistMin=4.5,DistMax=5):
         '''
         Create geo file for GMSH input
         resInG             _______
@@ -803,7 +804,7 @@ class aita(object):
                         / |
                        /  
         resGB ________/   |
-                   LcMin  LcMax
+                 DistMin  DistMax
                    
         :param name: output file name without extension
         :type name: str
@@ -907,12 +908,74 @@ class aita(object):
         geo_out.write('Field[2].IField = 1;\n')
         geo_out.write('Field[2].LcMin = '+str(resGB*res)+';\n')
         geo_out.write('Field[2].LcMax = '+str(resInG*res)+';\n')
-        geo_out.write('Field[2].DistMin = '+str(LcMin*res)+';\n')
-        geo_out.write('Field[2].DistMax = '+str(LcMin*res)+';\n')
+        geo_out.write('Field[2].DistMin = '+str(DistMin*res)+';\n')
+        geo_out.write('Field[2].DistMax = '+str(DistMax*res)+';\n')
         geo_out.write('Background Field = 2;\n')
         geo_out.close()
         
         print('Export .geo done')
+        
+    def mesh(self,name,resGB=1,resInG=20,DistMin=4.5,DistMax=5):
+        '''
+        Create mesh file
+        '''
+        res=self.grains.res
+        #Extract grainId map
+        grainId=self.grains.field
+        #remove the 0 value in the grainId numpy. To do so it is dilating each grain once.
+        print('Building grainId map')
+        for i in tqdm(range(np.int(np.nanmax(grainId)))):
+            mask=grainId==i+1
+            mask=skimage.morphology.dilation(mask)
+            grainId[mask]=i+1
+        
+        # Extract contours of each grains
+        contour=[]
+        for i in list(range(np.int(np.nanmax(grainId)))):
+            gi=grainId==i+1
+            if np.sum(gi)!=0:
+                contour.append(skimage.measure.find_contours(gi,level=0.5,fully_connected='high')[0])
+                
+        ss=grainId.shape
+        xmin=0
+        ymin=0
+        xmax=ss[1]-1
+        ymax=ss[0]
+
+        allPoints=[]
+        for i in tqdm(range(len(contour))):
+            for j in list(range(len(contour[i]))):
+                x=contour[i][j][1]
+                y=ss[0]-contour[i][j][0]
+                pos=np.array([x,y]) # Position of the point in pixel
+                if len(allPoints)==0 or np.sum(np.sum(pos==allPoints,axis=1)==2)==0: # Test if the point is already save in allPoints and therefore exported in the .geo file
+                    allPoints.append(pos) # Save position of point
+                    
+        with pygmsh.geo.Geometry() as geom:
+            poly = [
+                geom.add_polygon([[xmin*res, ymin*res],[xmin*res, ymax*res],[xmax*res, ymax*res],[xmax*res, xmin*res],],mesh_size=resInG*res)
+
+                #geom.add_point([xmax/2,ymax/2],mesh_size=20)
+                #geom.add_point([xmax/4,ymax/4],mesh_size=20)
+            ]
+
+            for i in list(range(len(allPoints))):
+                poly.append(geom.add_point([allPoints[i][0]*res,allPoints[i][1]*res],mesh_size=resInG*res))
+
+            #print(GB)
+
+            field0 = geom.add_boundary_layer(
+                nodes_list=poly[1::],
+                lcmin=resGB*res,
+                lcmax=resInG*res,
+                distmin=DistMin*res,
+                distmax=DistMax*res,
+            )
+            geom.set_background_mesh([field0], operator="Min")
+
+            mesh = geom.generate_mesh()
+            
+        mesh.write(name+'.vtk')
             
     
             

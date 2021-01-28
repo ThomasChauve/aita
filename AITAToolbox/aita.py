@@ -824,7 +824,7 @@ class aita(object):
         #Extract grainId map
         grainId=self.grains.field
         #remove the 0 value in the grainId numpy. To do so it is dilating each grain once.
-        print('Building grainId map')
+        #print('Building grainId map')
         for i in tqdm(range(np.int(np.nanmax(grainId)))):
             mask=grainId==i+1
             mask=skimage.morphology.dilation(mask)
@@ -880,7 +880,7 @@ class aita(object):
 
         
         # Write boudaries points in .geo file
-        print('Write boudaries points in .geo file')
+        #print('Write boudaries points in .geo file')
         k_point=5
         for i in tqdm(range(len(contour))):
             for j in list(range(len(contour[i]))):
@@ -918,7 +918,7 @@ class aita(object):
         
         print('Export .geo done')
         
-    def mesh(self,name,resGB=1,resInG=20,DistMin=4.5,DistMax=5):
+    def mesh(self,name,resGB=1,resInG=20,DistMin=2.8,DistMax=3,opt=0):
         '''
         Create mesh file
         '''
@@ -926,7 +926,7 @@ class aita(object):
         #Extract grainId map
         grainId=self.grains.field
         #remove the 0 value in the grainId numpy. To do so it is dilating each grain once.
-        print('Building grainId map')
+        #print('Building grainId map')
         for i in tqdm(range(np.int(np.nanmax(grainId)))):
             mask=grainId==i+1
             mask=skimage.morphology.dilation(mask)
@@ -944,39 +944,88 @@ class aita(object):
         ymin=0
         xmax=ss[1]-1
         ymax=ss[0]
+        if opt:
+            allPoints=[]
+            for i in tqdm(range(len(contour))):
+                for j in list(range(len(contour[i]))):
+                    x=contour[i][j][1]
+                    y=ss[0]-contour[i][j][0]
+                    pos=np.array([x,y]) # Position of the point in pixel
+                    if len(allPoints)==0 or np.sum(np.sum(pos==allPoints,axis=1)==2)==0: # Test if the point is already save in allPoints and therefore exported in the .geo file
+                        allPoints.append(pos) # Save position of point
 
-        allPoints=[]
-        for i in tqdm(range(len(contour))):
-            for j in list(range(len(contour[i]))):
-                x=contour[i][j][1]
-                y=ss[0]-contour[i][j][0]
-                pos=np.array([x,y]) # Position of the point in pixel
-                if len(allPoints)==0 or np.sum(np.sum(pos==allPoints,axis=1)==2)==0: # Test if the point is already save in allPoints and therefore exported in the .geo file
-                    allPoints.append(pos) # Save position of point
+            with pygmsh.geo.Geometry() as geom:
+                poly = [
+                    geom.add_polygon([[xmin*res, ymin*res],[xmin*res, ymax*res],[xmax*res, ymax*res],[xmax*res, xmin*res],],mesh_size=resInG*res)
+                ]
+
+                for i in list(range(len(allPoints))):
+                    poly.append(geom.add_point([allPoints[i][0]*res,allPoints[i][1]*res],mesh_size=resInG*res))
+
+                #print(GB)
+
+                field0 = geom.add_boundary_layer(
+                    nodes_list=poly[1::],
+                    lcmin=resGB*res,
+                    lcmax=resInG*res,
+                    distmin=DistMin*res,
+                    distmax=DistMax*res,
+                )
+                geom.set_background_mesh([field0], operator="Min")
+
+                mesh = geom.generate_mesh()
+        else:
+            allPoints=[]
+            GB=[]
+            for i in tqdm(range(len(contour))):
+                gi=[]
+                for j in list(range(len(contour[i]))):
+                    x=contour[i][j][1]
+                    y=ss[0]-contour[i][j][0]
+                    pos=np.array([x,y]) # Position of the point in pixel
+                    if len(allPoints)==0 or np.sum(np.sum(pos==allPoints,axis=1)==2)==0:
+                        allPoints.append(pos) # Save position of point
+                        id=np.where(np.sum(pos==allPoints,axis=1)==2)[0][0]
+                        gi.append(id+1)
+                    else:
+                        id=np.where(np.sum(pos==allPoints,axis=1)==2)[0][0]
+                        gi.append(id+1)
                     
-        with pygmsh.geo.Geometry() as geom:
-            poly = [
-                geom.add_polygon([[xmin*res, ymin*res],[xmin*res, ymax*res],[xmax*res, ymax*res],[xmax*res, xmin*res],],mesh_size=resInG*res)
+                GB.append(gi)
+                        
+            with pygmsh.geo.Geometry() as geom:
+                poly = [
+                    geom.add_polygon([[xmin*res, ymin*res],[xmin*res, ymax*res],[xmax*res, ymax*res],[xmax*res, xmin*res],],mesh_size=resInG*res)]
 
-                #geom.add_point([xmax/2,ymax/2],mesh_size=20)
-                #geom.add_point([xmax/4,ymax/4],mesh_size=20)
-            ]
+                # add points to geom
+                for i in list(range(len(allPoints))):
+                    poly.append(geom.add_point([allPoints[i][0]*res,allPoints[i][1]*res],mesh_size=resInG*res))
 
-            for i in list(range(len(allPoints))):
-                poly.append(geom.add_point([allPoints[i][0]*res,allPoints[i][1]*res],mesh_size=resInG*res))
+                        
+                # add line to geom
+                for i in list(range(len(GB))):
+                    for j in list(range(len(GB[i])-1)):
+                        evaltxt='poly.append(geom.add_line('
+                        evaltxt=evaltxt+'poly['+str(GB[i][j])+'],poly['+str(GB[i][j+1])+']))'
+                        eval(evaltxt)
+                            
+                list_lines=poly[len(allPoints)+1::]
+                list_lines.append(poly[0].lines[0])
+                list_lines.append(poly[0].lines[1])
+                list_lines.append(poly[0].lines[2])
+                list_lines.append(poly[0].lines[3])
+                        
+            
+                field0 = geom.add_boundary_layer(
+                    edges_list=list_lines,
+                    lcmin=resGB*res,
+                    lcmax=resInG*res,
+                    distmin=DistMin*res,
+                    distmax=DistMax*res
+                    )
+                geom.set_background_mesh([field0], operator="Min")
 
-            #print(GB)
-
-            field0 = geom.add_boundary_layer(
-                nodes_list=poly[1::],
-                lcmin=resGB*res,
-                lcmax=resInG*res,
-                distmin=DistMin*res,
-                distmax=DistMax*res,
-            )
-            geom.set_background_mesh([field0], operator="Min")
-
-            mesh = geom.generate_mesh()
+                mesh = geom.generate_mesh()
             
         mesh.write(name+'.vtk')
         

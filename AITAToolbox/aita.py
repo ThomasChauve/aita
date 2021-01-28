@@ -11,6 +11,7 @@ Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quart
 @license: CC-BY-CC
 '''
 
+import shapely.geometry
 import pygmsh
 import numpy as np
 import matplotlib.pyplot as plt
@@ -920,8 +921,29 @@ class aita(object):
         
     def mesh(self,name,resGB=1,resInG=20,DistMin=2.8,DistMax=3,opt=0):
         '''
-        Create mesh file
+        Create mesh in vtk format
+        resInG             _______
+                          /
+                         /
+                        / |
+                       /  
+        resGB ________/   |
+                 DistMin  DistMax
+                   
+        :param name: output file name without extension
+        :type name: str
+        :param resGB: resolution on the Grains Boundaries (in pixel)
+        :type resGB: float
+        :param resInG: resolution within the Grains (in pixel)
+        :type resInG: float
+        :param LcMin: starting distance for the transition between resGB and resInG
+        :type LcMin: float
+        :param LcMax: ending distance for the transition between resGB and resInG
+        :type LcMax: float
+        :param opt: Finner mesh on line (0) point (1)
+        :type opt: bool
         '''
+        ss=np.shape(self.grains.field)
         res=self.grains.res
         #Extract grainId map
         grainId=self.grains.field
@@ -932,24 +954,62 @@ class aita(object):
             mask=skimage.morphology.dilation(mask)
             grainId[mask]=i+1
         
+        grainId=np.pad(grainId,[(1, 1), (1, 1)],mode='constant')
         # Extract contours of each grains
         contour=[]
+        gId_list=[]
         for i in list(range(np.int(np.nanmax(grainId)))):
             gi=grainId==i+1
             if np.sum(gi)!=0:
-                contour.append(skimage.measure.find_contours(gi,level=0.5,fully_connected='high')[0])
+                pp=skimage.measure.find_contours(gi,level=0.5,fully_connected='high')
+                for j in list(range(len(pp))):
+                    pp2=np.zeros(pp[j].shape)
+                    pp2[:,0]=pp[j][:,1]
+                    pp2[:,1]=ss[0]-pp[j][:,0]
+                    contour.append(pp2)
+                    gId_list.append(i+1)
                 
+        
+        # Find xmin, ymin, xmax, ymax, because of the padding xmin and ymin are not equal to 0
         ss=grainId.shape
+        xmin=np.min(contour[0][:,0])
+        ymin=np.min(contour[0][:,1])
+        xmax=np.max(contour[0][:,0])
+        ymax=np.max(contour[0][:,1])
+        for i in list(range(len(contour))):
+            if xmin>np.min(contour[i][:,0]):
+                xmin=np.min(contour[i][:,0])
+            if xmax<np.max(contour[i][:,0]):
+                xmax=np.max(contour[i][:,0])
+            if ymin>np.min(contour[i][:,1]):
+                ymin=np.min(contour[i][:,1])
+            if ymax<np.max(contour[i][:,1]):
+                ymax=np.max(contour[i][:,1])
+        
+        # move the the microstructure to have a starting point at (0,0) This is needed for easier assignement of the grainId.
+        xmax=-xmin+xmax
+        ymax=-ymin+ymax
+        
+        xminI=xmin
+        yminI=ymin
+        
         xmin=0
         ymin=0
-        xmax=ss[1]-1
-        ymax=ss[0]
+        
+        polyG=[]
+        for i in list(range(len(contour))):
+            contour[i][:,0]=contour[i][:,0]-xminI
+            contour[i][:,1]=contour[i][:,1]-yminI
+            polyG.append(shapely.geometry.Polygon(contour[i]))
+
+        
+        
         if opt:
             allPoints=[]
             for i in tqdm(range(len(contour))):
                 for j in list(range(len(contour[i]))):
-                    x=contour[i][j][1]
-                    y=ss[0]-contour[i][j][0]
+                    x=contour[i][j][0]
+                    y=contour[i][j][1]
                     pos=np.array([x,y]) # Position of the point in pixel
                     if len(allPoints)==0 or np.sum(np.sum(pos==allPoints,axis=1)==2)==0: # Test if the point is already save in allPoints and therefore exported in the .geo file
                         allPoints.append(pos) # Save position of point
@@ -961,8 +1021,6 @@ class aita(object):
 
                 for i in list(range(len(allPoints))):
                     poly.append(geom.add_point([allPoints[i][0]*res,allPoints[i][1]*res],mesh_size=resInG*res))
-
-                #print(GB)
 
                 field0 = geom.add_boundary_layer(
                     nodes_list=poly[1::],
@@ -980,8 +1038,8 @@ class aita(object):
             for i in tqdm(range(len(contour))):
                 gi=[]
                 for j in list(range(len(contour[i]))):
-                    x=contour[i][j][1]
-                    y=ss[0]-contour[i][j][0]
+                    x=contour[i][j][0]
+                    y=contour[i][j][1]
                     pos=np.array([x,y]) # Position of the point in pixel
                     if len(allPoints)==0 or np.sum(np.sum(pos==allPoints,axis=1)==2)==0:
                         allPoints.append(pos) # Save position of point
@@ -1001,13 +1059,17 @@ class aita(object):
                 for i in list(range(len(allPoints))):
                     poly.append(geom.add_point([allPoints[i][0]*res,allPoints[i][1]*res],mesh_size=resInG*res))
 
-                        
                 # add line to geom
                 for i in list(range(len(GB))):
                     for j in list(range(len(GB[i])-1)):
-                        evaltxt='poly.append(geom.add_line('
-                        evaltxt=evaltxt+'poly['+str(GB[i][j])+'],poly['+str(GB[i][j+1])+']))'
-                        eval(evaltxt)
+                        if poly[GB[i][j]].x[0]==xmin*res or poly[GB[i][j]].x[0]==xmax*res or poly[GB[i][j+1]].x[0]==xmin*res or poly[GB[i][j+1]].x[0]==xmax*res or poly[GB[i][j]].x[1]==ymin*res or poly[GB[i][j]].x[1]==ymax*res or poly[GB[i][j+1]].x[1]==ymin*res or poly[GB[i][j+1]].x[1]==ymax*res:
+                            
+                            todo='nothing'
+                        else:
+                        
+                            evaltxt='poly.append(geom.add_line('
+                            evaltxt=evaltxt+'poly['+str(GB[i][j])+'],poly['+str(GB[i][j+1])+']))'
+                            eval(evaltxt)
                             
                 list_lines=poly[len(allPoints)+1::]
                 list_lines.append(poly[0].lines[0])
@@ -1039,14 +1101,26 @@ class aita(object):
         mesh_grains.SetNumberOfComponents(0)
         mesh_grains.SetName("GrainsId")
 
-        ss=np.shape(self.grains.field)
+        
 
-        for i in list(range(polydata.GetNumberOfCells())):
+        for i in tqdm(range(polydata.GetNumberOfCells())):
             if polydata.GetCellType(i)==5:
                 tri=polydata.GetCell(i)
                 center=np.zeros(3)
                 tri.TriangleCenter(tri.GetPoints().GetPoint(0),tri.GetPoints().GetPoint(1),tri.GetPoints().GetPoint(2),center)
-                mesh_grains.InsertNextValue(np.int(grainId[np.int(ss[0]-center[1]/res),np.int(center[0]/res)]))
+
+                p1=shapely.geometry.Point(center/res)
+                
+                id_g=-1
+                for j in list(range(len(polyG))):
+                    if polyG[j].contains(p1):
+                        id_g=gId_list[j]
+                        
+                if id_g==-1:
+                    #print(center)
+                    id_g=np.int(grainId[np.int(ss[0]-center[1]/res),np.int(center[0]/res)])
+                
+                mesh_grains.InsertNextValue(id_g)
             else:
                 mesh_grains.InsertNextValue(0)
                 

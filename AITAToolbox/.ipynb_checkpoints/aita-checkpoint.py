@@ -919,7 +919,7 @@ class aita(object):
         
         print('Export .geo done')
         
-    def mesh(self,name,resGB=1,resInG=20,DistMin=2.8,DistMax=3):
+    def mesh(self,name,resGB=1,resInG=5,DistMin=5):
         '''
         Create mesh in vtk format
         resInG             _______
@@ -947,7 +947,7 @@ class aita(object):
         grainId=self.grains.field
         #remove the 0 value in the grainId numpy. To do so it is dilating each grain once.
         #print('Building grainId map')
-        for i in tqdm(range(np.int(np.nanmax(grainId)))):
+        for i in list(range(np.int(np.nanmax(grainId)))):
             mask=grainId==i+1
             mask=skimage.morphology.dilation(mask)
             grainId[mask]=i+1
@@ -956,6 +956,8 @@ class aita(object):
         # Extract contours of each grains
         contour=[]
         gId_list=[]
+        erode_list=[]
+        erode_Id=[]
         for i in list(range(np.int(np.nanmax(grainId)))):
             gi=grainId==i+1
             if np.sum(gi)!=0:
@@ -966,7 +968,20 @@ class aita(object):
                     pp2[:,1]=ss[0]-pp[j][:,0]
                     contour.append(pp2)
                     gId_list.append(i+1)
-                
+            ## detect contour for inner mesh
+            for j in list(range(DistMin)):
+                gi=skimage.morphology.erosion(gi)
+            
+            if np.sum(gi)!=0:
+                pp=skimage.measure.find_contours(gi,level=0.5,fully_connected='high')
+                for j in list(range(len(pp))):
+                    pp2=np.zeros(pp[j].shape)
+                    pp2[:,0]=pp[j][:,1]
+                    pp2[:,1]=ss[0]-pp[j][:,0]
+                    erode_list.append(pp2*res)
+                    erode_Id.append(i+1)
+                    
+        
         
         # Find xmin, ymin, xmax, ymax, because of the padding xmin and ymin are not equal to 0
         ss=grainId.shape
@@ -995,69 +1010,124 @@ class aita(object):
         ymin=0
         
         polyG=[]
+        Gcentroid=[]
         for i in list(range(len(contour))):
-            contour[i][:,0]=contour[i][:,0]-xminI
-            contour[i][:,1]=contour[i][:,1]-yminI
-            polyG.append(shapely.geometry.Polygon(contour[i]).simplify(0))
-
-               
+            contour[i][:,0]=(contour[i][:,0]-xminI)*res
+            contour[i][:,1]=(contour[i][:,1]-yminI)*res
+            polyG.append(shapely.geometry.Polygon(contour[i]))#.simplify(0))
+            Gcentroid.append(polyG[i].centroid)
+        
+        # to remove hole in polygon
+        multi_polygon = shapely.geometry.MultiPolygon(polyG)
+        
+        square=multi_polygon.convex_hull
+        x,y=square.exterior.xy
+        Cxmin=np.min(x)
+        Cxmax=np.max(x)
+        Cymin=np.min(y)
+        Cymax=np.max(y)
+        square=shapely.geometry.Polygon([[Cxmin,Cymin],[Cxmin,Cymax],[Cxmax,Cymax],[Cxmax,Cymin]])
+        missing=square-multi_polygon
+        
+        allpolyG=[]
+        for ipoly in polyG:
+            allpolyG.append(ipoly)
+        for ipoly in missing:
+            allpolyG.append(ipoly)        
         
         allPoints=[]
         GB=[]
-        for i in tqdm(range(len(polyG))):
+        for i in tqdm(range(len(allpolyG))):
             gi=[]
-            xG,yG=polyG[i].exterior.xy
+            xG,yG=allpolyG[i].exterior.xy
             for j in list(range(len(xG))):
                 x=xG[j]
                 y=yG[j]
                 pos=np.array([x,y]) # Position of the point in pixel
-                if len(allPoints)==0 or np.sum(np.sum(pos==allPoints,axis=1)==2)==0:
-                    allPoints.append(pos) # Save position of point
-                    id=np.where(np.sum(pos==allPoints,axis=1)==2)[0][0]
-                    gi.append(id+1)
-                else:
-                    id=np.where(np.sum(pos==allPoints,axis=1)==2)[0][0]
-                    gi.append(id+1)
+                gi.append(pos)
                     
             GB.append(gi)
-                        
+         
+        
+        Pin=0
+        Pout=0
         with pygmsh.geo.Geometry() as geom:
-            poly = [
-                geom.add_polygon([[xmin*res, ymin*res],[xmin*res, ymax*res],[xmax*res, ymax*res],[xmax*res, xmin*res],],mesh_size=resInG*res)]
+            geofile = []
+                #geom.add_polygon([[xmin*res, ymin*res],[xmin*res, ymax*res],[xmax*res, ymax*res],[xmax*res, ymin*res],],mesh_size=resInG*res)]
 
             # add points to geom
-            for i in list(range(len(allPoints))):
-                poly.append(geom.add_point([allPoints[i][0]*res,allPoints[i][1]*res],mesh_size=resInG*res))
-
-            # add line to geom
+            #for i in list(range(len(allPoints))):
+            #    geofile.append(geom.add_point([allPoints[i][0]*res,allPoints[i][1]*res],mesh_size=resInG*res))
+            
+            allSurface=[]
+            # add all line to geom
             for i in list(range(len(GB))):
-                for j in list(range(len(GB[i])-1)):
-                    if poly[GB[i][j]].x[0]==xmin*res or poly[GB[i][j]].x[0]==xmax*res or poly[GB[i][j+1]].x[0]==xmin*res or poly[GB[i][j+1]].x[0]==xmax*res or poly[GB[i][j]].x[1]==ymin*res or poly[GB[i][j]].x[1]==ymax*res or poly[GB[i][j+1]].x[1]==ymin*res or poly[GB[i][j+1]].x[1]==ymax*res:
-                            
-                        todo='nothing'
-                    else:
+                # add polygon
+                evaltxt='geofile.append(geom.add_polygon(['
+                for j in list(range(len(GB[i])-2)):
+                        evaltxt=evaltxt+'['+str(GB[i][j][0])+','+str(GB[i][j][1])+'],'
+                
+                evaltxt=evaltxt+'['+str(GB[i][j+1][0])+','+str(GB[i][j+1][1])+']],mesh_size=resGB*res))' 
+                eval(evaltxt)
+                allSurface.append(len(geofile)-1)
+                
+                if (i+1) in erode_Id:
+                    id=np.where(np.array(erode_Id)==i+1)[0]
+                    
+                    for k in id:
+                        evaltxt='geofile.append(geom.add_polygon(['
+                        for j in list(range(len(erode_list[k])-1)):
+                            if j%resInG==0:
+                                geofile.append(geom.add_point([erode_list[k][j][0],erode_list[k][j][1]],resInG*res))
+                                p1=shapely.geometry.Point(np.array([erode_list[k][j][0],erode_list[k][j][1]]))
+                                
+                                for ik in allSurface:
+                                    liscor=[]
+                                    for cor in geofile[ik].points:
+                                        liscor.append(cor.x)
+    
+    
+                                    ggg=shapely.geometry.Polygon(liscor)
+                                
+                                
+                                    if ggg.contains(p1):
+                                        geom.in_surface(geofile[-1], geofile[ik].surface)
+                                        break
                         
-                        evaltxt='poly.append(geom.add_line('
-                        evaltxt=evaltxt+'poly['+str(GB[i][j])+'],poly['+str(GB[i][j+1])+']))'
-                        eval(evaltxt)
-                            
-            list_lines=poly[len(allPoints)+1::]
-            list_lines.append(poly[0].lines[0])
-            list_lines.append(poly[0].lines[1])
-            list_lines.append(poly[0].lines[2])
-            list_lines.append(poly[0].lines[3])
+                    
+                
+                
+                #if i<len(Gcentroid):
+                #    geofile.append(geom.add_point([Gcentroid[i].x,Gcentroid[i].y],resInG*res))
+                #    geom.in_surface(geofile[-1], geofile[-2].surface)
+                    
+                
+                
+            #for i in list(range(len(Gcentroid))):
+            #    geofile.append(geom.add_point([Gcentroid[i].x,Gcentroid[i].y],resInG*res))
+            
+            print('geo done')
                         
             
-            field0 = geom.add_boundary_layer(
-                edges_list=list_lines,
-                lcmin=resGB*res,
-                lcmax=resInG*res,
-                distmin=DistMin*res,
-                distmax=DistMax*res
-                )
-            geom.set_background_mesh([field0], operator="Min")
+            #curves_list=[]
+            #for face in geofile:
+            #    for curve in face.curves:
+            #        curves_list.append(curve)
+            
+            
+            #field0 = geom.add_boundary_layer(
+            #    edges_list=curves_list,
+            #    lcmin=resGB*res,
+            #    lcmax=resInG*res,
+            #    distmin=DistMin*res,
+            #    distmax=DistMax*res
+            #    )
+            
+            #geom.set_background_mesh([field0], operator="Max")
 
             mesh = geom.generate_mesh()
+            
+
         #################################    
         mesh.write(name+'.vtk')
         
@@ -1071,6 +1141,15 @@ class aita(object):
         mesh_grains.SetNumberOfComponents(0)
         mesh_grains.SetName("GrainsId")
 
+        kkk=0
+        while np.sum(grainId==0)!=0:
+            for i in list(range(np.int(np.nanmax(grainId)))):
+                mask=grainId==i+1
+                mask=skimage.morphology.dilation(mask)
+                grainId[mask]=i+1
+                kkk+=1
+                
+        print('Nb iter for remove 0:',kkk)
         
 
         for i in tqdm(range(polydata.GetNumberOfCells())):
@@ -1079,7 +1158,7 @@ class aita(object):
                 center=np.zeros(3)
                 tri.TriangleCenter(tri.GetPoints().GetPoint(0),tri.GetPoints().GetPoint(1),tri.GetPoints().GetPoint(2),center)
 
-                p1=shapely.geometry.Point(center/res)
+                p1=shapely.geometry.Point(center)
                 
                 id_g=-1
                 for j in list(range(len(polyG))):
@@ -1087,9 +1166,9 @@ class aita(object):
                         id_g=gId_list[j]
                         
                 if id_g==-1:
-                    #print(center)
                     id_g=np.int(grainId[np.int(ss[0]-center[1]/res),np.int(center[0]/res)])
-                
+                    if id_g==0:
+                        print('find 0')
                 mesh_grains.InsertNextValue(id_g)
             else:
                 mesh_grains.InsertNextValue(0)
@@ -1101,7 +1180,7 @@ class aita(object):
         writer.SetInputData(polydata)
         writer.Write()
         
-        return polydata
+        return grainId
             
     
             

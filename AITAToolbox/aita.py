@@ -275,8 +275,6 @@ class aita(object):
                 phi[-1]=0
                 phi2[-1]=0
                 
-                
-        print(phi1[17],phi[17],phi2[17])
         ################################   
         # Write the microstructure input
         ################################

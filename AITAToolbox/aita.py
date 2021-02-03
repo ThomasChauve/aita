@@ -266,9 +266,17 @@ class aita(object):
                 phi.append(self.phi.field[idx[0][0]][idx[1][0]])
                 phi2.append(random.random()*2*math.pi)
             else:
-                phi1.append(np.nan)
-                phi.append(np.nan)
-                phi2.append(np.nan)
+                phi1.append(0)
+                phi.append(0)
+                phi2.append(0)
+            
+            if np.isnan(phi1[-1]):
+                phi1[-1]=0
+                phi[-1]=0
+                phi2[-1]=0
+                
+                
+        print(phi1[17],phi[17],phi2[17])
         ################################   
         # Write the microstructure input
         ################################
@@ -304,8 +312,8 @@ class aita(object):
         phase_out.write('# phase    material       phi1    Phi   phi2\n')
         phase_out.write('#------------------------------------------------------------\n')
         for i in list(range(np.size(phi))):
-            if 1-np.isnan(phi[i]):
-                phase_out.write(str(i) + '          0              ' + str(phi1[i]) + ' ' + str(phi[i]) + ' ' + str(phi2[i]) + '\n');  
+            #if 1-np.isnan(phi[i]):
+            phase_out.write(str(i) + '          0              ' + str(phi1[i]) + ' ' + str(phi[i]) + ' ' + str(phi2[i]) + '\n');  
         phase_out.close()
         ################################
         # Write an exemple of load file##

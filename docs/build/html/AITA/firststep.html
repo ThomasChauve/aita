@@ -1,48 +1,53 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Fisrt step &mdash; AITAToolbox 2.0 documentation</title>
   
 
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
 
   
-  <script src="../_static/js/modernizr.min.js"></script>
+  
 
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -69,6 +74,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -93,6 +99,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -127,18 +134,20 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Fisrt step</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/AITA/firststep.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -158,7 +167,7 @@
 <div class="section" id="loading-data">
 <h2>Loading data<a class="headerlink" href="#loading-data" title="Permalink to this headline">¶</a></h2>
 <p>Loading data from G50 analyser after you convert binary file into ASCII file with 5 columuns. The ‘micro_test.bmp’ file should be a black and white image with the grains boundaries in white.</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">AITAToolbox.loadData_aita</span> <span class="k">as</span> <span class="nn">lda</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">AITAToolbox.loadData_aita</span> <span class="k">as</span> <span class="nn">lda</span>
 <span class="c1"># The inputs come from G50 analyseur</span>
 <span class="n">adr_data</span><span class="o">=</span><span class="s1">&#39;orientation_test.dat&#39;</span>
 <span class="n">adr_micro</span><span class="o">=</span><span class="s1">&#39;micro_test.bmp&#39;</span>
@@ -171,18 +180,18 @@
 <div class="section" id="basic-treatment">
 <h2>Basic treatment<a class="headerlink" href="#basic-treatment" title="Permalink to this headline">¶</a></h2>
 <p>You can crop the data.</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">crop</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">crop</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>You can filter the bad value for indexed orientation. Usualy 75 is a good value.</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="plot-orientation-map">
 <h2>Plot orientation map<a class="headerlink" href="#plot-orientation-map" title="Permalink to this headline">¶</a></h2>
 <p>You can plot Euler angle map.</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">data</span><span class="o">.</span><span class="n">phi1</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;phi1 Euler angle&#39;</span><span class="p">)</span>
@@ -194,20 +203,20 @@
 </pre></div>
 </div>
 <p>You can plot grains if you have include a microstructure when you load the data.</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">data</span><span class="o">.</span><span class="n">grains</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Grains&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>You can plot a colormap associated with a colorwheel</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The colorwheel</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">AITAToolbox.aita</span> <span class="k">as</span> <span class="nn">aita</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">AITAToolbox.aita</span> <span class="k">as</span> <span class="nn">aita</span>
 <span class="n">lut2d</span><span class="o">=</span><span class="n">aita</span><span class="o">.</span><span class="n">lut</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">lut</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -217,7 +226,7 @@
 <div class="section" id="plot-pole-figure">
 <h2>Plot pole figure<a class="headerlink" href="#plot-pole-figure" title="Permalink to this headline">¶</a></h2>
 <p>Various options can be used to plot pole figure. Projection plane, add circle at different angle. Plot eigenvalue on the pole figure. Here we just show the basic figure, which is ready for puplication.</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -233,20 +242,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright CC-BY-CC
+        &#169; Copyright CC-BY-CC.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -255,26 +269,16 @@
   </div>
   
 
-
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

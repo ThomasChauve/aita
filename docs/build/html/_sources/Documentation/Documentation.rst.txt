@@ -2,6 +2,13 @@
 This documention is made from a jupyter notebook available in
 'Exemple/Documentation.ipynb'
 
+It can be run interactively using binder :
+
+.. image:: https://mybinder.org/badge_logo.svg
+    :target: https://mybinder.org/v2/gh/ThomasChauve/aita/HEAD
+    
+
+
 Load data from G50 analyser
 ===========================
 

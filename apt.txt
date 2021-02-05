@@ -1,2 +1,4 @@
 libglu1-mesa
 libxcursor1
+libxft2
+gmsh

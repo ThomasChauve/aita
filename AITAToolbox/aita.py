@@ -804,127 +804,6 @@ class aita(object):
         return im2d.image2d(angle,self.phi1.res),xi,yi,xv,yv
         
         
-
-    def gmsh_geo(self,name,resGB=1,resInG=20,DistMin=4.5,DistMax=5):
-        '''
-        Create geo file for GMSH input
-        resInG             _______
-                          /
-                         /
-                        / |
-                       /  
-        resGB ________/   |
-                 DistMin  DistMax
-                   
-        :param name: output file name without extension
-        :type name: str
-        :param resGB: resolution on the Grains Boundaries (in pixel)
-        :type resGB: float
-        :param resInG: resolution within the Grains (in pixel)
-        :type resInG: float
-        :param LcMin: starting distance for the transition between resGB and resInG
-        :type Lcmin: float
-        :param LcMax: ending distance for the transition between resGB and resInG
-        '''
-        
-        res=self.grains.res
-        #Extract grainId map
-        grainId=self.grains.field
-        #remove the 0 value in the grainId numpy. To do so it is dilating each grain once.
-        #print('Building grainId map')
-        for i in tqdm(range(np.int(np.nanmax(grainId)))):
-            mask=grainId==i+1
-            mask=skimage.morphology.dilation(mask)
-            grainId[mask]=i+1
-        
-        # Extract contours of each grains
-        contour=[]
-        for i in list(range(np.int(np.nanmax(grainId)))):
-            gi=grainId==i+1
-            if np.sum(gi)!=0:
-                contour.append(skimage.measure.find_contours(gi,level=0.5,fully_connected='high')[0])
-        
-        # Open the geo file to write in it
-        geo_out=open(name+'.geo','w')
-        geo_out.write('Mesh.Algorithm=5; \n')
-        
-        # Extract the contour of the microstructure
-        ss=grainId.shape
-        xmin=0
-        ymin=0
-        xmax=ss[1]-1
-        ymax=ss[0]
-
-        # Variable with all the point exported in the .geo file
-        # I already add the corner points 
-        allPoints=[np.array([xmin,ymin]),np.array([xmin,ymax]),np.array([xmax,ymax]),np.array([xmax,ymin])]
-
-        # write the corner point in the geo file
-        geo_out.write('Point('+str(1)+')={'+str(xmin*res)+','+str(ymin*res)+',0.0,'+str(resInG*res)+'}; \n')
-        geo_out.write('Point('+str(2)+')={'+str(xmin*res)+','+str(ymax*res)+',0.0,'+str(resInG*res)+'}; \n')
-        geo_out.write('Point('+str(3)+')={'+str(xmax*res)+','+str(ymax*res)+',0.0,'+str(resInG*res)+'}; \n')
-        geo_out.write('Point('+str(4)+')={'+str(xmax*res)+','+str(ymin*res)+',0.0,'+str(resInG*res)+'}; \n')
-        
-        # Build line for the sample contour in .geo file
-        geo_out.write('\n')
-        geo_out.write('Line(1)={1,2};\n')
-        geo_out.write('Line(2)={2,3};\n')
-        geo_out.write('Line(3)={3,4};\n')
-        geo_out.write('Line(4)={4,1};\n')
-
-        # Build the line loop to define the surface
-        geo_out.write('Line Loop(1) = {1,2,3,4};\n')
-        # Define the Plane Surface
-        geo_out.write('Plane Surface(2) = {1};\n')
-        geo_out.write('\n')
-        # Define Physical Surface and Limit where limite condition will be applied
-        geo_out.write('Physical Line("Left face") = {1};\n')
-        geo_out.write('Physical Line("Top face") = {2};\n')
-        geo_out.write('Physical Line("Right face") = {3};\n')
-        geo_out.write('Physical Line("Bottom face") = {4};\n')
-        geo_out.write('Physical Surface("Ice") = {2};\n')
-        geo_out.write('\n')
-
-        
-        # Write boudaries points in .geo file
-        #print('Write boudaries points in .geo file')
-        k_point=5
-        for i in tqdm(range(len(contour))):
-            for j in list(range(len(contour[i]))):
-                x=contour[i][j][1]
-                y=ss[0]-contour[i][j][0]
-                pos=np.array([x,y]) # Position of the point in pixel
-                if np.sum(np.sum(pos==allPoints,axis=1)==2)==0: # Test if the point is already save in allPoints and therefore exported in the .geo file
-                    allPoints.append(pos) # Save position of point
-                    geo_out.write('Point('+str(k_point)+')={'+str(x*res)+','+str(y*res)+',0.0,'+str(resInG*res)+'}; \n') # Export Point in .geo
-                    k_point+=1 # Increment point label in .geo file
-
-        nb_point=k_point-1 # save the number of point exported    
-        geo_out.write('\n')
-        
-        # Write Field option in .geo file to have finner mesh close to grains boundaries
-        geo_out.write('Field[1]=Distance;\n')
-        # Export all the Points in NodesList variable in .geo file
-        geo_out.write('Field[1].NodesList={')
-        k_point=5
-        for i in list(range(nb_point)):
-            geo_out.write(str(k_point)+',')
-            k_point+=1
-            
-        geo_out.write(str(k_point))
-        geo_out.write('};\n')
-
-        geo_out.write('Field[2] = Threshold;\n')
-        geo_out.write('Field[2].IField = 1;\n')
-        geo_out.write('Field[2].LcMin = '+str(resGB*res)+';\n')
-        geo_out.write('Field[2].LcMax = '+str(resInG*res)+';\n')
-        geo_out.write('Field[2].DistMin = '+str(DistMin*res)+';\n')
-        geo_out.write('Field[2].DistMax = '+str(DistMax*res)+';\n')
-        geo_out.write('Background Field = 2;\n')
-        geo_out.close()
-        
-        print('Export .geo done')
-        
     def mesh(self,name,resGB=1,resInG=5,DistMin=5):
         '''
         Create mesh in vtk format
@@ -934,7 +813,7 @@ class aita(object):
                         / |
                        /  
         resGB ________/   |
-                 DistMin  DistMax
+                          DistMin
                    
         :param name: output file name without extension
         :type name: str
@@ -942,11 +821,22 @@ class aita(object):
         :type resGB: float
         :param resInG: resolution within the Grains (in pixel)
         :type resInG: float
-        :param LcMin: starting distance for the transition between resGB and resInG
+        :param DistMin: starting distance for the transition between resGB and resInG
         :type LcMin: float
-        :param LcMax: ending distance for the transition between resGB and resInG
-        :type LcMax: float
         '''
+        self.mean_grain()
+        nbG=np.int(np.nanmax(self.grains.field))
+        ori_vector=np.zeros([nbG+1,3])
+        for i in list(range(nbG+1)):
+            id=np.where(self.grains.field==i)
+            if len(id[0])>0:
+                phi1=self.phi1.field[id[0][0],id[1][0]]
+                phi=self.phi.field[id[0][0],id[1][0]]
+                ori_vector[i,0]=math.sin(phi)*math.cos(phi1-math.pi/2)
+                ori_vector[i,1]=math.sin(phi)*math.sin(phi1-math.pi/2)
+                ori_vector[i,2]=math.cos(phi)
+        
+        
         ss=np.shape(self.grains.field)
         res=self.grains.res
         #Extract grainId map
@@ -1058,13 +948,7 @@ class aita(object):
         Pin=0
         Pout=0
         with pygmsh.geo.Geometry() as geom:
-            geofile = []
-                #geom.add_polygon([[xmin*res, ymin*res],[xmin*res, ymax*res],[xmax*res, ymax*res],[xmax*res, ymin*res],],mesh_size=resInG*res)]
-
-            # add points to geom
-            #for i in list(range(len(allPoints))):
-            #    geofile.append(geom.add_point([allPoints[i][0]*res,allPoints[i][1]*res],mesh_size=resInG*res))
-            
+            geofile = []            
             allSurface=[]
             # add all line to geom
             for i in list(range(len(GB))):
@@ -1099,40 +983,28 @@ class aita(object):
                                     if ggg.contains(p1):
                                         geom.in_surface(geofile[-1], geofile[ik].surface)
                                         break
-                        
-                    
-                
-                
-                #if i<len(Gcentroid):
-                #    geofile.append(geom.add_point([Gcentroid[i].x,Gcentroid[i].y],resInG*res))
-                #    geom.in_surface(geofile[-1], geofile[-2].surface)
-                    
-                
-                
-            #for i in list(range(len(Gcentroid))):
-            #    geofile.append(geom.add_point([Gcentroid[i].x,Gcentroid[i].y],resInG*res))
+            
+            #add physical line
+            p0 = geom.add_point([Cxmin, Cymin, 0], mesh_size=resGB)
+            p1 = geom.add_point([Cxmin, Cymax, 0], mesh_size=resGB)
+            p2 = geom.add_point([Cxmax, Cymax, 0], mesh_size=resGB)
+            p3 = geom.add_point([Cxmax, Cymin, 0], mesh_size=resGB)
+            
+            l0 = geom.add_line(p0, p1)
+            l1 = geom.add_line(p1, p2)
+            l2 = geom.add_line(p2, p3)
+            l3 = geom.add_line(p3, p0)
+            
+            geofile.append(geom.add_physical(l1,label='Top'))
+            geofile.append(geom.add_physical(l3,label='Bottom'))
+            geofile.append(geom.add_physical(l0,label='Left'))
+            geofile.append(geom.add_physical(l2,label='Right'))
+            
+            
             
             print('geo done')
-                        
-            
-            #curves_list=[]
-            #for face in geofile:
-            #    for curve in face.curves:
-            #        curves_list.append(curve)
-            
-            
-            #field0 = geom.add_boundary_layer(
-            #    edges_list=curves_list,
-            #    lcmin=resGB*res,
-            #    lcmax=resInG*res,
-            #    distmin=DistMin*res,
-            #    distmax=DistMax*res
-            #    )
-            
-            #geom.set_background_mesh([field0], operator="Max")
-
             mesh = geom.generate_mesh()
-            
+            print('mesh done')
 
         #################################    
         mesh.write(name+'.vtk')
@@ -1146,6 +1018,12 @@ class aita(object):
         mesh_grains=vtk.vtkIntArray()
         mesh_grains.SetNumberOfComponents(0)
         mesh_grains.SetName("GrainsId")
+        
+        # compute orientation
+        ori=vtk.vtkDoubleArray()
+        ori.SetNumberOfComponents(3)
+        ori.SetName("Orientation")
+        
 
         kkk=0
         while np.sum(grainId==0)!=0:
@@ -1153,10 +1031,7 @@ class aita(object):
                 mask=grainId==i+1
                 mask=skimage.morphology.dilation(mask)
                 grainId[mask]=i+1
-                kkk+=1
-                
-        print('Nb iter for remove 0:',kkk)
-        
+                kkk+=1        
 
         for i in tqdm(range(polydata.GetNumberOfCells())):
             if polydata.GetCellType(i)==5:
@@ -1175,18 +1050,32 @@ class aita(object):
                     id_g=np.int(grainId[np.int(ss[0]-center[1]/res),np.int(center[0]/res)])
                     if id_g==0:
                         print('find 0')
-                mesh_grains.InsertNextValue(id_g)
+                mesh_grains.InsertNextValue(id_g)                
+                ori.InsertNextValue(ori_vector[id_g,0])
+                ori.InsertNextValue(ori_vector[id_g,1])
+                ori.InsertNextValue(ori_vector[id_g,2])
+                if np.isnan(ori_vector[id_g,0]):
+                    print('Warning nan value', id_g)
             else:
                 mesh_grains.InsertNextValue(0)
+                ori.InsertNextValue(0)
+                ori.InsertNextValue(0)
+                ori.InsertNextValue(0)
                 
-        polydata.GetCellData().AddArray(mesh_grains)
+        polydata.GetCellData().SetScalars(mesh_grains)
+        
+        
+        
+        
+        
+        polydata.GetCellData().AddArray(ori)
         
         writer = vtk.vtkXMLUnstructuredGridWriter()
         writer.SetFileName(name+'.vtu')
         writer.SetInputData(polydata)
         writer.Write()
         
-        return grainId
+        return
             
     
             

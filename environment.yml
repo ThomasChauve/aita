@@ -1,0 +1,19 @@
+name: envAITA
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy=1.19.5=py39hdbf815f_1
+  - python=3.9.1=hdb3f193_2
+  - vtk=9.0.1=no_osmesa_py39h3e65357_103
+  - pip=20.3.3=py39h06a4308_0
+  - pip:
+    - gmsh==4.7.1
+    - matplotlib==3.3.3
+    - pillow==8.1.0
+    - pygmsh==7.1.5
+    - scikit-image==0.18.1
+    - scikit-learn==0.24.1
+    - scipy==1.6.0
+    - shapely==1.7.1
+    - tqdm==4.56.0

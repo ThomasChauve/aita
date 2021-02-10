@@ -31,7 +31,7 @@ setuptools.setup(
         'Documentation': 'https://thomaschauve.github.io/aita/build/html/index.html',
     },
       
-    python_requires='>=3.7',
+    python_requires='>=3.9',
     
     install_requires=[
         'Shapely',

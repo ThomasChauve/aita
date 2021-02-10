@@ -7,7 +7,7 @@ long_description = open(os.path.join(here, 'README.rst'), encoding='utf-8').read
 
 setuptools.setup(
     name='AITAToolbox',
-    version='2.0.1',
+    version='2.0.2',
     description='Tools for AITA',
     long_description=long_description,
       

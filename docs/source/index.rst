@@ -98,9 +98,9 @@ Contact
 :Author: Thomas Chauve
 :Contact: thomas.chauve@univ-grenoble-alpes.fr
 
-:organization: UiO
+:organization: IGE
 :status: This is a "work in progress"
-:version: 2.0
+:version: 2.1
 
 
 

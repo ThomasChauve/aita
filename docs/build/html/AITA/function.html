@@ -390,40 +390,6 @@ It provide an environnement to plot data, to create inpur for CraFT code,…</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="AITAToolbox.aita.aita.gmsh_geo">
-<code class="sig-name descname">gmsh_geo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">resGB</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">resInG</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">DistMin</span><span class="o">=</span><span class="default_value">4.5</span></em>, <em class="sig-param"><span class="n">DistMax</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.gmsh_geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.gmsh_geo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create geo file for GMSH input
-resInG             _______</p>
-<blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><p>/</p>
-</div></blockquote>
-<p>/</p>
-</div></blockquote>
-<p>/ |</p>
-</div></blockquote>
-<p>/</p>
-</div></blockquote>
-<dl class="simple">
-<dt>resGB ________/   |</dt><dd><p>DistMin  DistMax</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – output file name without extension</p></li>
-<li><p><strong>resGB</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – resolution on the Grains Boundaries (in pixel)</p></li>
-<li><p><strong>resInG</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – resolution within the Grains (in pixel)</p></li>
-<li><p><strong>LcMin</strong> – starting distance for the transition between resGB and resInG</p></li>
-<li><p><strong>LcMax</strong> – ending distance for the transition between resGB and resInG</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="AITAToolbox.aita.aita.grain_ori">
 <code class="sig-name descname">grain_ori</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.grain_ori"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.grain_ori" title="Permalink to this definition">¶</a></dt>
 <dd><p>Give the grain orientation output</p>
@@ -519,7 +485,7 @@ resInG             _______</p>
 <p>/</p>
 </div></blockquote>
 <dl class="simple">
-<dt>resGB ________/   |</dt><dd><p>DistMin  DistMax</p>
+<dt>resGB ________/   |</dt><dd><p>DistMin</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -528,8 +494,7 @@ resInG             _______</p>
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – output file name without extension</p></li>
 <li><p><strong>resGB</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – resolution on the Grains Boundaries (in pixel)</p></li>
 <li><p><strong>resInG</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – resolution within the Grains (in pixel)</p></li>
-<li><p><strong>LcMin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – starting distance for the transition between resGB and resInG</p></li>
-<li><p><strong>LcMax</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – ending distance for the transition between resGB and resInG</p></li>
+<li><p><strong>DistMin</strong> – starting distance for the transition between resGB and resInG</p></li>
 </ul>
 </dd>
 </dl>

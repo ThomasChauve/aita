@@ -17,14 +17,12 @@ AITA Toolbox is a python tools created to work on orientation map such as the on
 Installation
 ============
 
+From pip
+********
 
-We advised to create a new python environement using conda :
 
-.. code:: bash
-    
-    conda create --name envAITA python=3.9
-    conda activate envAITA
-    
+From repository
+***************
 
 You can clone the repository :
   
@@ -32,29 +30,46 @@ You can clone the repository :
 
     git clone https://github.com/ThomasChauve/aita
     cd aita/
-    
-    
-After you can install the requirements using pip :
+
+
+Create a new environement envAITA by default
+--------------------------------------------
+
+You cand directly install the new conda environement
 
 .. code:: bash
 
-    pip install -r requirements.txt
-    
-And finally install the DICToolbox package
+    conda env create --name envAITA -f environment.yml
+
+
+Using AITAToolbox
+=================
+
+You need to run python in the good environement using :
 
 .. code:: bash
-
-	pip install .
-
+    
+    conda activate envAITA
 
 Then you will find all the package in python using
 
 .. code:: python
 
     import AITAToolbox
+    
+Devellopement
+=============
+
+If you want to add new function in the Toolbox you run in aita folder
+
+.. code:: bash
+    
+    conda activate envAITA
+    pip install -e .
+
 
 Uninstall
-*********
+=========
 
 .. code:: bash
     
@@ -83,9 +98,9 @@ Contact
 :Author: Thomas Chauve
 :Contact: thomas.chauve@univ-grenoble-alpes.fr
 
-:organization: UiO
+:organization: IGE
 :status: This is a "work in progress"
-:version: 2.0
+:version: 2.1
 
 
 

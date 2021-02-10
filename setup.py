@@ -1,8 +1,7 @@
 import setuptools
-import pathlib
 import os
 
-here = pathlib.Path(__file__).parent.resolve()
+here = os.path.abspath(os.path.dirname(__file__))
 long_description = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
 
 setuptools.setup(

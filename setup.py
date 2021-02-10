@@ -1,9 +1,15 @@
 import setuptools
+import pathlib
+import os
+
+here = pathlib.Path(__file__).parent.resolve()
+long_description = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
 
 setuptools.setup(
     name='AITAToolbox',
     version='2.0.1',
     description='Tools for AITA',
+    long_description=long_description
       
     url='https://github.com/ThomasChauve/aita',
     author='Thomas Chauve',

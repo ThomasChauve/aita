@@ -6,7 +6,13 @@
 Welcome to AITA Toolbox's documentation!
 ========================================
 
-AITA Toolbox is a python tools created to work on orientation map such as the one obtained using optical measurement (birefringence). It is an open source code under CC-BY-CC licence (https://creativecommons.org/licenses/by/2.0/fr/deed.en). There is no guarantee if you are using it. It has been tested with python 3.7
+AITA Toolbox is a python tools created to work on orientation map such as the one obtained using optical measurement (birefringence).
+
+It is an open source code under GPL-v3. 
+
+There is no guarantee if you are using it. 
+
+It has been tested with python 3.8
 
 
 .. toctree::
@@ -19,6 +25,12 @@ Installation
 
 From pip
 ********
+
+python 3.8 is require
+
+.. code:: bash
+
+    pip install AITAToolbox
 
 
 From repository
@@ -64,7 +76,6 @@ If you want to add new function in the Toolbox you run in aita folder
 
 .. code:: bash
     
-    conda activate envAITA
     pip install -e .
 
 

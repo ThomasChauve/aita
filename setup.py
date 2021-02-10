@@ -17,7 +17,7 @@ DESCRIPTION = 'Tools for AITA.'
 URL = 'https://github.com/ThomasChauve/aita'
 EMAIL = 'thomas.chauve@univ-grenoble-alpes.fr'
 AUTHOR = 'Thomas Chauve'
-REQUIRES_PYTHON = '>=3.9'
+REQUIRES_PYTHON = '>=3.8'
 VERSION = '2.1'
 
 # What packages are required for this module to be executed?

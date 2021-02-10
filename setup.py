@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='AITAToolbox',
-    version='2.0',
+    version='2.0.1',
     description='Tools for AITA',
       
     url='https://github.com/ThomasChauve/aita',

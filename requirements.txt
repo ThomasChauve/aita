@@ -8,3 +8,4 @@ scipy==1.6.0
 pillow==8.1.0
 gmsh==4.7.1
 ipywidgets==7.6.3
+ipympl==0.6.3 

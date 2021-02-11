@@ -16,6 +16,7 @@ import pygmsh
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+import matplotlib
 import math
 import pylab
 from skimage import io
@@ -26,7 +27,8 @@ import datetime
 import random
 import scipy
 import colorsys
-
+import ipywidgets as widgets
+import time
 import vtk
 from vtk.util.numpy_support import numpy_to_vtk, vtk_to_numpy
 
@@ -76,7 +78,83 @@ class aita(object):
         idx=np.where(self.micro.field==1)
         self.grains.field[idx]=np.nan
 
-        print("Sucessfull aita build !")  
+        print("Sucessfull aita build !") 
+    
+    def interactive_crop(self):
+        '''
+        out=data_aita.interactive_crop()
+        
+        This function can be use to crop within a jupyter notebook
+        It will crop the data and export the value of the crop in out.pos
+        '''
+        def onselect(eclick, erelease):
+            "eclick and erelease are matplotlib events at press and release."
+            print('startposition: (%f, %f)' % (eclick.xdata, eclick.ydata))
+            print('endposition  : (%f, %f)' % (erelease.xdata, erelease.ydata))
+            print('used button  : ', eclick.button)
+    
+        def toggle_selector(event):
+            print('Key pressed.')
+            if event.key in ['Q', 'q'] and toggle_selector.RS.active:
+                print('RectangleSelector deactivated.')
+                toggle_selector.RS.set_active(False)
+            if event.key in ['A', 'a'] and not toggle_selector.RS.active:
+                print('RectangleSelector activated.')
+                toggle_selector.RS.set_active(True)
+        
+        print('1. click and drag the mouse on the figure to selecte the area')
+        print('2. you can draw the rectangle using the button "Draw area"')
+        print('3. if you are unhappy with the selection restart to 1.')
+        print('4. if you are happy with the selection click on "Export crop" (only the last rectangle is taken into account)')
+        
+        fig,ax=plt.subplots()
+        self.phi1.plot()
+        toggle_selector.RS = matplotlib.widgets.RectangleSelector(ax, onselect, drawtype='box')
+        fig.canvas.mpl_connect('key_press_event', toggle_selector)        
+        
+        
+        buttonCrop = widgets.Button(description='Export crop')
+        buttonDraw = widgets.Button(description='Draw area')
+        ss=np.shape(self.phi1.field)
+        
+        def draw_area(_):
+            x=list(toggle_selector.RS.corners[0])
+            x.append(x[0])
+            y=list(toggle_selector.RS.corners[1])
+            y.append(y[0])
+            xmin=int(np.ceil(np.min(x)))
+            xmax=int(np.floor(np.max(x)))
+            ymin=int(ss[0]-np.ceil(np.max(y)))
+            ymax=int(ss[0]-np.floor(np.min(y)))
+            plt.plot(x,y,'-k')
+        
+        def get_data(_):
+            # "linking function with output"
+            # what happens when we press the button
+            x=list(toggle_selector.RS.corners[0])
+            x.append(x[0])
+            x=np.array(x)/self.phi1.res
+            y=list(toggle_selector.RS.corners[1])
+            y.append(y[0])
+            y=np.array(y)/self.phi1.res
+            xmin=int(np.ceil(np.min(x)))
+            xmax=int(np.floor(np.max(x)))
+            ymin=int(ss[0]-np.ceil(np.max(y)))
+            ymax=int(ss[0]-np.floor(np.min(y)))
+            plt.plot(x*self.phi1.res,y*self.phi1.res,'-b')
+            #get_data.pos=np.array([xmin,xmax,ymin,ymax])
+            pos=self.crop(xmin=xmin,xmax=xmax,ymin=ymin,ymax=ymax)
+            get_data.pos=pos
+            return get_data.pos
+
+
+        # linking button and function together using a button's method
+        buttonDraw.on_click(draw_area)
+        buttonCrop.on_click(get_data)
+        # displaying button and its output together
+        display(buttonDraw,buttonCrop)
+        
+        return get_data
         
     def crop(self,xmin=0,xmax=0,ymin=0,ymax=0):
         '''
@@ -88,10 +166,7 @@ class aita(object):
         
         .. note:: clic on the top left corner and bottom right corner to select the area
         '''
-        
-        
         if (xmin+xmax+ymin+ymax)==0:
-            
             print('Warning : if you are using jupyter notebook with %matplotlib inline option, you should add %matplotlib qt to have a pop up figure before this function. You can add %matplotlib inline after if you want to come back to the initial configuration')
             
             # plot the data
@@ -110,8 +185,7 @@ class aita(object):
             xmin=int(np.ceil(np.min(xx)))
             xmax=int(np.floor(np.max(xx)))
             ymin=int(ss[0]-np.ceil(np.max(yy)))
-            ymax=int(ss[0]-np.floor(np.min(yy)))
-            
+            ymax=int(ss[0]-np.floor(np.min(yy)))          
         
         # crop the map
         self.phi.field=self.phi.field[ymin:ymax, xmin:xmax]
@@ -124,7 +198,7 @@ class aita(object):
         self.grains.field=np.array(self.grains.field,float)
         idx=np.where(self.micro.field==1)
         self.grains.field[idx]=np.nan
-        
+        print('crop')
         return np.array([xmin,xmax,ymin,ymax])
         
     def fliplr(self):

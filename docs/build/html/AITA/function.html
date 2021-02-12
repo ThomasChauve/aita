@@ -397,7 +397,7 @@ It provide an environnement to plot data, to create inpur for CraFT code,…</p>
 
 <dl class="py method">
 <dt id="AITAToolbox.aita.aita.grelon">
-<code class="sig-name descname">grelon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.grelon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.grelon" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">grelon</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">posc</span><span class="o">=</span><span class="default_value">array([0, 0])</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.grelon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.grelon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the angle between the directions defined by the “center” and the pixel with the c-axis direction</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -437,6 +437,18 @@ It provide an environnement to plot data, to create inpur for CraFT code,…</p>
 <dd><p>out=data_aita.interactive_crop()</p>
 <p>This function can be use to crop within a jupyter notebook
 It will crop the data and export the value of the crop in out.pos</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="AITAToolbox.aita.aita.interactive_grelon">
+<code class="sig-name descname">interactive_grelon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.interactive_grelon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.interactive_grelon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interactuve grelon function for jupyter notebook</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="AITAToolbox.aita.aita.interactive_misorientation_profile">
+<code class="sig-name descname">interactive_misorientation_profile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.interactive_misorientation_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.interactive_misorientation_profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interactive misorientation profile for jupyter notebook</p>
 </dd></dl>
 
 <dl class="py method">
@@ -509,8 +521,31 @@ resInG             _______</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="AITAToolbox.aita.aita.misorientation_extractor">
+<code class="sig-name descname">misorientation_extractor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.misorientation_extractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.misorientation_extractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the misorientation profile along a line</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pos</strong> (<em>array</em>) – first point and last point of the line</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x - coordinate along the line</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>mis2o,mis2p - misorientation angle to the origin, and misorientation angle to the previous pixel</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="AITAToolbox.aita.aita.misorientation_profile">
-<code class="sig-name descname">misorientation_profile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">'all'</span></em>, <em class="sig-param"><span class="n">orientation</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">pos</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.misorientation_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.misorientation_profile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">misorientation_profile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ploton</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">'all'</span></em>, <em class="sig-param"><span class="n">orientation</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.misorientation_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#AITAToolbox.aita.aita.misorientation_profile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the misorientation profile along a line</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>

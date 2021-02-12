@@ -79,127 +79,9 @@ class aita(object):
         self.grains.field[idx]=np.nan
 
         print("Sucessfull aita build !") 
-    
-    def interactive_crop(self):
-        '''
-        out=data_aita.interactive_crop()
-        
-        This function can be use to crop within a jupyter notebook
-        It will crop the data and export the value of the crop in out.pos
-        '''
-        def onselect(eclick, erelease):
-            "eclick and erelease are matplotlib events at press and release."
-            print('startposition: (%f, %f)' % (eclick.xdata, eclick.ydata))
-            print('endposition  : (%f, %f)' % (erelease.xdata, erelease.ydata))
-            print('used button  : ', eclick.button)
-    
-        def toggle_selector(event):
-            print('Key pressed.')
-            if event.key in ['Q', 'q'] and toggle_selector.RS.active:
-                print('RectangleSelector deactivated.')
-                toggle_selector.RS.set_active(False)
-            if event.key in ['A', 'a'] and not toggle_selector.RS.active:
-                print('RectangleSelector activated.')
-                toggle_selector.RS.set_active(True)
-        
-        print('1. click and drag the mouse on the figure to selecte the area')
-        print('2. you can draw the rectangle using the button "Draw area"')
-        print('3. if you are unhappy with the selection restart to 1.')
-        print('4. if you are happy with the selection click on "Export crop" (only the last rectangle is taken into account)')
-        
-        fig,ax=plt.subplots()
-        self.phi1.plot()
-        toggle_selector.RS = matplotlib.widgets.RectangleSelector(ax, onselect, drawtype='box')
-        fig.canvas.mpl_connect('key_press_event', toggle_selector)        
-        
-        
-        buttonCrop = widgets.Button(description='Export crop')
-        buttonDraw = widgets.Button(description='Draw area')
-        ss=np.shape(self.phi1.field)
-        
-        def draw_area(_):
-            x=list(toggle_selector.RS.corners[0])
-            x.append(x[0])
-            y=list(toggle_selector.RS.corners[1])
-            y.append(y[0])
-            xmin=int(np.ceil(np.min(x)))
-            xmax=int(np.floor(np.max(x)))
-            ymin=int(ss[0]-np.ceil(np.max(y)))
-            ymax=int(ss[0]-np.floor(np.min(y)))
-            plt.plot(x,y,'-k')
-        
-        def get_data(_):
-            # "linking function with output"
-            # what happens when we press the button
-            x=list(toggle_selector.RS.corners[0])
-            x.append(x[0])
-            x=np.array(x)/self.phi1.res
-            y=list(toggle_selector.RS.corners[1])
-            y.append(y[0])
-            y=np.array(y)/self.phi1.res
-            xmin=int(np.ceil(np.min(x)))
-            xmax=int(np.floor(np.max(x)))
-            ymin=int(ss[0]-np.ceil(np.max(y)))
-            ymax=int(ss[0]-np.floor(np.min(y)))
-            plt.plot(x*self.phi1.res,y*self.phi1.res,'-b')
-            #get_data.pos=np.array([xmin,xmax,ymin,ymax])
-            pos=self.crop(xmin=xmin,xmax=xmax,ymin=ymin,ymax=ymax)
-            get_data.pos=pos
-            return get_data.pos
-
-
-        # linking button and function together using a button's method
-        buttonDraw.on_click(draw_area)
-        buttonCrop.on_click(get_data)
-        # displaying button and its output together
-        display(buttonDraw,buttonCrop)
-        
-        return get_data
-        
-    def crop(self,xmin=0,xmax=0,ymin=0,ymax=0):
-        '''
-        Crop function to select the area of interest
-        
-        :return: crop aita object
-        :rtype: aita
-        :Exemple: >>> data.crop()
-        
-        .. note:: clic on the top left corner and bottom right corner to select the area
-        '''
-        if (xmin+xmax+ymin+ymax)==0:
-            print('Warning : if you are using jupyter notebook with %matplotlib inline option, you should add %matplotlib qt to have a pop up figure before this function. You can add %matplotlib inline after if you want to come back to the initial configuration')
-            
-            # plot the data
-            h=self.phi.plot()
-            # select top left and bottom right corner for crop
-            print('Select top left and bottom right corner for crop :')
-            x=np.array(pylab.ginput(2))/self.phi.res
-            plt.close("all")
-            # create x and Y coordinate
-
-            xx=[x[0][0],x[1][0]]
-            yy=[x[0][1],x[1][1]]
-            # size of the initial map
-            ss=np.shape(self.phi.field)
-            # find xmin xmax ymin and ymax
-            xmin=int(np.ceil(np.min(xx)))
-            xmax=int(np.floor(np.max(xx)))
-            ymin=int(ss[0]-np.ceil(np.max(yy)))
-            ymax=int(ss[0]-np.floor(np.min(yy)))          
-        
-        # crop the map
-        self.phi.field=self.phi.field[ymin:ymax, xmin:xmax]
-        self.phi1.field=self.phi1.field[ymin:ymax, xmin:xmax]
-        self.qua.field=self.qua.field[ymin:ymax, xmin:xmax]
-        self.micro.field=self.micro.field[ymin:ymax, xmin:xmax]
-        self.grains=self.micro.grain_label()
-        
-        # replace grains boundary with NaN number
-        self.grains.field=np.array(self.grains.field,float)
-        idx=np.where(self.micro.field==1)
-        self.grains.field[idx]=np.nan
-        print('crop')
-        return np.array([xmin,xmax,ymin,ymax])
+##################################################################### 
+######################Geometry conversion############################
+#####################################################################
         
     def fliplr(self):
         '''
@@ -216,7 +98,7 @@ class aita(object):
         self.qua.field=np.fliplr(self.qua.field)
         self.micro.field=np.fliplr(self.micro.field)
         self.grains.field=np.fliplr(self.grains.field)
-        
+#---------------------------------------------------------------------        
     def rot180(self):
         '''
         Rotate the data of 180 degree
@@ -232,40 +114,7 @@ class aita(object):
         self.qua.field=np.flipud(np.fliplr(self.qua.field))
         self.micro.field=np.flipud(np.fliplr(self.micro.field))
         self.grains.field=np.flipud(np.fliplr(self.grains.field))
-        
-    def filter(self,value):
-        ''' 
-        Remove data of bad quality
-        
-        :param value: limit quality value between 0 to 100
-        :type value: int
-        :return: data object with no orientation with quality value under threshold
-        :rtype: aita
-        :Exemple: >>> data.filter(75)
-        '''
-        # find where quality<value
-        x=np.where(self.qua.field < value)
-        self.phi.field[x]=np.NAN
-        self.phi1.field[x]=np.NAN
-        
-    def mean_grain(self):
-        '''
-        Compute the mean orientation inside the grain
-        
-        :return: data with only one orientation per grains, the mean orientation
-        :rtype: aita
-        :Exemple: >>> data.mean_orientation()
-        '''
-        # number of grain
-        nb_grain=int(np.nanmax(self.grains.field))
-        # loop on all the grain
-        for i in list(range(nb_grain+1)):
-            # find the pixel inside the grain i
-            idx=np.where(self.grains.field==i)
-            # compute the mean value of phi1 and phi and replace the value in the map
-            self.phi.field[idx]=np.nanmean(self.phi.field[idx])
-            self.phi1.field[idx]=np.nanmean(self.phi1.field[idx])
-        
+#----------------------------------------------------------------------        
     def imresize(self,res):
         '''
         Resize the data
@@ -285,6 +134,263 @@ class aita(object):
         self.micro.field=scipy.ndimage.binary_dilation(self.micro.field, iterations=np.int32(res/(2*self.micro.res)))
         # resize
         self.micro.imresize(res)
+        
+#----------------------------------------------------------------------
+    def mask(self,mask):
+        '''
+        Applied mask on aita data
+        
+        :param mask:
+        :type mask: im2d.mask2d
+        
+        :return: aita object with the mask applied 
+        :rtype: aita
+        '''
+        
+        if (type(mask) is im2d.mask2d):
+            phi1=self.phi1*mask
+            phi=self.phi*mask
+            qua=self.qua*mask
+            micro=self.micro
+            res=self.micro.res
+            # reduce the size of the aita data : remouve band of NaN
+            x,y=np.where(mask.field==1)
+            minx=np.min(x)
+            maxx=np.max(x)
+            miny=np.min(y)
+            maxy=np.max(y)
+            
+           
+            
+            ma=aita(phi1.field[minx:maxx,miny:maxy],phi.field[minx:maxx,miny:maxy],qua.field[minx:maxx,miny:maxy],micro.field[minx:maxx,miny:maxy],res)
+            
+        else:
+            print('mask is not and mask2d object')
+            ma=False
+           
+        return ma
+
+##################################################################### 
+#########################Data traitement#############################
+#####################################################################
+        
+    def filter(self,value):
+        ''' 
+        Remove data of bad quality
+        
+        :param value: limit quality value between 0 to 100
+        :type value: int
+        :return: data object with no orientation with quality value under threshold
+        :rtype: aita
+        :Exemple: >>> data.filter(75)
+        '''
+        # find where quality<value
+        x=np.where(self.qua.field < value)
+        self.phi.field[x]=np.NAN
+        self.phi1.field[x]=np.NAN
+#--------------------------------------------------------------------        
+    def mean_grain(self):
+        '''
+        Compute the mean orientation inside the grain
+        
+        :return: data with only one orientation per grains, the mean orientation
+        :rtype: aita
+        :Exemple: >>> data.mean_orientation()
+        '''
+        # number of grain
+        nb_grain=int(np.nanmax(self.grains.field))
+        # loop on all the grain
+        for i in list(range(nb_grain+1)):
+            # find the pixel inside the grain i
+            idx=np.where(self.grains.field==i)
+            # compute the mean value of phi1 and phi and replace the value in the map
+            self.phi.field[idx]=np.nanmean(self.phi.field[idx])
+            self.phi1.field[idx]=np.nanmean(self.phi1.field[idx])
+
+    def misorientation_extractor(self,pos):       
+        '''
+        Compute the misorientation profile along a line
+        
+        :param pos: first point and last point of the line
+        :type pos: array
+        :return: x - coordinate along the line
+        :rtype: array, float
+        :return: mis2o,mis2p - misorientation angle to the origin, and misorientation angle to the previous pixel
+        :rtype: array, float
+        '''
+        
+        # size of the map
+        ss=np.shape(self.phi1.field)        
+        yy=np.float32([pos[0][0],pos[1][0]])/self.phi.res
+        xx=np.float32([pos[0][1],pos[1][1]])/self.phi.res
+        
+        # numbers of pixel along the line
+        nb_pixel=np.int32(np.sqrt((xx[1]-xx[0])**2+(yy[1]-yy[0])**2))
+        
+        # calcul for each pixel
+        phi=[]
+        phi1=[]
+        x=[]
+        xi=[]
+        yi=[]
+        mis2p=[]
+        mis2o=[]
+        ori=[]
+        for i in list(range(nb_pixel)):
+            # find the coordinate x an y along the line
+            xi.append(ss[0]-np.int32(np.round(i*(xx[1]-xx[0])/nb_pixel+xx[0])))
+            yi.append(np.int32(np.round(i*(yy[1]-yy[0])/nb_pixel+yy[0])))
+            # extract phi and phi1
+            phi.append(self.phi.field[xi[i],yi[i]])
+            phi1.append(self.phi1.field[xi[i],yi[i]])
+            
+            # ori0 and orii are the c axis vector
+            ori.append(np.mat([np.cos(np.mod(phi1[i]-math.pi/2,2*math.pi))*np.sin(phi[i]) , np.sin(np.mod(phi1[i]-math.pi/2,2*math.pi))*np.sin(phi[i]) ,np.cos(phi[i])]))   
+            # mis2o is the misorientation between pixel i and the origin
+            mis2o.append(np.float(np.arccos(np.abs(ori[0]*np.transpose(ori[i])))*180/math.pi))
+            if i>0:
+            # mis2p is the misorientation to the previous pixel    
+                mis2p.append(np.float(np.arccos(np.abs(ori[i]*np.transpose(ori[i-1])))*180/math.pi))
+            # x is the position along the line
+                x.append(np.sqrt((xi[i]-xi[0])**2+(yi[i]-yi[0])**2))
+            else:
+                mis2p.append(0.0)
+                x.append(0.0)
+
+        return np.array(x)*self.phi.res, np.array(mis2o), np.array(mis2p)
+        
+            
+##################################################################### 
+##########################Plot function##############################
+#####################################################################
+    def plot(self,nlut=512):
+        '''
+        Plot the data using a 2d lut
+        
+        :param nlut: number of pixel tou want for the 2d LUT (default 512)
+        :type nlut: int
+        :return: figure of orientation mapping
+        :rtype: matplotlib figure
+        :Exemple: 
+            >>> data.plot()
+            >>> plt.show()
+            >>> # print the associated color wheel
+            >>> lut=lut()
+            >>> plt.show()
+            
+        .. note:: It takes time to build the colormap
+        '''
+        # size of the map
+        nx=np.shape(self.phi.field)
+        # create image for color map
+        img=np.ones([nx[0],nx[1],3])
+        # load the colorwheel
+        rlut=lut(nx=nlut,circle=False)
+        nnlut=np.shape(rlut)
+        nnnlut=nnlut[0]
+        # fill the color map
+        XX=(nnnlut-1)/2*np.multiply(np.sin(self.phi.field),np.cos(self.phi1.field))+(nnnlut-1)/2
+        YY=(nnnlut-1)/2*np.multiply(np.sin(self.phi.field),np.sin(self.phi1.field))+(nnnlut-1)/2
+    
+        for i in list(range(nx[0])):
+            for j in list(range(nx[1])):
+                if ~np.isnan(self.phi.field[i,j]):
+                    img[i,j,0]=rlut[np.int32(XX[i,j]),np.int32(YY[i,j]),0]
+                    img[i,j,1]=rlut[np.int32(XX[i,j]),np.int32(YY[i,j]),1]
+                    img[i,j,2]=rlut[np.int32(XX[i,j]),np.int32(YY[i,j]),2]
+                
+        h=plt.imshow(img,extent=(0,nx[1]*self.phi.res,0,nx[0]*self.phi.res))               
+        
+        return h,img
+    
+#---------------------------------------------------------------------
+
+    def plotpdf(self,peigen=True,select_grain=False,grainlist=[],nbp=10000,contourf=False,cm2=cm.viridis,bw=0.1,projz=1,angle=np.array([30.,60.]),cline=15,n_jobs=-1):
+        '''
+        Plot pole figure for c-axis (0001)
+        
+        :param peigen: Plot the eigenvalues and eigenvectors on the pole figure (default = False)
+        :type peigen: bool
+        :param select_grain: select the grains use for the pole figure
+        :type select_grain: bool
+        :param grainlist: give the list of the grainId you want to plot
+        :type grainlist: list
+        :param nbp: number of pixel plotted
+        :type nbp: int
+        :param contourf: Do you want to add contouring to your pole figure ? (Default : False)
+        :type contourf: bool
+        :param cm2: colorbar (default : cm.viridis)
+        :type cm2: cm
+        :param bw: bandwidth to compute kernel density (default : 0.1) bw=0 mean find the best fit between 0.01 and 1
+        :type bw: float
+        :param projz: 0 or 1. It choose the type of projection. 0 (1) means projection in the plane z=0 (1).
+        :type projz: int
+        :param angle: plot circle for this angle value (default : np.array([30.,60.])) 0 if you don't want inner circle.
+        :type angle: np.array
+        :param cline: Number of line in contourf (default 15) Used only when contourf=True.
+        :type cline: int
+        :param n_jobs: number of job in parellel (CPU). Only use when bw=0 (best fit) (default : -1 mean all processor)
+        :type n_jobs: int
+        :return: pole figure image
+        :rtype: matplotlib figure
+        :return: eigenvalue
+        :rtype: float
+        :Exemple:
+            >>> eigenvalue = data.plotpdf(peigen=True)
+        '''
+        
+        if select_grain:
+            if grainlist==[]:
+                plt.imshow(self.grains.field,aspect='equal')
+                plt.waitforbuttonpress()
+                print('midle mouse clic when you are finish')
+                #grain wanted for the plot
+                id=np.int32(np.array(pylab.ginput(0)))
+                plt.close('all')
+                # find the label of grain
+                label=self.grains.field[id[:,1],id[:,0]]
+            else:
+                label=grainlist
+            tazi=[]
+            tcol=[]
+            for i in list(range(len(label))):
+                idx=np.where(self.grains.field==label[i])
+                tazi.append(list(np.mod(self.phi1.field[idx[0],idx[1]]-math.pi/2,2*math.pi)))
+                tcol.append(list(self.phi.field[idx[0],idx[1]]))
+                
+            azi=np.transpose(np.concatenate(np.array(tazi)))
+            col=np.transpose(np.concatenate(np.array(tcol)))
+        else:
+            # compute azimuth and colatitude
+            azi=np.mod(self.phi1.field.reshape((-1,1))-math.pi/2,2*math.pi)
+            col=self.phi.field.reshape((-1,1))
+
+
+        # remove nan value
+        idnan=np.isnan(azi)
+        idlist=np.where(idnan==True)
+        
+        azi=np.delete(azi,idlist,0)
+        col=np.delete(col,idlist,0)
+        
+        # compute [xc,yc,zc] the coordinate of the c-axis
+        xc = np.multiply(np.cos(azi),np.sin(col))
+        yc = np.multiply(np.sin(azi),np.sin(col))
+        zc = np.cos(col)  
+        
+        v=vec3d.setvector3d(np.transpose(np.array([xc[:,0],yc[:,0],zc[:,0]])))
+        v.stereoplot(nbpoints=nbp,contourf=contourf,bw=bw,cm=cm2,angle=angle,plotOT=peigen,projz=projz,cline=cline,n_jobs=n_jobs)
+
+        plt.text(-1.4, 1.4, r'[0001]')
+        
+        eigvalue,eigvector=v.OrientationTensor2nd()
+        
+        return eigvalue
+        
+##################################################################### 
+##########################Exportation################################
+#####################################################################
+        
         
     def craft(self,nameId):
         '''
@@ -464,420 +570,9 @@ class aita(object):
         out_in.write('precision=1.e-4, 1.e-4\n')
         out_in.write('#------------------------------------------------------------\n')
         out_in.close()
+        
+#-----------------------------------------------------------------------------------------------
     
-    def plotpdf(self,peigen=True,select_grain=False,grainlist=[],nbp=10000,contourf=False,cm2=cm.viridis,bw=0.1,projz=1,angle=np.array([30.,60.]),cline=15,n_jobs=-1):
-        '''
-        Plot pole figure for c-axis (0001)
-        
-        :param peigen: Plot the eigenvalues and eigenvectors on the pole figure (default = False)
-        :type peigen: bool
-        :param select_grain: select the grains use for the pole figure
-        :type select_grain: bool
-        :param grainlist: give the list of the grainId you want to plot
-        :type grainlist: list
-        :param nbp: number of pixel plotted
-        :type nbp: int
-        :param contourf: Do you want to add contouring to your pole figure ? (Default : False)
-        :type contourf: bool
-        :param cm2: colorbar (default : cm.viridis)
-        :type cm2: cm
-        :param bw: bandwidth to compute kernel density (default : 0.1) bw=0 mean find the best fit between 0.01 and 1
-        :type bw: float
-        :param projz: 0 or 1. It choose the type of projection. 0 (1) means projection in the plane z=0 (1).
-        :type projz: int
-        :param angle: plot circle for this angle value (default : np.array([30.,60.])) 0 if you don't want inner circle.
-        :type angle: np.array
-        :param cline: Number of line in contourf (default 15) Used only when contourf=True.
-        :type cline: int
-        :param n_jobs: number of job in parellel (CPU). Only use when bw=0 (best fit) (default : -1 mean all processor)
-        :type n_jobs: int
-        :return: pole figure image
-        :rtype: matplotlib figure
-        :return: eigenvalue
-        :rtype: float
-        :Exemple:
-            >>> eigenvalue = data.plotpdf(peigen=True)
-        '''
-        
-        if select_grain:
-            if grainlist==[]:
-                plt.imshow(self.grains.field,aspect='equal')
-                plt.waitforbuttonpress()
-                print('midle mouse clic when you are finish')
-                #grain wanted for the plot
-                id=np.int32(np.array(pylab.ginput(0)))
-                plt.close('all')
-                # find the label of grain
-                label=self.grains.field[id[:,1],id[:,0]]
-            else:
-                label=grainlist
-            tazi=[]
-            tcol=[]
-            for i in list(range(len(label))):
-                idx=np.where(self.grains.field==label[i])
-                tazi.append(list(np.mod(self.phi1.field[idx[0],idx[1]]-math.pi/2,2*math.pi)))
-                tcol.append(list(self.phi.field[idx[0],idx[1]]))
-                
-            azi=np.transpose(np.concatenate(np.array(tazi)))
-            col=np.transpose(np.concatenate(np.array(tcol)))
-        else:
-            # compute azimuth and colatitude
-            azi=np.mod(self.phi1.field.reshape((-1,1))-math.pi/2,2*math.pi)
-            col=self.phi.field.reshape((-1,1))
-
-
-        # remove nan value
-        idnan=np.isnan(azi)
-        idlist=np.where(idnan==True)
-        
-        azi=np.delete(azi,idlist,0)
-        col=np.delete(col,idlist,0)
-        
-        # compute [xc,yc,zc] the coordinate of the c-axis
-        xc = np.multiply(np.cos(azi),np.sin(col))
-        yc = np.multiply(np.sin(azi),np.sin(col))
-        zc = np.cos(col)  
-        
-        v=vec3d.setvector3d(np.transpose(np.array([xc[:,0],yc[:,0],zc[:,0]])))
-        v.stereoplot(nbpoints=nbp,contourf=contourf,bw=bw,cm=cm2,angle=angle,plotOT=peigen,projz=projz,cline=cline,n_jobs=n_jobs)
-
-        plt.text(-1.4, 1.4, r'[0001]')
-        
-        eigvalue,eigvector=v.OrientationTensor2nd()
-        
-        return eigvalue
-    
-    def grain_ori(self):
-        '''
-        Give the grain orientation output
-        '''
-        plt.imshow(self.grains.field,aspect='equal')
-        plt.waitforbuttonpress()
-        print('midle mouse clic when you are finish')
-        #grain wanted for the plot
-        id=np.int32(np.array(pylab.ginput(0)))
-        plt.close('all')
-        
-        phi=self.phi.field[id[:,1],id[:,0]]
-        phi1=self.phi1.field[id[:,1],id[:,0]]
-        
-        return [phi1,phi]
-        
-    def plot(self,nlut=512):
-        '''
-        Plot the data using a 2d lut
-        
-        :param nlut: number of pixel tou want for the 2d LUT (default 512)
-        :type nlut: int
-        :return: figure of orientation mapping
-        :rtype: matplotlib figure
-        :Exemple: 
-            >>> data.plot()
-            >>> plt.show()
-            >>> # print the associated color wheel
-            >>> lut=lut()
-            >>> plt.show()
-            
-        .. note:: It takes time to build the colormap
-        '''
-        # size of the map
-        nx=np.shape(self.phi.field)
-        # create image for color map
-        img=np.ones([nx[0],nx[1],3])
-        # load the colorwheel
-        rlut=lut(nx=nlut,circle=False)
-        nnlut=np.shape(rlut)
-        nnnlut=nnlut[0]
-        # fill the color map
-        XX=(nnnlut-1)/2*np.multiply(np.sin(self.phi.field),np.cos(self.phi1.field))+(nnnlut-1)/2
-        YY=(nnnlut-1)/2*np.multiply(np.sin(self.phi.field),np.sin(self.phi1.field))+(nnnlut-1)/2
-    
-        for i in list(range(nx[0])):
-            for j in list(range(nx[1])):
-                if ~np.isnan(self.phi.field[i,j]):
-                    img[i,j,0]=rlut[np.int32(XX[i,j]),np.int32(YY[i,j]),0]
-                    img[i,j,1]=rlut[np.int32(XX[i,j]),np.int32(YY[i,j]),1]
-                    img[i,j,2]=rlut[np.int32(XX[i,j]),np.int32(YY[i,j]),2]
-                
-        h=plt.imshow(img,extent=(0,nx[1]*self.phi.res,0,nx[0]*self.phi.res))               
-        
-        return h,img
-    
-
-    def misorientation_profile(self, plot='all',orientation=False,pos=0):       
-        '''
-        Compute the misorientation profile along a line
-        
-        :param plot: option for to misorientation profile plot, 'all' (default), 'mis2o', 'mis2p'
-        :type plot: str
-        :param orientation: option for the color code used for the map, False (default) use phi1 and True use colorwheel (take time)
-        :type orientation: bool
-        :param pos: coordinate of the profile line - 0 (default) click on the map to select the 2 points
-        :type pos: array
-        :return: x - coordinate along the line
-        :rtype: array, float
-        :return: mis2o,mis2p - misorientation angle to the origin, and misorientation angle to the previous pixel
-        :rtype: array, float
-        :return: h - matplotlib image with line draw on the orientation map, subplot with mis2o and/or mis2p profile
-        :return: pos - coordinate of the profile line
-        :Exemple: 
-            >>> [x,mis2o,mis2p,h,pos]=data.misorientation_profile()
-            >>> rpos = pos[::-1]
-            >>> [x,mis2o,mis2p,hr,pos]=data.misorientation_profile(pos=rpos)
-            >>> plt.show()
-        '''
-        
-        # size of the map
-        ss=np.shape(self.phi1.field)
-        # plot the data with phi1 value
-        if np.size(pos)==1:
-            h=plt.figure()
-            self.phi1.plot()
-            # select initial and final points for the line
-            print('Select initial and final points for the line :')
-            pos=np.array(pylab.ginput(2))
-            plt.close(h)
-        
-        yy=np.float32([pos[0][0],pos[1][0]])/self.phi.res
-        xx=np.float32([pos[0][1],pos[1][1]])/self.phi.res
-        
-        # numbers of pixel along the line
-        nb_pixel=np.int32(np.sqrt((xx[1]-xx[0])**2+(yy[1]-yy[0])**2))
-        
-        # calcul for each pixel
-        phi=[]
-        phi1=[]
-        x=[]
-        xi=[]
-        yi=[]
-        mis2p=[]
-        mis2o=[]
-        ori=[]
-        for i in list(range(nb_pixel)):
-            # find the coordinate x an y along the line
-            xi.append(ss[0]-np.int32(np.round(i*(xx[1]-xx[0])/nb_pixel+xx[0])))
-            yi.append(np.int32(np.round(i*(yy[1]-yy[0])/nb_pixel+yy[0])))
-            # extract phi and phi1
-            phi.append(self.phi.field[xi[i],yi[i]])
-            phi1.append(self.phi1.field[xi[i],yi[i]])
-            
-            # ori0 and orii are the c axis vector
-            ori.append(np.mat([np.cos(np.mod(phi1[i]-math.pi/2,2*math.pi))*np.sin(phi[i]) , np.sin(np.mod(phi1[i]-math.pi/2,2*math.pi))*np.sin(phi[i]) ,np.cos(phi[i])]))   
-            # mis2o is the misorientation between pixel i and the origin
-            mis2o.append(np.float(np.arccos(np.abs(ori[0]*np.transpose(ori[i])))*180/math.pi))
-            if i>0:
-            # mis2p is the misorientation to the previous pixel    
-                mis2p.append(np.float(np.arccos(np.abs(ori[i]*np.transpose(ori[i-1])))*180/math.pi))
-            # x is the position along the line
-                x.append(np.sqrt((xi[i]-xi[0])**2+(yi[i]-yi[0])**2))
-            else:
-                mis2p.append(0.0)
-                x.append(0.0)
-
-
-        #hh=plt.figure()
-        plt.subplot(211)
-        if orientation:
-            self.plot()
-        else:
-            self.phi1.plot()
-        #plt.hold('on')
-        plt.plot(yy*self.phi.res,xx*self.phi.res)
-        # plot misorientation profile
-        plt.subplot(212)
-        if plot=='all' or plot=='mis2o':
-            plt.plot(x,mis2o,'-b')
-        if plot=='all' or plot=='mis2p':
-            plt.plot(x,mis2p,'-k')    
-        plt.grid(True)
-            
-        return x, mis2o, mis2p, pos
-    
-    
-    def addgrain(self,ori=0):
-        '''
-        add a grain inside the microstructure
-        
-        :param ori: orienation of the new grain [phi1 phi] (default random value)
-        :type ori: array, float
-        :return: new_micro, object with the new grain include
-        :rtype: aita
-        :Exemple: 
-            >>> data.addgrain()      
-        '''
-        
-        # select the contour of the grains
-        h=self.grains.plot()
-        # click on the submit of the new grain
-        plt.waitforbuttonpress()
-        print('click on the submit of the new grain :')
-        x=np.array(pylab.ginput(3))/self.grains.res
-        plt.close('all')
-        
-        # select a subarea contening the triangle
-        minx=np.int(np.fix(np.min(x[:,0])))
-        maxx=np.int(np.ceil(np.max(x[:,0])))
-        miny=np.int(np.fix(np.min(x[:,1])))
-        maxy=np.int(np.ceil(np.max(x[:,1])))
-        
-        # write all point inside this area
-        gpoint=[]
-        for i in list(range(minx,maxx)):
-            for j in list(range(miny,maxy)):
-                gpoint.append([i,j])
-        
-    
-        # test if the point is inside the triangle    
-        gIn=[]
-        for i in list(range(len(gpoint))):
-            gIn.append(isInsideTriangle(gpoint[i],x[0,:],x[1,:],x[2,:]))
-
-        gpointIn=np.array(gpoint)[np.array(gIn)]
-        
-        #transform in xIn and yIn, the coordinate of the map
-        xIn=np.shape(self.grains.field)[0]-gpointIn[:,1]
-        yIn=gpointIn[:,0]
-               
-        # add one grains
-        self.grains.field[xIn,yIn]=np.nanmax(self.grains.field)+1
-        # add the orientation of the grains
-        if ori==0:
-            self.phi1.field[xIn,yIn]=random.random()*2*math.pi
-            self.phi.field[xIn,yIn]=random.random()*math.pi/2
-        else:
-            self.phi1.field[xIn,yIn]=ori[0]
-            self.phi.field[xIn,yIn]=ori[1]
-            
-        returnphi=self.phi1*mask
-    
-    def new_ori_TJ(self,mask,mean=True):
-        '''
-        Extract orientation to compare with CraFT simulation
-        '''
-        ng=(self.grains*mask).field        
-        res=[]
-        con=True
-        
-        while con:
-            gID=self.grains.mask_build()
-            print('triple junction label')
-            x=input()
-            ng=(self.grains*gID).field
-            ngmax=np.nanmax(ng)
-            for i in list(range(np.int32(ngmax))):
-                id=np.where(self.grains.field==i)
-                if len(id[0])>0:
-                    if mean:
-                        pp=np.array([[id[0][0],id[1][0]]])
-                        phi1,pos=self.phi1.extract_data(pos=pp)
-                        phi,pos=self.phi.extract_data(pos=pp)
-                        if ~np.isnan(phi1):
-                            res.append([i,phi1,phi,float(x)])
-                    else:
-                        for j in list(range(len(id[0]))):
-                            pp=np.array([[id[0][j],id[1][j]]])
-                            phi1,pos=self.phi1.extract_data(pos=pp)
-                            phi,pos=self.phi.extract_data(pos=pp)
-                            if ~np.isnan(phi1):
-                                res.append([i,phi1,phi,float(x)])
-                            
-            print('continue ? 0 no, 1 yes')
-            con=input()
-        
-        return res
-    
-    def mask(self,mask):
-        '''
-        Applied mask on aita data
-        
-        :param mask:
-        :type mask: im2d.mask2d
-        
-        :return: aita object with the mask applied 
-        :rtype: aita
-        '''
-        
-        if (type(mask) is im2d.mask2d):
-            phi1=self.phi1*mask
-            phi=self.phi*mask
-            qua=self.qua*mask
-            micro=self.micro
-            res=self.micro.res
-            # reduce the size of the aita data : remouve band of NaN
-            x,y=np.where(mask.field==1)
-            minx=np.min(x)
-            maxx=np.max(x)
-            miny=np.min(y)
-            maxy=np.max(y)
-            
-           
-            
-            ma=aita(phi1.field[minx:maxx,miny:maxy],phi.field[minx:maxx,miny:maxy],qua.field[minx:maxx,miny:maxy],micro.field[minx:maxx,miny:maxy],res)
-            
-        else:
-            print('mask is not and mask2d object')
-            ma=False
-           
-        return ma
-    
-    def grelon(self):
-        '''
-        Compute the angle between the directions defined by the "center" and the pixel with the c-axis direction
-        
-        :return: angle (degree)
-        :rtype: im2d.image2d
-        '''
-        
-        # Find the center
-        self.phi1.plot()
-        print('Click on the center of the hailstone')
-        posc=plt.ginput(1)
-        plt.close('all')
-        
-        ss=np.shape(self.phi1.field)
-        
-        # vecteur C
-        xc=np.cos(self.phi1.field-math.pi/2)*np.sin(self.phi.field)
-        yc=np.sin(self.phi1.field-math.pi/2)*np.sin(self.phi.field)
-        
-        nn=(xc**2+yc**2.)**.5
-        xc=xc/nn
-        yc=yc/nn
-        
-        # build x y
-        xi=np.zeros(ss)
-        yi=np.transpose(np.zeros(ss))
-        xl=np.arange(ss[0])
-        yl=np.arange(ss[1])
-        xi[:,:]=yl
-        yi[:,:]=xl
-        yi=np.transpose(yi)
-        # center and norm
-        xcen=np.int32(posc[0][0]/self.phi1.res)
-        ycen=(ss[0]-np.int32(posc[0][1]/self.phi1.res))
-        xv=xi-xcen
-        yv=yi-ycen
-        
-        nn=(xv**2.+yv**2.)**0.5
-        xv=xv/nn
-        yv=yv/nn
-        #
-        plt.figure()
-        plt.imshow(nn)
-        plt.figure()
-        plt.quiver(xi[xcen-50:xcen-50],yi[ycen-50:ycen-50],xv[xcen-50:xcen-50],yv[ycen-50:ycen-50],scale=1000)
-        
-        #
-        acos=xv*xc+yv*yc
-        
-        angle=np.arccos(acos)*180./math.pi
-        
-        id=np.where(angle>90)
-        angle[id]=180-angle[id]
-                
-        return im2d.image2d(angle,self.phi1.res),xi,yi,xv,yv
-        
-        
     def mesh(self,name,resGB=1,resInG=5,DistMin=5):
         '''
         Create mesh in vtk format
@@ -1137,11 +832,6 @@ class aita(object):
                 ori.InsertNextValue(0)
                 
         polydata.GetCellData().SetScalars(mesh_grains)
-        
-        
-        
-        
-        
         polydata.GetCellData().AddArray(ori)
         
         writer = vtk.vtkXMLUnstructuredGridWriter()
@@ -1150,7 +840,430 @@ class aita(object):
         writer.Write()
         
         return
+################################
+    
+    
+    
+    def new_ori_TJ(self,mask,mean=True):
+        '''
+        Extract orientation to compare with CraFT simulation
+        '''
+        ng=(self.grains*mask).field        
+        res=[]
+        con=True
+        
+        while con:
+            gID=self.grains.mask_build()
+            print('triple junction label')
+            x=input()
+            ng=(self.grains*gID).field
+            ngmax=np.nanmax(ng)
+            for i in list(range(np.int32(ngmax))):
+                id=np.where(self.grains.field==i)
+                if len(id[0])>0:
+                    if mean:
+                        pp=np.array([[id[0][0],id[1][0]]])
+                        phi1,pos=self.phi1.extract_data(pos=pp)
+                        phi,pos=self.phi.extract_data(pos=pp)
+                        if ~np.isnan(phi1):
+                            res.append([i,phi1,phi,float(x)])
+                    else:
+                        for j in list(range(len(id[0]))):
+                            pp=np.array([[id[0][j],id[1][j]]])
+                            phi1,pos=self.phi1.extract_data(pos=pp)
+                            phi,pos=self.phi.extract_data(pos=pp)
+                            if ~np.isnan(phi1):
+                                res.append([i,phi1,phi,float(x)])
+                            
+            print('continue ? 0 no, 1 yes')
+            con=input()
+        
+        return res
+    
+
+        
+
+##########################################################################
+###########################Interactive function###########################
+##########################################################################
+    def misorientation_profile(self, ploton=True, plot='all',orientation=False):       
+        '''
+        Compute the misorientation profile along a line
+        
+        :param plot: option for to misorientation profile plot, 'all' (default), 'mis2o', 'mis2p'
+        :type plot: str
+        :param orientation: option for the color code used for the map, False (default) use phi1 and True use colorwheel (take time)
+        :type orientation: bool
+        :param pos: coordinate of the profile line - 0 (default) click on the map to select the 2 points
+        :type pos: array
+        :return: x - coordinate along the line
+        :rtype: array, float
+        :return: mis2o,mis2p - misorientation angle to the origin, and misorientation angle to the previous pixel
+        :rtype: array, float
+        :return: h - matplotlib image with line draw on the orientation map, subplot with mis2o and/or mis2p profile
+        :return: pos - coordinate of the profile line
+        :Exemple: 
+            >>> [x,mis2o,mis2p,h,pos]=data.misorientation_profile()
+            >>> rpos = pos[::-1]
+            >>> [x,mis2o,mis2p,hr,pos]=data.misorientation_profile(pos=rpos)
+            >>> plt.show()
+        '''
+        
+        # plot the data with phi1 value
+        h=plt.figure()
+        self.phi1.plot()
+        # select initial and final points for the line
+        print('Select initial and final points for the line :')
+        pos=np.array(pylab.ginput(2))
+        plt.close(h)
+        
+        x, mis2o, mis2p=self.misorientation_extractor(pos)
+        
+        if ploton:
+            plt.subplot(1,2,1)
+            if orientation:
+                self.plot()
+                
+            else:
+                self.phi1.plot()
+                
+            plt.plot(pos[:,0],pos[:,1],'-k')
             
+            plt.subplot(122)
+            if plot in ['all','mis2o']:
+                plt.plot(x,mis2o,'-b',label='mis2o')
+            if plot in ['all','mis2p']:
+                plt.plot(x,mis2p,'-k',label='mis2p')
+            plt.legend()
+            plt.grid()
+            plt.xlabel('Distance')
+            plt.ylabel('Angle')
+        
+        return x, mis2o, mis2p, pos
+
+    def grain_ori(self):
+        '''
+        Give the grain orientation output
+        '''
+        plt.imshow(self.grains.field,aspect='equal')
+        plt.waitforbuttonpress()
+        print('midle mouse clic when you are finish')
+        #grain wanted for the plot
+        id=np.int32(np.array(pylab.ginput(0)))
+        plt.close('all')
+        
+        phi=self.phi.field[id[:,1],id[:,0]]
+        phi1=self.phi1.field[id[:,1],id[:,0]]
+        
+        return [phi1,phi]
+    
+    def crop(self,xmin=0,xmax=0,ymin=0,ymax=0):
+        '''
+        Crop function to select the area of interest
+        
+        :return: crop aita object
+        :rtype: aita
+        :Exemple: >>> data.crop()
+        
+        .. note:: clic on the top left corner and bottom right corner to select the area
+        '''
+        if (xmin+xmax+ymin+ymax)==0:
+            print('Warning : if you are using jupyter notebook with %matplotlib inline option, you should add %matplotlib qt to have a pop up figure before this function. You can add %matplotlib inline after if you want to come back to the initial configuration')
+            
+            # plot the data
+            h=self.phi.plot()
+            # select top left and bottom right corner for crop
+            print('Select top left and bottom right corner for crop :')
+            x=np.array(pylab.ginput(2))/self.phi.res
+            plt.close("all")
+            # create x and Y coordinate
+
+            xx=[x[0][0],x[1][0]]
+            yy=[x[0][1],x[1][1]]
+            # size of the initial map
+            ss=np.shape(self.phi.field)
+            # find xmin xmax ymin and ymax
+            xmin=int(np.ceil(np.min(xx)))
+            xmax=int(np.floor(np.max(xx)))
+            ymin=int(ss[0]-np.ceil(np.max(yy)))
+            ymax=int(ss[0]-np.floor(np.min(yy)))          
+        
+        # crop the map
+        self.phi.field=self.phi.field[ymin:ymax, xmin:xmax]
+        self.phi1.field=self.phi1.field[ymin:ymax, xmin:xmax]
+        self.qua.field=self.qua.field[ymin:ymax, xmin:xmax]
+        self.micro.field=self.micro.field[ymin:ymax, xmin:xmax]
+        self.grains=self.micro.grain_label()
+        
+        # replace grains boundary with NaN number
+        self.grains.field=np.array(self.grains.field,float)
+        idx=np.where(self.micro.field==1)
+        self.grains.field[idx]=np.nan
+        print('crop')
+        return np.array([xmin,xmax,ymin,ymax])
+    
+#-------------------------------------------------------------------------
+
+    def grelon(self,posc=np.array([0,0])):
+        '''
+        Compute the angle between the directions defined by the "center" and the pixel with the c-axis direction
+        
+        :return: angle (degree)
+        :rtype: im2d.image2d
+        '''
+        
+        if (posc==0).all():
+            # Find the center
+            self.phi1.plot()
+            print('Click on the center of the hailstone')
+            posc=np.array(plt.ginput(1)[0])
+            plt.close('all')
+        
+        ss=np.shape(self.phi1.field)
+        
+        # vecteur C
+        xc=np.cos(self.phi1.field-math.pi/2)*np.sin(self.phi.field)
+        yc=np.sin(self.phi1.field-math.pi/2)*np.sin(self.phi.field)
+        
+        nn=(xc**2+yc**2.)**.5
+        xc=xc/nn
+        yc=yc/nn
+        
+        # build x y
+        xi=np.zeros(ss)
+        yi=np.transpose(np.zeros(ss))
+        xl=np.arange(ss[0])
+        yl=np.arange(ss[1])
+        xi[:,:]=yl
+        yi[:,:]=xl
+        yi=np.transpose(yi)
+        # center and norm
+        xcen=np.int32(posc[0]/self.phi1.res)
+        ycen=(ss[0]-np.int32(posc[1]/self.phi1.res))
+        xv=xi-xcen
+        yv=yi-ycen
+        
+        nn=(xv**2.+yv**2.)**0.5
+        xv=xv/nn
+        yv=yv/nn
+        #
+        #plt.figure()
+        #plt.imshow(nn)
+        #plt.figure()
+        #plt.quiver(xi[xcen-50:xcen-50],yi[ycen-50:ycen-50],xv[xcen-50:xcen-50],yv[ycen-50:ycen-50],scale=1000)
+        
+        #
+        acos=xv*xc+yv*yc
+        
+        angle=np.arccos(acos)*180./math.pi
+        
+        id=np.where(angle>90)
+        angle[id]=180-angle[id]
+                
+        return im2d.image2d(angle,self.phi1.res)
+    
+#-------------------------------------------------------------------------------------
+    def addgrain(self,ori=0):
+        '''
+        add a grain inside the microstructure
+        
+        :param ori: orienation of the new grain [phi1 phi] (default random value)
+        :type ori: array, float
+        :return: new_micro, object with the new grain include
+        :rtype: aita
+        :Exemple: 
+            >>> data.addgrain()      
+        '''
+        
+        # select the contour of the grains
+        h=self.grains.plot()
+        # click on the submit of the new grain
+        plt.waitforbuttonpress()
+        print('click on the submit of the new grain :')
+        x=np.array(pylab.ginput(3))/self.grains.res
+        plt.close('all')
+        
+        # select a subarea contening the triangle
+        minx=np.int(np.fix(np.min(x[:,0])))
+        maxx=np.int(np.ceil(np.max(x[:,0])))
+        miny=np.int(np.fix(np.min(x[:,1])))
+        maxy=np.int(np.ceil(np.max(x[:,1])))
+        
+        # write all point inside this area
+        gpoint=[]
+        for i in list(range(minx,maxx)):
+            for j in list(range(miny,maxy)):
+                gpoint.append([i,j])
+        
+    
+        # test if the point is inside the triangle    
+        gIn=[]
+        for i in list(range(len(gpoint))):
+            gIn.append(isInsideTriangle(gpoint[i],x[0,:],x[1,:],x[2,:]))
+
+        gpointIn=np.array(gpoint)[np.array(gIn)]
+        
+        #transform in xIn and yIn, the coordinate of the map
+        xIn=np.shape(self.grains.field)[0]-gpointIn[:,1]
+        yIn=gpointIn[:,0]
+               
+        # add one grains
+        self.grains.field[xIn,yIn]=np.nanmax(self.grains.field)+1
+        # add the orientation of the grains
+        if ori==0:
+            self.phi1.field[xIn,yIn]=random.random()*2*math.pi
+            self.phi.field[xIn,yIn]=random.random()*math.pi/2
+        else:
+            self.phi1.field[xIn,yIn]=ori[0]
+            self.phi.field[xIn,yIn]=ori[1]
+            
+        return
+    
+##########################################################################
+####################Interactive function for notebook#####################
+##########################################################################
+    def interactive_grelon(self):
+        '''
+        Interactuve grelon function for jupyter notebook
+        '''
+        
+        f,a = plt.subplots()
+        self.phi1.plot()
+        pos = []
+        def onclick(event):
+            pos.append([event.xdata,event.ydata])
+            plt.plot(pos[-1][0],pos[-1][1],'+k')
+        
+        f.canvas.mpl_connect('button_press_event', onclick)
+        
+        buttonExport = widgets.Button(description='Export')
+        
+        def export(_):
+            res=self.grelon(posc=np.array(pos[-1]))
+            export.map=res
+            export.center=np.array(pos[-1])
+            return export
+        
+        buttonExport.on_click(export)
+
+        # displaying button and its output together
+        display(buttonExport)
+        
+        return export
+    
+    def interactive_misorientation_profile(self):
+        '''
+        Interactive misorientation profile for jupyter notebook
+        '''
+        f,a = plt.subplots()
+        self.phi1.plot()
+        pos = []
+        def onclick(event):
+            pos.append([event.xdata,event.ydata])
+        
+        f.canvas.mpl_connect('button_press_event', onclick)
+        
+        buttonShow = widgets.Button(description='Show line')
+        buttonExtract = widgets.Button(description='Extract profile')
+ 
+        
+        def draw_line(_):
+            pos_mis=np.array(pos[-2::])
+            plt.plot(pos_mis[:,0],pos_mis[:,1],'-k')
+            
+        def extract_data(_):
+            pos_mis=np.array(pos[-2::])
+            x,mis2o,mis2p=self.misorientation_extractor(pos_mis)
+            extract_data.x=x
+            extract_data.mis2o=mis2o
+            extract_data.mis2p=mis2p
+            extract_data.pos=pos_mis
+            return extract_data
+        
+
+        # linking button and function together using a button's method
+        buttonShow.on_click(draw_line)
+        buttonExtract.on_click(extract_data)
+
+        # displaying button and its output together
+        display(buttonShow,buttonExtract)
+        
+        return extract_data
+        
+    def interactive_crop(self):
+        '''
+        out=data_aita.interactive_crop()
+
+        This function can be use to crop within a jupyter notebook
+        It will crop the data and export the value of the crop in out.pos
+        '''
+        def onselect(eclick, erelease):
+            "eclick and erelease are matplotlib events at press and release."
+            print('startposition: (%f, %f)' % (eclick.xdata, eclick.ydata))
+            print('endposition  : (%f, %f)' % (erelease.xdata, erelease.ydata))
+            print('used button  : ', eclick.button)
+
+        def toggle_selector(event):
+            print('Key pressed.')
+            if event.key in ['Q', 'q'] and toggle_selector.RS.active:
+                print('RectangleSelector deactivated.')
+                toggle_selector.RS.set_active(False)
+            if event.key in ['A', 'a'] and not toggle_selector.RS.active:
+                print('RectangleSelector activated.')
+                toggle_selector.RS.set_active(True)
+
+        print('1. click and drag the mouse on the figure to selecte the area')
+        print('2. you can draw the rectangle using the button "Draw area"')
+        print('3. if you are unhappy with the selection restart to 1.')
+        print('4. if you are happy with the selection click on "Export crop" (only the last rectangle is taken into account)')
+
+
+        fig,ax=plt.subplots()
+        self.phi1.plot()
+        toggle_selector.RS = matplotlib.widgets.RectangleSelector(ax, onselect, drawtype='box')
+        fig.canvas.mpl_connect('key_press_event', toggle_selector)
+
+
+        buttonCrop = widgets.Button(description='Export crop')
+        buttonDraw = widgets.Button(description='Draw area')
+        ss=np.shape(self.phi1.field)
+
+        def draw_area(_):
+            x=list(toggle_selector.RS.corners[0])
+            x.append(x[0])
+            y=list(toggle_selector.RS.corners[1])
+            y.append(y[0])
+            xmin=int(np.ceil(np.min(x)))
+            xmax=int(np.floor(np.max(x)))
+            ymin=int(ss[0]-np.ceil(np.max(y)))
+            ymax=int(ss[0]-np.floor(np.min(y)))
+            plt.plot(x,y,'-k')
+
+        def get_data(_):
+            # what happens when we press the button
+            x=list(toggle_selector.RS.corners[0])
+            x.append(x[0])
+            x=np.array(x)/self.phi1.res
+            y=list(toggle_selector.RS.corners[1])
+            y.append(y[0])
+            y=np.array(y)/self.phi1.res
+            xmin=int(np.ceil(np.min(x)))
+            xmax=int(np.floor(np.max(x)))
+            ymin=int(ss[0]-np.ceil(np.max(y)))
+            ymax=int(ss[0]-np.floor(np.min(y)))
+            plt.plot(x*self.phi1.res,y*self.phi1.res,'-b')
+            pos=self.crop(xmin=xmin,xmax=xmax,ymin=ymin,ymax=ymax)
+            get_data.pos=pos
+            return get_data.pos
+
+
+        # linking button and function together using a button's method
+        buttonDraw.on_click(draw_area)
+        buttonCrop.on_click(get_data)
+        # displaying button and its output together
+        display(buttonDraw,buttonCrop)
+
+        return get_data
     
             
             

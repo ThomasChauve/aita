@@ -1441,7 +1441,7 @@ class aita(object):
             export_micro.val_quality=val_qua.get_interact_value()
             export_micro.use_quality=use_qua.get_interact_value()
             
-            return export_micro.newdata
+            return export_micro
             
         #~~~~~~~~~~~~~~~~~~~~~~~~~ interactive plot~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         val_scharr=widgets.FloatSlider(value=1,min=0,max=10.0,step=0.1,description='Scharr filter:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='.1f')

@@ -74,6 +74,15 @@ class image2d(object):
         # set up colorbar
         plt.colorbar(img,orientation='vertical',aspect=4)
         
+    def save_bmp(self,name):
+        '''
+        Save image as bmp
+        :param name: name of the file
+        :type name: str
+        '''
+        plt.imsave(name+'.bmp', self.field, cmap=cm.gray)
+        
+        
     def extract_data(self,pos=[]):
         '''
         Extract the value at the position 'pos' or where you clic

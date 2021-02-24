@@ -22,7 +22,8 @@ import pylab
 from skimage import io
 import skimage.morphology
 import skimage.measure
-from tqdm import tqdm
+import skimage.feature
+import mahotas as mh
 import datetime
 import random
 import scipy
@@ -31,6 +32,11 @@ import ipywidgets as widgets
 import time
 import vtk
 from vtk.util.numpy_support import numpy_to_vtk, vtk_to_numpy
+
+if get_ipython().__class__.__name__=='ZMQInteractiveShell':
+    from tqdm.notebook import tqdm
+else:
+    from tqdm import tqdm
 
 import AITAToolbox.image2d as im2d
 import AITAToolbox.setvector3d as vec3d
@@ -263,7 +269,7 @@ class aita(object):
 ##################################################################### 
 ##########################Plot function##############################
 #####################################################################
-    def plot(self,nlut=512):
+    def plot(self,nlut=512,semi=False):
         '''
         Plot the data using a 2d lut
         
@@ -285,14 +291,14 @@ class aita(object):
         # create image for color map
         img=np.ones([nx[0],nx[1],3])
         # load the colorwheel
-        rlut=lut(nx=nlut,circle=False)
+        rlut=lut(nx=nlut,semi=semi,circle=False)
         nnlut=np.shape(rlut)
         nnnlut=nnlut[0]
         # fill the color map
         XX=(nnnlut-1)/2*np.multiply(np.sin(self.phi.field),np.cos(self.phi1.field))+(nnnlut-1)/2
         YY=(nnnlut-1)/2*np.multiply(np.sin(self.phi.field),np.sin(self.phi1.field))+(nnnlut-1)/2
     
-        for i in list(range(nx[0])):
+        for i in tqdm(range(nx[0])):
             for j in list(range(nx[1])):
                 if ~np.isnan(self.phi.field[i,j]):
                     img[i,j,0]=rlut[np.int32(XX[i,j]),np.int32(YY[i,j]),0]
@@ -1150,7 +1156,7 @@ class aita(object):
         display(buttonExport)
         
         return export
-    
+#--------------------------------------------------------------------------   
     def interactive_misorientation_profile(self):
         '''
         Interactive misorientation profile for jupyter notebook
@@ -1189,7 +1195,7 @@ class aita(object):
         display(buttonShow,buttonExtract)
         
         return extract_data
-        
+#--------------------------------------------------------------------------        
     def interactive_crop(self):
         '''
         out=data_aita.interactive_crop()
@@ -1264,11 +1270,210 @@ class aita(object):
         display(buttonDraw,buttonCrop)
 
         return get_data
+ #--------------------------------------------------------------------------
+    def interactive_segmentation(self):
+        '''
+        This function allow you to performed grain segmentation on aita data.
+        '''
+        #~~~~~~~~~~~~~~~~~~ segmentation function~~~~~~~~~~~~~~~~
+        def seg_scharr(field):
+            ## Commented bit are previous settings which just use raw Phi1
+            ## define Scharr filter
+            scharr = np.array([[-3-3j,0-10j,3-3j],[-10+0j,0+0j,10+0j],[-3+3j,0+10j,3+3j]])
+
+            ## run edge detection.
+            edge_sin = np.abs(np.real(scipy.signal.convolve2d(np.sin(field*2)+1,scharr,boundary='symm',mode='same')))
     
+            return edge_sin
+    
+    
+        #~~~~~~~~~~~~~~~~~~pruning function~~~~~~~~~~~~~~~~~~~~~~
+        def endPoints(skel):
+            endpoint1=np.array([[0, 0, 0],
+                                [0, 1, 0],
+                                [2, 1, 2]])
+
+            endpoint2=np.array([[0, 0, 0],
+                                [0, 1, 2],
+                                [0, 2, 1]])
+
+            endpoint3=np.array([[0, 0, 2],
+                                [0, 1, 1],
+                                [0, 0, 2]])
+
+            endpoint4=np.array([[0, 2, 1],
+                                [0, 1, 2],
+                                [0, 0, 0]])
+
+            endpoint5=np.array([[2, 1, 2],
+                                [0, 1, 0],
+                                [0, 0, 0]])
+
+            endpoint6=np.array([[1, 2, 0],
+                                [2, 1, 0],
+                                [0, 0, 0]])
+
+            endpoint7=np.array([[2, 0, 0],
+                                [1, 1, 0],
+                                [2, 0, 0]])
+
+            endpoint8=np.array([[0, 0, 0],
+                                [2, 1, 0],
+                                [1, 2, 0]])
+
+            ep1=mh.morph.hitmiss(skel,endpoint1)
+            ep2=mh.morph.hitmiss(skel,endpoint2)
+            ep3=mh.morph.hitmiss(skel,endpoint3)
+            ep4=mh.morph.hitmiss(skel,endpoint4)
+            ep5=mh.morph.hitmiss(skel,endpoint5)
+            ep6=mh.morph.hitmiss(skel,endpoint6)
+            ep7=mh.morph.hitmiss(skel,endpoint7)
+            ep8=mh.morph.hitmiss(skel,endpoint8)
+            ep = ep1+ep2+ep3+ep4+ep5+ep6+ep7+ep8
+            return ep
+
+        def pruning(skeleton, size):
+            '''remove iteratively end points "size" 
+               times from the skeletonget_ipython().__class__.__name__
+            '''
+            for i in range(0, size):
+                endpoints = endPoints(skeleton)
+                endpoints = np.logical_not(endpoints)
+                skeleton = np.logical_and(skeleton,endpoints)
+            return skeleton
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        #plot image
+        pltimg,data_img=self.plot()
+        pltimg,data_img_semi=self.plot(semi=True)
+        
+        
+        def calcGB(val_scharr,use_scharr,val_canny,use_canny,val_qua,use_qua,dilate,CM,CW):
             
+            micro=[]
+            IMdata=[]
+            if CW=='semi color wheel' or CW=='both color wheel':
+                IMdata.append(data_img_semi)
+                
+            if CW=='full color wheel' or CW=='both color wheel':
+                IMdata.append(data_img)
             
                 
-      
+            if use_canny:
+                for im in IMdata:
+                    edges1 = skimage.feature.canny(im[:,:,0],sigma=val_canny)
+                    edges2 = skimage.feature.canny(im[:,:,1],sigma=val_canny)
+                    edges3 = skimage.feature.canny(im[:,:,2],sigma=val_canny)
+                    micro.append((edges1+edges2+edges3)>0.5)
+                
+            if use_scharr:
+                seg1=seg_scharr(self.phi1.field)
+                seg2=seg_scharr(self.phi.field)
+                micro.append((seg1+seg2)>val_scharr)
+                
+            if use_qua:
+                micro.append(self.qua.field<val_qua)
+                
+            
+            
+            Edge_detect=np.zeros(micro[0].shape)
+            for m in micro:
+                Edge_detect+=m/len(micro)
+                
+            Edge_detect[0,:]=1
+            Edge_detect[:,0]=1
+            Edge_detect[-1,:]=1
+            Edge_detect[:,-1]=1
+
+            microCL=skimage.morphology.area_closing(Edge_detect)
+            # skeleton
+            skeleton = skimage.morphology.skeletonize(microCL,method='lee')
+            # prunnig
+            skeleton=pruning(skeleton,100)
+            # remove dot 
+            mat1=np.array([[-1,-1,-1],[-1,1,-1],[-1,-1,-1]])
+            skeleton[scipy.signal.convolve2d(skeleton,mat1,mode='same',boundary='fill')==1]=0
+
+            #remove small grain
+            #skeleton2=skeleton
+            #for i in range(small_grain):
+            #    skeleton2=skimage.morphology.dilation(skeleton2)
+            #    skeleton2=pruning(skeleton2,100)
+                
+            #TrueMicro=skimage.morphology.skeletonize(skeleton2)
+            
+            TrueMicro=skeleton
+            TrueMicro[0,:]=1
+            TrueMicro[-1,:]=1
+            TrueMicro[:,0]=1
+            TrueMicro[:,-1]=1
+            dTrueMicro=TrueMicro
+            for i in range(dilate):
+                dTrueMicro=skimage.morphology.dilation(dTrueMicro) 
+            
+            if CM=='semi color wheel':
+                plt.imshow(data_img_semi)
+                plt.imshow(dTrueMicro,alpha=dTrueMicro.astype(float),cmap=cm.gray)
+            elif CM=='full color wheel':
+                plt.imshow(data_img)
+                plt.imshow(dTrueMicro,alpha=dTrueMicro.astype(float),cmap=cm.gray)
+            elif CM=='none':
+                plt.imshow(dTrueMicro,cmap=cm.gray)
+                
+            return TrueMicro
+            
+            
+        def export_micro(_):
+            TrueMicro=calcGB(val_scharr.get_interact_value(),use_scharr.get_interact_value(),val_canny.get_interact_value(),use_canny.get_interact_value(),val_qua.get_interact_value(),use_qua.get_interact_value(),dilate.get_interact_value(),CM.get_interact_value(),CW.get_interact_value())
+            # create microstructure
+            self.micro=im2d.micro2d(TrueMicro,self.micro.res)
+            self.grains=self.micro.grain_label()
+            # replace grains boundary with NaN number
+            self.grains.field=np.array(self.grains.field,float)
+            idx=np.where(self.micro.field==1)
+            self.grains.field[idx]=np.nan
+            
+            export_micro.val_scharr=val_scharr.get_interact_value()
+            export_micro.use_scharr=use_scharr.get_interact_value()
+            export_micro.val_canny=val_canny.get_interact_value()
+            export_micro.use_canny=use_canny.get_interact_value()
+            export_micro.img_canny=CW.get_interact_value()
+            export_micro.val_quality=val_qua.get_interact_value()
+            export_micro.use_quality=use_qua.get_interact_value()
+            
+            return export_micro.newdata
+            
+        #~~~~~~~~~~~~~~~~~~~~~~~~~ interactive plot~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        val_scharr=widgets.FloatSlider(value=1,min=0,max=10.0,step=0.1,description='Scharr filter:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='.1f')
+        use_scharr=widgets.Checkbox(value=True,description='Use scharr filter',disabled=False)
+
+        val_canny=widgets.FloatSlider(value=0.5,min=0,max=10.0,step=0.1,description='Canny filter:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='.1f')
+        use_canny=widgets.Checkbox(value=True,description='Use canny filter',disabled=False)
+        
+        val_qua=widgets.FloatSlider(value=60,min=0,max=100,step=1,description='Quatlity filter:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='.1f')
+        use_qua=widgets.Checkbox(value=True,description='Use Quality filter',disabled=False)
+
+        
+        #small_grain=widgets.IntSlider(value=0,min=0,max=5,step=1,description='Remove small grain:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='d')
+
+        dilate=widgets.IntSlider(value=0,min=0,max=10,step=1,description='Dilate GB:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='d')
+        CM=widgets.Dropdown(value='semi color wheel', options=['semi color wheel', 'full color wheel', 'none'], description='Plot colormap')
+        CW=widgets.Dropdown(value='semi color wheel', options=['semi color wheel', 'full color wheel', 'both color wheel'], description='Segmentation colormap')
+        buttonExport = widgets.Button(description='Export AITA')
+
+        
+        ui_scharr=widgets.HBox([val_scharr,use_scharr])
+        ui_canny=widgets.HBox([val_canny,use_canny,CW])
+        ui_quality=widgets.HBox([val_qua,use_qua])
+
+        ui=widgets.VBox([ui_scharr,ui_canny,ui_quality,dilate,CM,buttonExport])
+        out = widgets.interactive_output(calcGB,{'val_scharr': val_scharr,'use_scharr':use_scharr,'val_canny':val_canny,'use_canny':use_canny,'val_qua':val_qua,'use_qua':use_qua,'dilate': dilate,'CM': CM,'CW': CW})
+        display(ui,out)
+
+        buttonExport.on_click(export_micro)
+        return export_micro
+
+    
 ##########################################################################
 ###################### Function need for aita class  #####################
 ##########################################################################        
@@ -1291,7 +1496,7 @@ def cart2pol(x, y):
     return(rho, phi)
 
 
-def lut(nx=512,circle=True):
+def lut(nx=512,semi=False,circle=True):
     '''
     Create a 2D colorwheel
     
@@ -1300,6 +1505,7 @@ def lut(nx=512,circle=True):
     :param semi: do you want a semi LUT
     :type nx: int
     :type circle: bool
+    :type semi: bool
     :return: lut
     :rtype: array of size [nx,nx,3]
     :Exemple:
@@ -1313,6 +1519,10 @@ def lut(nx=512,circle=True):
     y=np.linspace(-math.pi/2, math.pi/2, nx)
     xv, yv = np.meshgrid(x, y)
     rho,phi=cart2pol(xv, yv)
+    
+    if semi:
+        phi=np.mod(phi,np.pi)
+    
     h = (phi-np.min(phi))/(np.max(phi)-np.min(phi))
     v = rho/np.max(rho)
 

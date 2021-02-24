@@ -18,7 +18,7 @@ URL = 'https://github.com/ThomasChauve/aita'
 EMAIL = 'thomas.chauve@univ-grenoble-alpes.fr'
 AUTHOR = 'Thomas Chauve'
 REQUIRES_PYTHON = '>=3.8'
-VERSION = '2.1.1'
+VERSION = '2.2.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [

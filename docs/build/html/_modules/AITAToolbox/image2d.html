@@ -236,6 +236,15 @@
         <span class="c1"># set up colorbar</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span><span class="n">aspect</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
         
+<div class="viewcode-block" id="image2d.save_bmp"><a class="viewcode-back" href="../../CLASS/image2d.html#AITAToolbox.image2d.image2d.save_bmp">[docs]</a>    <span class="k">def</span> <span class="nf">save_bmp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Save image as bmp</span>
+<span class="sd">        :param name: name of the file</span>
+<span class="sd">        :type name: str</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imsave</span><span class="p">(</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;.bmp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">)</span></div>
+        
+        
 <div class="viewcode-block" id="image2d.extract_data"><a class="viewcode-back" href="../../CLASS/image2d.html#AITAToolbox.image2d.image2d.extract_data">[docs]</a>    <span class="k">def</span> <span class="nf">extract_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Extract the value at the position &#39;pos&#39; or where you clic</span>

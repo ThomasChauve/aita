@@ -328,8 +328,8 @@ class aita(object):
             res = np.delete(res, 0, 1)  # delete first column 
             res = np.delete(res, -1, 1)  # delete last column 
             #put everything between 0  and pi/2 because c=-c
-            id=np.where(xres>math.pi/2)
-            xres[id]=math.pi-xres[id] 
+            id=np.where(res>math.pi/2)
+            res[id]=math.pi-res[id] 
             
             id=np.where(res>filter_angle)
             xres=res[id]

@@ -1298,9 +1298,26 @@ class aita(object):
 
         return get_data
  #--------------------------------------------------------------------------
-    def interactive_segmentation(self):
+    def interactive_segmentation(self,val_scharr_init=1.5,use_scharr_init=True,val_canny_init=1.5,use_canny_init=True,val_qua_init=60,use_qua_init=False,inc_border_init=False):
         '''
         This function allow you to performed grain segmentation on aita data.
+        The intitial value of the segmenation function can be set-up initially :
+        :param val_scharr_init: scharr filter usually between 0 and 10 (default : 1.5)
+        :type val_scharr_init: float
+        :param use_scharr_init: use scharr filter
+        :type use_scharr_init: bool
+        :param val_canny_init: canny filter usually between 0 and 10 (default : 1.5)
+        :type val_canny_init: float
+        :param use_canny_init: use canny filter
+        :type use_canny_init: bool
+        :param val_qua_init: quality filter usually between 0 and 100 (default : 60)
+        :type val_qua_init: int
+        :param use_qua_init: use quality filter
+        :type use_qua_init: bool
+        :param inc_border_init: add image border to grain boundaries
+        
+        
+        .. note:: on data with holes such as snow, using quality filter is not recommended 
         '''
         #~~~~~~~~~~~~~~~~~~ segmentation function~~~~~~~~~~~~~~~~
         def seg_scharr(field):
@@ -1375,7 +1392,7 @@ class aita(object):
         pltimg,data_img_semi=self.plot(semi=True)
         
         
-        def calcGB(val_scharr,use_scharr,val_canny,use_canny,val_qua,use_qua,dilate,CM,CW):
+        def calcGB(val_scharr,use_scharr,val_canny,use_canny,val_qua,use_qua,dilate,CM,CW,inc_border):
             
             micro=[]
             IMdata=[]
@@ -1406,11 +1423,12 @@ class aita(object):
             Edge_detect=np.zeros(micro[0].shape)
             for m in micro:
                 Edge_detect+=m/len(micro)
-                
-            Edge_detect[0,:]=1
-            Edge_detect[:,0]=1
-            Edge_detect[-1,:]=1
-            Edge_detect[:,-1]=1
+            
+            if inc_border:   
+                Edge_detect[0,:]=1
+                Edge_detect[:,0]=1
+                Edge_detect[-1,:]=1
+                Edge_detect[:,-1]=1
 
             microCL=skimage.morphology.area_closing(Edge_detect)
             # skeleton
@@ -1430,11 +1448,13 @@ class aita(object):
             #TrueMicro=skimage.morphology.skeletonize(skeleton2)
             
             TrueMicro=skeleton
-            TrueMicro[0,:]=1
-            TrueMicro[-1,:]=1
-            TrueMicro[:,0]=1
-            TrueMicro[:,-1]=1
+            if inc_border:
+                TrueMicro[0,:]=1
+                TrueMicro[-1,:]=1
+                TrueMicro[:,0]=1
+                TrueMicro[:,-1]=1
             dTrueMicro=TrueMicro
+            
             for i in range(dilate):
                 dTrueMicro=skimage.morphology.dilation(dTrueMicro) 
             
@@ -1451,7 +1471,7 @@ class aita(object):
             
             
         def export_micro(_):
-            TrueMicro=calcGB(val_scharr.get_interact_value(),use_scharr.get_interact_value(),val_canny.get_interact_value(),use_canny.get_interact_value(),val_qua.get_interact_value(),use_qua.get_interact_value(),dilate.get_interact_value(),CM.get_interact_value(),CW.get_interact_value())
+            TrueMicro=calcGB(val_scharr.get_interact_value(),use_scharr.get_interact_value(),val_canny.get_interact_value(),use_canny.get_interact_value(),val_qua.get_interact_value(),use_qua.get_interact_value(),dilate.get_interact_value(),CM.get_interact_value(),CW.get_interact_value(),inc_border.get_interact_value())
             # create microstructure
             self.micro=im2d.micro2d(TrueMicro,self.micro.res)
             self.grains=self.micro.grain_label()
@@ -1467,18 +1487,21 @@ class aita(object):
             export_micro.img_canny=CW.get_interact_value()
             export_micro.val_quality=val_qua.get_interact_value()
             export_micro.use_quality=use_qua.get_interact_value()
+            export_micro.include_border=inc_border.get_interact_value()
             
             return export_micro
             
         #~~~~~~~~~~~~~~~~~~~~~~~~~ interactive plot~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        val_scharr=widgets.FloatSlider(value=1,min=0,max=10.0,step=0.1,description='Scharr filter:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='.1f')
-        use_scharr=widgets.Checkbox(value=True,description='Use scharr filter',disabled=False)
+        val_scharr=widgets.FloatSlider(value=val_scharr_init,min=0,max=10.0,step=0.1,description='Scharr filter:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='.1f')
+        use_scharr=widgets.Checkbox(value=use_scharr_init,description='Use scharr filter',disabled=False)
 
-        val_canny=widgets.FloatSlider(value=0.5,min=0,max=10.0,step=0.1,description='Canny filter:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='.1f')
-        use_canny=widgets.Checkbox(value=True,description='Use canny filter',disabled=False)
+        val_canny=widgets.FloatSlider(value=val_canny_init,min=0,max=10.0,step=0.1,description='Canny filter:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='.1f')
+        use_canny=widgets.Checkbox(value=use_canny_init,description='Use canny filter',disabled=False)
         
-        val_qua=widgets.FloatSlider(value=60,min=0,max=100,step=1,description='Quatlity filter:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='.1f')
-        use_qua=widgets.Checkbox(value=True,description='Use Quality filter',disabled=False)
+        val_qua=widgets.FloatSlider(value=val_qua_init,min=0,max=100,step=1,description='Quatlity filter:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='.1f')
+        use_qua=widgets.Checkbox(value=use_qua_init,description='Use Quality filter',disabled=False)
+        
+        inc_border=widgets.Checkbox(value=inc_border_init,description='Include border as grain boundaries',disabled=False)
 
         
         #small_grain=widgets.IntSlider(value=0,min=0,max=5,step=1,description='Remove small grain:',disabled=False,continuous_update=False,orientation='horizontal',readout=True,readout_format='d')
@@ -1493,8 +1516,8 @@ class aita(object):
         ui_canny=widgets.HBox([val_canny,use_canny,CW])
         ui_quality=widgets.HBox([val_qua,use_qua])
 
-        ui=widgets.VBox([ui_scharr,ui_canny,ui_quality,dilate,CM,buttonExport])
-        out = widgets.interactive_output(calcGB,{'val_scharr': val_scharr,'use_scharr':use_scharr,'val_canny':val_canny,'use_canny':use_canny,'val_qua':val_qua,'use_qua':use_qua,'dilate': dilate,'CM': CM,'CW': CW})
+        ui=widgets.VBox([ui_scharr,ui_canny,ui_quality,inc_border,dilate,CM,buttonExport])
+        out = widgets.interactive_output(calcGB,{'val_scharr': val_scharr,'use_scharr':use_scharr,'val_canny':val_canny,'use_canny':use_canny,'val_qua':val_qua,'use_qua':use_qua,'dilate': dilate,'CM': CM,'CW': CW,'inc_border': inc_border})
         display(ui,out)
 
         buttonExport.on_click(export_micro)

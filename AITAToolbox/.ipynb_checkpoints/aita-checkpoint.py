@@ -642,7 +642,7 @@ class aita(object):
             ## detect contour for inner mesh
             for j in list(range(DistMin)):
                 gi=skimage.morphology.erosion(gi)
-            
+
             if np.sum(gi)!=0:
                 pp=skimage.measure.find_contours(gi,level=0.5,fully_connected='high')
                 for j in list(range(len(pp))):
@@ -736,28 +736,28 @@ class aita(object):
                 eval(evaltxt)
                 allSurface.append(len(geofile)-1)
                 
-                if (i+1) in erode_Id:
-                    id=np.where(np.array(erode_Id)==i+1)[0]
+#                 if (i+1) in erode_Id:
+#                     id=np.where(np.array(erode_Id)==i+1)[0]
                     
-                    for k in id:
-                        evaltxt='geofile.append(geom.add_polygon(['
-                        for j in list(range(len(erode_list[k])-1)):
-                            if j%resInG==0:
-                                geofile.append(geom.add_point([erode_list[k][j][0],erode_list[k][j][1]],resInG*res))
-                                p1=shapely.geometry.Point(np.array([erode_list[k][j][0],erode_list[k][j][1]]))
+#                     for k in id:
+#                         evaltxt='geofile.append(geom.add_polygon(['
+#                         for j in list(range(len(erode_list[k])-1)):
+#                             if j%resInG==0:
+#                                 geofile.append(geom.add_point([erode_list[k][j][0],erode_list[k][j][1]],resInG*res))
+#                                 p1=shapely.geometry.Point(np.array([erode_list[k][j][0],erode_list[k][j][1]]))
                                 
-                                for ik in allSurface:
-                                    liscor=[]
-                                    for cor in geofile[ik].points:
-                                        liscor.append(cor.x)
+#                                 for ik in allSurface:
+#                                     liscor=[]
+#                                     for cor in geofile[ik].points:
+#                                         liscor.append(cor.x)
     
     
-                                    ggg=shapely.geometry.Polygon(liscor)
+#                                     ggg=shapely.geometry.Polygon(liscor)
                                 
                                 
-                                    if ggg.contains(p1):
-                                        geom.in_surface(geofile[-1], geofile[ik].surface)
-                                        break
+#                                     if ggg.contains(p1):
+#                                         geom.in_surface(geofile[-1], geofile[ik].surface)
+#                                         break
             
             #add physical line
             p0 = geom.add_point([Cxmin, Cymin, 0], mesh_size=resGB)

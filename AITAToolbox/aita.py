@@ -963,7 +963,7 @@ class aita(object):
         
         return [phi1,phi]
     
-    def crop(self,xmin=0,xmax=0,ymin=0,ymax=0):
+    def crop(self,xmin=0,xmax=0,ymin=0,ymax=0,new=False):
         '''
         Crop function to select the area of interest
         
@@ -994,20 +994,33 @@ class aita(object):
             ymin=int(ss[0]-np.ceil(np.max(yy)))
             ymax=int(ss[0]-np.floor(np.min(yy)))          
         
-        # crop the map
-        self.phi.field=self.phi.field[ymin:ymax, xmin:xmax]
-        self.phi1.field=self.phi1.field[ymin:ymax, xmin:xmax]
-        self.qua.field=self.qua.field[ymin:ymax, xmin:xmax]
-        self.micro.field=self.micro.field[ymin:ymax, xmin:xmax]
-        self.grains=self.micro.grain_label()
+        if new:
+            res=self.phi1.res
+            # crop the map
+            phi=self.phi.field[ymin:ymax, xmin:xmax]
+            phi1=self.phi1.field[ymin:ymax, xmin:xmax]
+            qua=self.qua.field[ymin:ymax, xmin:xmax]
+            micro=self.micro.field[ymin:ymax, xmin:xmax]
+            new_data=aita(phi1,phi,qua,micro,resolution=res)
+            pos=np.array([xmin,xmax,ymin,ymax])
+            print('Cropped')
+            return pos,new_data
         
-        # replace grains boundary with NaN number
-        self.grains.field=np.array(self.grains.field,float)
-        idx=np.where(self.micro.field==1)
-        self.grains.field[idx]=np.nan
-        print('crop')
-        return np.array([xmin,xmax,ymin,ymax])
-    
+        else:
+            # crop the map
+            self.phi.field=self.phi.field[ymin:ymax, xmin:xmax]
+            self.phi1.field=self.phi1.field[ymin:ymax, xmin:xmax]
+            self.qua.field=self.qua.field[ymin:ymax, xmin:xmax]
+            self.micro.field=self.micro.field[ymin:ymax, xmin:xmax]
+            self.grains=self.micro.grain_label()
+
+            # replace grains boundary with NaN number
+            self.grains.field=np.array(self.grains.field,float)
+            idx=np.where(self.micro.field==1)
+            self.grains.field[idx]=np.nan
+            print('Cropped')
+            return np.array([xmin,xmax,ymin,ymax])
+
 #-------------------------------------------------------------------------
 
     def grelon(self,posc=np.array([0,0])):
@@ -1196,12 +1209,18 @@ class aita(object):
         
         return extract_data
 #--------------------------------------------------------------------------        
-    def interactive_crop(self):
+    def interactive_crop(self,new=False):
         '''
         out=data_aita.interactive_crop()
 
         This function can be use to crop within a jupyter notebook
         It will crop the data and export the value of the crop in out.pos
+        
+        :param new: create a new data variable (default:False; erase input data)
+        :type new: bool
+        
+        .. note:: If you use new=True (out=interactive_crop(new=true)) you can find the cropped data in out.crop_data
+        .. note:: The position of the rectangle used for the cropping is in out.pos
         '''
         def onselect(eclick, erelease):
             "eclick and erelease are matplotlib events at press and release."
@@ -1258,9 +1277,17 @@ class aita(object):
             ymin=int(ss[0]-np.ceil(np.max(y)))
             ymax=int(ss[0]-np.floor(np.min(y)))
             plt.plot(x*self.phi1.res,y*self.phi1.res,'-b')
-            pos=self.crop(xmin=xmin,xmax=xmax,ymin=ymin,ymax=ymax)
-            get_data.pos=pos
-            return get_data.pos
+            out=self.crop(xmin=xmin,xmax=xmax,ymin=ymin,ymax=ymax,new=new)
+            if new:
+                get_data.pos=out[0]
+                get_data.crop_data=out[1]
+                
+            else:
+                get_data.pos=out
+                
+            return get_data
+            
+            
 
 
         # linking button and function together using a button's method

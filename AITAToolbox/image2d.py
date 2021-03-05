@@ -42,7 +42,7 @@ class image2d(object):
         self.field=field
         self.res=resolution
         
-    def plot(self,vmin=np.NaN,vmax=np.NaN,colorbarcenter=False,colorbar=cm.jet):
+    def plot(self,vmin=np.NaN,vmax=np.NaN,colorbarcenter=False,colorbar=cm.viridis):
         '''
         plot the image2d
         

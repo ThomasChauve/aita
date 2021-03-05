@@ -206,13 +206,19 @@ class aita(object):
         # number of grain
         nb_grain=int(np.nanmax(self.grains.field))
         # loop on all the grain
-        for i in list(range(nb_grain+1)):
+        for i in tqdm(range(nb_grain+1)):
             # find the pixel inside the grain i
-            idx=np.where(self.grains.field==i)
-            # compute the mean value of phi1 and phi and replace the value in the map
-            self.phi.field[idx]=np.nanmean(self.phi.field[idx])
-            self.phi1.field[idx]=np.nanmean(self.phi1.field[idx])
+            map=(self.grains.field==i)
+            if np.sum(map)>0:
+                map=skimage.morphology.dilation(map)
 
+                idx=np.where(map==True)
+                # compute the mean value of phi1 and phi and replace the value in the map
+                self.phi.field[idx]=np.nanmean(self.phi.field[idx])
+                self.phi1.field[idx]=np.nanmean(self.phi1.field[idx])
+                
+#-------------------------------------------------------------------- 
+                
     def misorientation_extractor(self,pos):       
         '''
         Compute the misorientation profile along a line
@@ -264,7 +270,73 @@ class aita(object):
                 x.append(0.0)
 
         return np.array(x)*self.phi.res, np.array(mis2o), np.array(mis2p)
+#-------------------------------------------------------------------- 
+    def misorientation(self,random=False,filter_angle=math.pi/180):
+        '''
+        Compute the misorientation with the neighbouring grain
+        :param random: suffle the image and compute the angle
+        :type random: bool
+        :param filter_angle: threshold angle for removing small value in radians (default : pi/180)
+        :type filter_angle: float
+        '''
+        phi1=self.phi1.field
+        phi=self.phi.field
         
+        if random:
+            np.random.shuffle(phi1)
+            np.random.shuffle(phi)
+            phi1=phi1.flatten()
+            phi=phi.flatten()
+            phi1 = phi1[~numpy.isnan(phi1)]
+            phi = phi[~numpy.isnan(phi)]
+            dd=np.int(np.sqrt(len(phi1)))
+            phi1[0:dd**2].reshape([dd,dd])
+            phi[0:dd**2].reshape([dd,dd])
+
+        mat=np.zeros([3,3])
+        mat[0,1]=1
+        phi_a=scipy.signal.convolve2d(phi,mat,mode='same',boundary='symm')
+        phi1_a=scipy.signal.convolve2d(phi1,mat,mode='same',boundary='symm')
+
+        mat=np.zeros([3,3])
+        mat[1,0]=1
+        phi_b=scipy.signal.convolve2d(phi,mat,mode='same',boundary='symm')
+        phi1_b=scipy.signal.convolve2d(phi1,mat,mode='same',boundary='symm')
+
+
+        mat=np.zeros([3,3])
+        mat[1,2]=1
+        phi_c=scipy.signal.convolve2d(phi,mat,mode='same',boundary='symm')
+        phi1_c=scipy.signal.convolve2d(phi1,mat,mode='same',boundary='symm')
+
+
+        mat=np.zeros([3,3])
+        mat[2,1]=1
+        phi_d=scipy.signal.convolve2d(phi,mat,mode='same',boundary='symm')
+        phi1_d=scipy.signal.convolve2d(phi1,mat,mode='same',boundary='symm')
+
+        phi1_s=[phi1_a,phi1_b,phi1_c,phi1_d]
+        phi_s=[phi_a,phi_b,phi_c,phi_d]
+
+
+        for i in range(4):
+            nphi1=phi1_s[i]
+            nphi=phi_s[i]
+            res=np.arccos(np.round(np.sin(phi1)*np.sin(nphi1)*np.sin(phi)*np.sin(nphi)+np.cos(phi1)*np.cos(nphi1)*np.sin(phi)*np.sin(nphi)+np.cos(phi)*np.cos(nphi),5))
+            res = np.delete(res, 0, 0)  # delete first row 
+            res = np.delete(res, -1, 0)  # delete last row 
+            res = np.delete(res, 0, 1)  # delete first column 
+            res = np.delete(res, -1, 1)  # delete last column 
+            id=np.where(res>filter_angle)
+            xres=res[id]
+
+            if i==0:
+                angle=xres
+            else:
+                angle=np.concatenate((angle,xres),axis=0)
+
+    
+        return angle
             
 ##################################################################### 
 ##########################Plot function##############################

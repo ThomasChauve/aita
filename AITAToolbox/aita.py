@@ -290,8 +290,8 @@ class aita(object):
             phi1 = phi1[~np.isnan(phi1)]
             phi = phi[~np.isnan(phi)]
             dd=np.int(np.sqrt(len(phi1)))
-            phi1[0:dd**2].reshape([dd,dd])
-            phi[0:dd**2].reshape([dd,dd])
+            phi1=phi1[0:dd**2].reshape([dd,dd])
+            phi=phi[0:dd**2].reshape([dd,dd])
 
         mat=np.zeros([3,3])
         mat[0,1]=1

@@ -287,8 +287,8 @@ class aita(object):
             np.random.shuffle(phi)
             phi1=phi1.flatten()
             phi=phi.flatten()
-            phi1 = phi1[~numpy.isnan(phi1)]
-            phi = phi[~numpy.isnan(phi)]
+            phi1 = phi1[~np.isnan(phi1)]
+            phi = phi[~np.isnan(phi)]
             dd=np.int(np.sqrt(len(phi1)))
             phi1[0:dd**2].reshape([dd,dd])
             phi[0:dd**2].reshape([dd,dd])

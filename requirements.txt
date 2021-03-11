@@ -10,3 +10,5 @@ gmsh==4.7.1
 ipywidgets==7.6.3
 ipympl==0.6.3
 mahotas==1.4.11
+sphinx==3.5.2
+sphinx-rtd-theme==0.5.1

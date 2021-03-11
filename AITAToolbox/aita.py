@@ -32,7 +32,7 @@ import ipywidgets as widgets
 import time
 import vtk
 from vtk.util.numpy_support import numpy_to_vtk, vtk_to_numpy
-
+from IPython import get_ipython
 if get_ipython().__class__.__name__=='ZMQInteractiveShell':
     from tqdm.notebook import tqdm
 else:

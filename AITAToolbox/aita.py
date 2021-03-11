@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 '''
-.. py:module:: AITA G50
-
 Created on 3 juil. 2015
 Toolbox for data obtained using G50 Automatique Ice Texture Analyser (AITA) provide by :
 Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quartz and ice. J. Glaciol. 24, 117–130
@@ -1376,7 +1374,8 @@ class aita(object):
     def interactive_segmentation(self,val_scharr_init=1.5,use_scharr_init=True,val_canny_init=1.5,use_canny_init=True,val_qua_init=60,use_qua_init=False,inc_border_init=False):
         '''
         This function allow you to performed grain segmentation on aita data.
-        The intitial value of the segmenation function can be set-up initially :
+        The intitial value of the segmenation function can be set-up initially
+        
         :param val_scharr_init: scharr filter usually between 0 and 10 (default : 1.5)
         :type val_scharr_init: float
         :param use_scharr_init: use scharr filter
@@ -1390,7 +1389,7 @@ class aita(object):
         :param use_qua_init: use quality filter
         :type use_qua_init: bool
         :param inc_border_init: add image border to grain boundaries
-        
+        :type inc_border_init: bool
         
         .. note:: on data with holes such as snow, using quality filter is not recommended 
         '''

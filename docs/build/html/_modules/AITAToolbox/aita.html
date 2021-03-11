@@ -162,8 +162,6 @@
   <h1>Source code for AITAToolbox.aita</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">.. py:module:: AITA G50</span>
-
 <span class="sd">Created on 3 juil. 2015</span>
 <span class="sd">Toolbox for data obtained using G50 Automatique Ice Texture Analyser (AITA) provide by :</span>
 <span class="sd">Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quartz and ice. J. Glaciol. 24, 117–130</span>
@@ -1538,7 +1536,8 @@
 <div class="viewcode-block" id="aita.interactive_segmentation"><a class="viewcode-back" href="../../AITA/function.html#AITAToolbox.aita.aita.interactive_segmentation">[docs]</a>    <span class="k">def</span> <span class="nf">interactive_segmentation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val_scharr_init</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span><span class="n">use_scharr_init</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">val_canny_init</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span><span class="n">use_canny_init</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">val_qua_init</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">use_qua_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">inc_border_init</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        This function allow you to performed grain segmentation on aita data.</span>
-<span class="sd">        The intitial value of the segmenation function can be set-up initially :</span>
+<span class="sd">        The intitial value of the segmenation function can be set-up initially</span>
+<span class="sd">        </span>
 <span class="sd">        :param val_scharr_init: scharr filter usually between 0 and 10 (default : 1.5)</span>
 <span class="sd">        :type val_scharr_init: float</span>
 <span class="sd">        :param use_scharr_init: use scharr filter</span>
@@ -1552,7 +1551,7 @@
 <span class="sd">        :param use_qua_init: use quality filter</span>
 <span class="sd">        :type use_qua_init: bool</span>
 <span class="sd">        :param inc_border_init: add image border to grain boundaries</span>
-<span class="sd">        </span>
+<span class="sd">        :type inc_border_init: bool</span>
 <span class="sd">        </span>
 <span class="sd">        .. note:: on data with holes such as snow, using quality filter is not recommended </span>
 <span class="sd">        &#39;&#39;&#39;</span>

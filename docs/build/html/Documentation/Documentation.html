@@ -183,10 +183,10 @@
 <p>Loading data from G50 analyser after you convert binary file into ASCII
 file with 5 columuns. The ‘micro_test.bmp’ file should be a black and
 white image with the grains boundaries in white.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">AITAToolbox.loadData_aita</span> <span class="k">as</span> <span class="nn">lda</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import AITAToolbox.loadData_aita as lda
+import matplotlib.pyplot as plt
 
-<span class="n">data</span><span class="o">=</span><span class="n">lda</span><span class="o">.</span><span class="n">aita5col</span><span class="p">(</span><span class="s1">&#39;orientation_test.dat&#39;</span><span class="p">,</span><span class="s1">&#39;micro_test.bmp&#39;</span><span class="p">)</span>
+data=lda.aita5col(&#39;orientation_test.dat&#39;,&#39;micro_test.bmp&#39;)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Sucessfull aita build !
@@ -200,7 +200,7 @@ white image with the grains boundaries in white.</p>
 <p>This function filter the bad indexed value. Using G50 analyser a quelity
 factor is given between 0 and 100. Usualy using data with a quality
 factor higher than 75 is a good option.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data.filter(75)
 </pre></div>
 </div>
 </div>
@@ -209,7 +209,7 @@ factor higher than 75 is a good option.</p>
 <p>Sometimes it can be usefull to select a sub area.</p>
 <p><strong>Warning :</strong> This function need an interaction with a figure. Hence it
 cannot ne used with jupyter notebook such as ‘%matplotlib inline’</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">crop</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data.crop()
 </pre></div>
 </div>
 </div>
@@ -217,10 +217,10 @@ cannot ne used with jupyter notebook such as ‘%matplotlib inline’</p>
 <div class="section" id="colormap">
 <h1><span class="section-number">3. </span>Colormap<a class="headerlink" href="#colormap" title="Permalink to this headline">¶</a></h1>
 <p>Plotting the colormap with the grains boundaries</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="n">data</span><span class="o">.</span><span class="n">micro</span><span class="o">.</span><span class="n">plotBoundary</span><span class="p">(</span><span class="n">dilatation</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Colormap&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(10,10))
+data.plot()
+data.micro.plotBoundary(dilatation=4)
+plt.title(&#39;Colormap&#39;)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;Colormap&#39;</span><span class="p">)</span>
@@ -228,9 +228,9 @@ cannot ne used with jupyter notebook such as ‘%matplotlib inline’</p>
 </div>
 <img alt="../_images/output_7_1.png" src="../_images/output_7_1.png" />
 <p>The associated colorwheel :</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">lda</span><span class="o">.</span><span class="n">aita</span><span class="o">.</span><span class="n">lut</span><span class="p">())</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;LUT&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.imshow(lda.aita.lut())
+plt.axis(&#39;off&#39;)
+plt.title(&#39;LUT&#39;)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;LUT&#39;</span><span class="p">)</span>
@@ -256,15 +256,15 @@ circle for specific angle.</p>
 <p>Be aware that to reduce the computation time we only used by default
 10000 orientations selected randomly. You can modify this using ‘nbp’
 value. If you set nbp to 0 it use all the data.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(20,20),dpi=160)
+plt.subplot(2,2,1)
+data.plotpdf(contourf=True,angle=0)
+plt.subplot(2,2,2)
+data.plotpdf(contourf=True)
+plt.subplot(2,2,3)
+data.plotpdf(angle=0)
+plt.subplot(2,2,4)
+data.plotpdf()
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">0.29090318</span><span class="p">,</span> <span class="mf">0.36842623</span><span class="p">,</span> <span class="mf">0.3406706</span> <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
@@ -289,19 +289,19 @@ can have a strong influence on your pole figure and you interpretation.
 You should set it up carefully and be critic on your pole figure. Here
 we show different pole figure for different bandwidth value using the
 same data as input.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;bw=0.05&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;bw=0.1&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;bw=0.3&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">plotpdf</span><span class="p">(</span><span class="n">contourf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bw</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;bw=2&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(20,20),dpi=160)
+plt.subplot(2,2,1)
+data.plotpdf(contourf=True,angle=0,bw=0.05)
+plt.title(&#39;bw=0.05&#39;)
+plt.subplot(2,2,2)
+data.plotpdf(contourf=True,angle=0,bw=0.1)
+plt.title(&#39;bw=0.1&#39;)
+plt.subplot(2,2,3)
+data.plotpdf(contourf=True,angle=0,bw=0.3)
+plt.title(&#39;bw=0.3&#39;)
+plt.subplot(2,2,4)
+data.plotpdf(contourf=True,angle=0,bw=2.0)
+plt.title(&#39;bw=2&#39;)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;bw=2&#39;</span><span class="p">)</span>

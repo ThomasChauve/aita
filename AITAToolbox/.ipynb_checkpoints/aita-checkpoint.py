@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 '''
-.. py:module:: AITA G50
-
 Created on 3 juil. 2015
 Toolbox for data obtained using G50 Automatique Ice Texture Analyser (AITA) provide by :
 Russell-Head, D.S., Wilson, C., 2001. Automated fabric analyser system for quartz and ice. J. Glaciol. 24, 117–130
@@ -32,7 +30,7 @@ import ipywidgets as widgets
 import time
 import vtk
 from vtk.util.numpy_support import numpy_to_vtk, vtk_to_numpy
-
+from IPython import get_ipython
 if get_ipython().__class__.__name__=='ZMQInteractiveShell':
     from tqdm.notebook import tqdm
 else:
@@ -1373,10 +1371,11 @@ class aita(object):
 
         return get_data
  #--------------------------------------------------------------------------
-    def interactive_segmentation(self,val_scharr_init=1.5,use_scharr_init=True,val_canny_init=1.5,use_canny_init=True,val_qua_init=60,use_qua_init=False,inc_border_init=False):
+    def interactive_segmentation(self,val_scharr_init=1.5,use_scharr_init=True,val_canny_init=1.5,use_canny_init=True,val_qua_init=60,use_qua_init=False,inc_border_init=False,mask=False):
         '''
         This function allow you to performed grain segmentation on aita data.
-        The intitial value of the segmenation function can be set-up initially :
+        The intitial value of the segmenation function can be set-up initially
+        
         :param val_scharr_init: scharr filter usually between 0 and 10 (default : 1.5)
         :type val_scharr_init: float
         :param use_scharr_init: use scharr filter
@@ -1390,10 +1389,11 @@ class aita(object):
         :param use_qua_init: use quality filter
         :type use_qua_init: bool
         :param inc_border_init: add image border to grain boundaries
-        
+        :type inc_border_init: bool
         
         .. note:: on data with holes such as snow, using quality filter is not recommended 
         '''
+        
         #~~~~~~~~~~~~~~~~~~ segmentation function~~~~~~~~~~~~~~~~
         def seg_scharr(field):
             ## Commented bit are previous settings which just use raw Phi1
@@ -1467,6 +1467,23 @@ class aita(object):
         pltimg,data_img_semi=self.plot(semi=True)
         
         
+        phi1=self.phi1.field
+        phi=self.phi.field
+        qua=self.qua.field
+        
+        if mask!=False:
+            id=np.isnan(mask.field)
+            data_img[id,0]=np.nan
+            data_img_semi[id,0]=np.nan
+            data_img[id,1]=np.nan
+            data_img_semi[id,1]=np.nan
+            data_img[id,2]=np.nan
+            data_img_semi[id,2]=np.nan
+            phi1[id]=np.nan
+            phi[id]=np.nan
+            qua[id]=np.nan
+
+        
         def calcGB(val_scharr,use_scharr,val_canny,use_canny,val_qua,use_qua,dilate,CM,CW,inc_border):
             
             micro=[]
@@ -1486,12 +1503,12 @@ class aita(object):
                     micro.append((edges1+edges2+edges3)>0.5)
                 
             if use_scharr:
-                seg1=seg_scharr(self.phi1.field)
-                seg2=seg_scharr(self.phi.field)
+                seg1=seg_scharr(phi1)
+                seg2=seg_scharr(phi)
                 micro.append((seg1+seg2)>val_scharr)
                 
             if use_qua:
-                micro.append(self.qua.field<val_qua)
+                micro.append(qua<val_qua)
                 
             
             
@@ -1499,11 +1516,24 @@ class aita(object):
             for m in micro:
                 Edge_detect+=m/len(micro)
             
-            if inc_border:   
-                Edge_detect[0,:]=1
-                Edge_detect[:,0]=1
-                Edge_detect[-1,:]=1
-                Edge_detect[:,-1]=1
+            if inc_border:
+                if mask==False:
+                    Edge_detect[0,:]=1
+                    Edge_detect[-1,:]=1
+                    Edge_detect[:,0]=1
+                    Edge_detect[:,-1]=1
+                else:
+                    id=np.isnan(mask.field)
+                    idx,idy=np.where(mask.field==1)
+                    xmin=np.min(idx)
+                    xmax=np.max(idx)
+                    ymin=np.min(idy)
+                    ymax=np.max(idy)
+                    Edge_detect[xmin,:]=1
+                    Edge_detect[xmax,:]=1
+                    Edge_detect[:,ymin]=1
+                    Edge_detect[:,ymax]=1
+                    Edge_detect[id]=0
 
             microCL=skimage.morphology.area_closing(Edge_detect)
             # skeleton
@@ -1524,14 +1554,32 @@ class aita(object):
             
             TrueMicro=skeleton
             if inc_border:
-                TrueMicro[0,:]=1
-                TrueMicro[-1,:]=1
-                TrueMicro[:,0]=1
-                TrueMicro[:,-1]=1
+                if mask==False:
+                    TrueMicro[0,:]=1
+                    TrueMicro[-1,:]=1
+                    TrueMicro[:,0]=1
+                    TrueMicro[:,-1]=1
+                else:
+                    id=np.isnan(mask.field)
+                    idx,idy=np.where(mask.field==1)
+                    xmin=np.min(idx)
+                    xmax=np.max(idx)
+                    ymin=np.min(idy)
+                    ymax=np.max(idy)
+                    TrueMicro[xmin,:]=1
+                    TrueMicro[xmax,:]=1
+                    TrueMicro[:,ymin]=1
+                    TrueMicro[:,ymax]=1
+                    TrueMicro[id]=0
+                    
             dTrueMicro=TrueMicro
             
             for i in range(dilate):
                 dTrueMicro=skimage.morphology.dilation(dTrueMicro) 
+            
+            
+            #fig,ax=plt.subplots()
+                 
             
             if CM=='semi color wheel':
                 plt.imshow(data_img_semi)
@@ -1542,9 +1590,13 @@ class aita(object):
             elif CM=='none':
                 plt.imshow(dTrueMicro,cmap=cm.gray)
                 
+            #toggle_selector.RS = matplotlib.widgets.RectangleSelector(ax, onselect, drawtype='box')
+            #fig.canvas.mpl_connect('key_press_event', toggle_selector)
+            
             return TrueMicro
-            
-            
+                
+        
+                
         def export_micro(_):
             TrueMicro=calcGB(val_scharr.get_interact_value(),use_scharr.get_interact_value(),val_canny.get_interact_value(),use_canny.get_interact_value(),val_qua.get_interact_value(),use_qua.get_interact_value(),dilate.get_interact_value(),CM.get_interact_value(),CW.get_interact_value(),inc_border.get_interact_value())
             # create microstructure
@@ -1597,6 +1649,111 @@ class aita(object):
 
         buttonExport.on_click(export_micro)
         return export_micro
+    
+#--------------------------------------------------------------------------
+    def rectangular_mask(self):
+        '''
+        out=data_aita.mask()
+
+        This function can be use to crop within a jupyter notebook
+        It will crop the data and export the value of the crop in out.pos
+        
+        :param new: create a new data variable (default:False; erase input data)
+        :type new: bool
+        
+        .. note:: If you use new=True (out=interactive_crop(new=true)) you can find the cropped data in out.crop_data
+        .. note:: The position of the rectangle used for the cropping is in out.pos
+        '''
+        def onselect(eclick, erelease):
+            "eclick and erelease are matplotlib events at press and release."
+            print('startposition: (%f, %f)' % (eclick.xdata, eclick.ydata))
+            print('endposition  : (%f, %f)' % (erelease.xdata, erelease.ydata))
+            print('used button  : ', eclick.button)
+
+        def toggle_selector(event):
+            print('Key pressed.')
+            if event.key in ['Q', 'q'] and toggle_selector.RS.active:
+                print('RectangleSelector deactivated.')
+                toggle_selector.RS.set_active(False)
+            if event.key in ['A', 'a'] and not toggle_selector.RS.active:
+                print('RectangleSelector activated.')
+                toggle_selector.RS.set_active(True)
+
+        print('1. click and drag the mouse on the figure to select the area')
+        print('2. you can draw the rectangle using the button "Draw area"')
+        print('3. if you are unhappy with the selection restart to 1.')
+        print('4. if you are happy with the selection click on "Export mask" (only the last rectangle is taken into account)')
+
+
+        fig,ax=plt.subplots()
+        self.phi1.plot()
+        toggle_selector.RS = matplotlib.widgets.RectangleSelector(ax, onselect, drawtype='box')
+        fig.canvas.mpl_connect('key_press_event', toggle_selector)
+
+
+        buttonCrop = widgets.Button(description='Export mask')
+        buttonDraw = widgets.Button(description='Draw area')
+        ss=np.shape(self.phi1.field)
+
+        def draw_area(_):
+            x=list(toggle_selector.RS.corners[0])
+            x.append(x[0])
+            y=list(toggle_selector.RS.corners[1])
+            y.append(y[0])
+            xmin=int(np.ceil(np.min(x)))
+            xmax=int(np.floor(np.max(x)))
+            ymin=int(ss[0]-np.ceil(np.max(y)))
+            ymax=int(ss[0]-np.floor(np.min(y)))
+            plt.plot(x,y,'-k')
+
+        def get_data(_):
+            # what happens when we press the button
+            x=list(toggle_selector.RS.corners[0])
+            x.append(x[0])
+            x=np.array(x)/self.phi1.res
+            y=list(toggle_selector.RS.corners[1])
+            y.append(y[0])
+            y=np.array(y)/self.phi1.res
+            xmin=int(np.ceil(np.min(x)))
+            xmax=int(np.floor(np.max(x)))
+            ymin=int(ss[0]-np.ceil(np.max(y)))
+            ymax=int(ss[0]-np.floor(np.min(y)))
+            
+            # create the mask
+            out=np.ones(ss)
+            for i in list(range(ymin)):
+                out[i,:]=np.nan
+            for i in list(range(xmin)):
+                out[:,i]=np.nan
+             
+            listx=np.linspace(xmax,ss[0]-1,ss[0]-xmax)
+            listy=np.linspace(ymax,ss[1]-1,ss[1]-ymax)
+            plt.plot(x*self.phi1.res,y*self.phi1.res,'-b')
+            for i in listy:
+                out[np.int32(i),:]=np.nan
+            
+            for i in listx:
+                out[:,np.int32(i)]=np.nan
+                
+            
+
+            
+            out=im2d.mask2d(out,self.phi1.res)
+           
+            get_data.mask=out
+                
+            return get_data
+            
+            
+
+
+        # linking button and function together using a button's method
+        buttonDraw.on_click(draw_area)
+        buttonCrop.on_click(get_data)
+        # displaying button and its output together
+        display(buttonDraw,buttonCrop)
+
+        return get_data
 
     
 ##########################################################################

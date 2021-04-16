@@ -384,7 +384,7 @@ class aita(object):
     
 #---------------------------------------------------------------------
 
-    def plotpdf(self,peigen=True,select_grain=False,grainlist=[],nbp=10000,contourf=False,cm2=cm.viridis,bw=0.1,projz=1,angle=np.array([30.,60.]),cline=15,n_jobs=-1):
+    def plotpdf(self,peigen=True,select_grain=False,grainlist=[],nbp=10000,contourf=True,cm2=cm.viridis,bw=0.1,projz=1,angle=np.array([30.,60.]),cline=15,n_jobs=-1):
         '''
         Plot pole figure for c-axis (0001)
         

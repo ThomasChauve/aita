@@ -3,10 +3,9 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - numpy=1.19.5=py39hdbf815f_1
-  - python=3.8.8=hdb3f193_4
-  - vtk=9.0.1=no_osmesa_py39h3e65357_103
-  - pip=20.3.3=py39h06a4308_0
+  - python
+  - vtk
+  - pip
   - pip:
     - -r requirements.txt
     - -e .

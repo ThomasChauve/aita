@@ -201,19 +201,38 @@ class aita(object):
         :rtype: aita
         :Exemple: >>> data.mean_orientation()
         '''
+        allv=[]
         # number of grain
         nb_grain=int(np.nanmax(self.grains.field))
         # loop on all the grain
         for i in tqdm(range(nb_grain+1)):
-            # find the pixel inside the grain i
-            map=(self.grains.field==i)
-            if np.sum(map)>0:
-                map=skimage.morphology.dilation(map)
+            idx=np.where(self.grains.field==i)
+            col=self.phi.field[idx[0],idx[1]]
+            azi=np.mod(self.phi1.field[idx[0],idx[1]]-math.pi/2,2*math.pi)
 
-                idx=np.where(map==True)
-                # compute the mean value of phi1 and phi and replace the value in the map
-                self.phi.field[idx]=np.nanmean(self.phi.field[idx])
-                self.phi1.field[idx]=np.nanmean(self.phi1.field[idx])
+            # remove nan value
+            azi=azi[~np.isnan(azi)]
+            col=col[~np.isnan(col)]
+
+            # compute [xc,yc,zc] the coordinate of the c-axis
+            xc = np.multiply(np.cos(azi),np.sin(col))
+            yc = np.multiply(np.sin(azi),np.sin(col))
+            zc = np.cos(col)
+
+            v=vec3d.setvector3d(np.transpose(np.array([xc,yc,zc])))
+            if len(v.vector)==0:
+                self.phi.field[idx]=np.nan
+                self.phi1.field[idx]=np.nan
+            else:
+                SOT_val,SOT_vec=v.OrientationTensor2nd()
+                vc=SOT_vec[:,0]
+                if vc[2]<0:
+                    vc=-vc
+                col=np.arccos(vc[2])
+                azi=np.arctan2(vc[1],vc[0])
+                phi1=np.mod(azi+math.pi/2,2*math.pi)
+                self.phi.field[idx]=col
+                self.phi1.field[idx]=phi1
                 
 #-------------------------------------------------------------------- 
                 
@@ -384,14 +403,12 @@ class aita(object):
     
 #---------------------------------------------------------------------
 
-    def plotpdf(self,peigen=True,select_grain=False,grainlist=[],nbp=10000,contourf=True,cm2=cm.viridis,bw=0.1,projz=1,angle=np.array([30.,60.]),cline=15,n_jobs=-1):
+    def plotpdf(self,peigen=True,grainlist=[],nbp=10000,contourf=True,cm2=cm.viridis,bw=0.1,projz=1,angle=np.array([30.,60.]),cline=15,n_jobs=-1):
         '''
         Plot pole figure for c-axis (0001)
         
         :param peigen: Plot the eigenvalues and eigenvectors on the pole figure (default = False)
         :type peigen: bool
-        :param select_grain: select the grains use for the pole figure
-        :type select_grain: bool
         :param grainlist: give the list of the grainId you want to plot
         :type grainlist: list
         :param nbp: number of pixel plotted
@@ -418,46 +435,31 @@ class aita(object):
             >>> eigenvalue = data.plotpdf(peigen=True)
         '''
         
-        if select_grain:
-            if grainlist==[]:
-                plt.imshow(self.grains.field,aspect='equal')
-                plt.waitforbuttonpress()
-                print('midle mouse clic when you are finish')
-                #grain wanted for the plot
-                id=np.int32(np.array(pylab.ginput(0)))
-                plt.close('all')
-                # find the label of grain
-                label=self.grains.field[id[:,1],id[:,0]]
-            else:
-                label=grainlist
-            tazi=[]
-            tcol=[]
-            for i in list(range(len(label))):
-                idx=np.where(self.grains.field==label[i])
-                tazi.append(list(np.mod(self.phi1.field[idx[0],idx[1]]-math.pi/2,2*math.pi)))
-                tcol.append(list(self.phi.field[idx[0],idx[1]]))
-                
-            azi=np.transpose(np.concatenate(np.array(tazi)))
-            col=np.transpose(np.concatenate(np.array(tcol)))
+
+        if grainlist!=[]:
+            azi=np.array([np.nan])
+            col=np.array([np.nan])
+            for ig in grainlist:
+                idx=np.where(self.grains.field==ig)
+                col=np.concatenate([col,self.phi.field[idx[0],idx[1]]])
+                azi=np.concatenate([azi,np.mod(self.phi1.field[idx[0],idx[1]]-math.pi/2,2*math.pi)])
+
         else:
             # compute azimuth and colatitude
-            azi=np.mod(self.phi1.field.reshape((-1,1))-math.pi/2,2*math.pi)
-            col=self.phi.field.reshape((-1,1))
+            azi=np.mod(self.phi1.field.flatten()-math.pi/2,2*math.pi)
+            col=self.phi.field.flatten()
 
 
         # remove nan value
-        idnan=np.isnan(azi)
-        idlist=np.where(idnan==True)
-        
-        azi=np.delete(azi,idlist,0)
-        col=np.delete(col,idlist,0)
+        azi=azi[~np.isnan(azi)]
+        col=col[~np.isnan(col)]
         
         # compute [xc,yc,zc] the coordinate of the c-axis
         xc = np.multiply(np.cos(azi),np.sin(col))
         yc = np.multiply(np.sin(azi),np.sin(col))
-        zc = np.cos(col)  
-        
-        v=vec3d.setvector3d(np.transpose(np.array([xc[:,0],yc[:,0],zc[:,0]])))
+        zc = np.cos(col)
+                
+        v=vec3d.setvector3d(np.transpose(np.array([xc,yc,zc])))
         v.stereoplot(nbpoints=nbp,contourf=contourf,bw=bw,cm=cm2,angle=angle,plotOT=peigen,projz=projz,cline=cline,n_jobs=n_jobs)
 
         plt.text(-1.4, 1.4, r'[0001]')

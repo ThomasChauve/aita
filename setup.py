@@ -22,7 +22,7 @@ VERSION = '2.2.3'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'Shapely','pygmsh','numpy','matplotlib','scikit-image','scikit-learn','tqdm','scipy','vtk','Pillow','gmsh','ipywidgets','ipympl','mahotas','sphinx','sphinx-rtd-theme'
+    'Shapely','pygmsh','numpy','matplotlib','scikit-image','scikit-learn','tqdm','scipy','vtk','Pillow','gmsh','ipywidgets','ipympl','mahotas','sphinx','sphinx-rtd-theme','pandas'
 ]
 
 # What packages are optional?

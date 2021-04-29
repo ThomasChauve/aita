@@ -1,6 +1,7 @@
 import AITAToolbox.aita as aita
 import numpy as np
 import math
+import pandas as pd
 from skimage import io
 from PIL import Image
 
@@ -16,9 +17,11 @@ def aita5col(data_adress,micro_adress=0):
     :rtype: aita
     '''
     # load data from G50 output
-    file=open(data_adress,'r')
-    azi,col,qua = np.loadtxt(file, skiprows=19,usecols=(2,3,5),dtype='f,f,f',comments='[eof]',unpack=True)    
-    file.close()
+    
+    a=pd.read_csv(data_adress,usecols=[3,4,6],skiprows=16,comment='[',header=0,names=['azi','col','qua'],delimiter=' ')
+    azi=np.array(a.azi)
+    col=np.array(a.col)
+    qua=np.array(a.col)
     # read head of file
     file=open(data_adress,'r')
     a=[]

@@ -13,3 +13,4 @@ ipympl
 mahotas
 sphinx
 sphinx-rtd-theme
+pandas

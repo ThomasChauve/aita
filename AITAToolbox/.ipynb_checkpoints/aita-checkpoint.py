@@ -38,6 +38,7 @@ else:
 
 import AITAToolbox.image2d as im2d
 import AITAToolbox.setvector3d as vec3d
+from AITAToolbox.function import normxcorr2
 
 class aita(object):
     '''
@@ -357,6 +358,69 @@ class aita(object):
                 angle=np.concatenate((angle,xres),axis=0)
            
         return angle
+    
+#--------------------------------------------------------------------   
+    def project_end2init(self,self_e,image,mask=0,min_win=20,apply_morph=True):
+        '''
+        Project the final microstructure on the initial microstrucure
+        :param self_e: final AITA
+        :type self_e: aita
+        :param image: Binairy image to project instead of final microstructure.
+        :type image: im2d.image2d
+        :return: image projected on aita initial
+        :rtype: im2d.image2d
+        
+        .. note:: It works better if you pass aita with mean_grain function applied before.
+        '''        
+
+        # compute img semi
+        f,img_i=self.plot(semi=True)
+        f,img_e=self_e.plot(semi=True)
+        # gray value for img
+        img_i=np.mean(img_i,axis=2)
+        img_e=np.mean(img_e,axis=2)
+        #size of the final image
+        ss=img_i.shape
+        # create projected image
+        RX_i=np.zeros(ss)
+        # position of the  
+        idx,idy=np.where(image.field==1)
+        idxm=np.array([0])
+        idym=np.array([0])
+        if mask!=0:
+            idxm2,idym2=np.where(mask.field==1)
+            idxm=np.concatenate([idxm,idxm2])
+            idym=np.concatenate([idym,idym2])
+            
+        # The tricks used here is to performed cross correlation between the init images and subset of final images to find the best localization for the center pixel of the subset image.
+        for i in tqdm(range(len(idx))):
+            x=idx[i]
+            y=idy[i]
+            win=np.min(np.array([np.min(np.abs(x-idxm)),np.min(np.abs(y-idym)),ss[0]-x,ss[1]-y]))
+            if win>min_win:
+                look_for1=img_e[np.int32(x-win):np.int32(x+win),np.int32(y-win):np.int32(y+win)]
+                look_for2=self_e.phi1.field[np.int32(x-win):np.int32(x+win),np.int32(y-win):np.int32(y+win)]
+                look_for3=self_e.phi.field[np.int32(x-win):np.int32(x+win),np.int32(y-win):np.int32(y+win)]
+                look_for4=self_e.micro.field[np.int32(x-win):np.int32(x+win),np.int32(y-win):np.int32(y+win)]
+                #RX_look_for=RX.field[np.int32(x-win):np.int32(x+win),np.int32(y-win):np.int32(y+win)]
+                res1=normxcorr2(look_for1,img_i,mode='same')
+                res2=normxcorr2(look_for2,self.phi1.field,mode='same')
+                res3=normxcorr2(look_for3,self.phi.field,mode='same')
+                res4=normxcorr2(look_for4,self.micro.field,mode='same')
+                res=res1+res2+res3+res4
+                xn,yn=np.where(res==np.max(res))
+                #print(win)
+                RX_i[xn[0],yn[0]]=1
+        
+        if apply_morph:
+            for i in range(2):
+                RX_i=scipy.ndimage.morphology.binary_closing(RX_i,iterations=2)
+                RX_i=scipy.ndimage.morphology.binary_erosion(RX_i,iterations=1)
+                RX_i=scipy.ndimage.morphology.binary_dilation(RX_i,iterations=2)
+        
+        return im2d.image2d(RX_i,self.phi1.res)
+        
+        
             
 ##################################################################### 
 ##########################Plot function##############################

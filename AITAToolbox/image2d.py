@@ -140,6 +140,16 @@ class image2d(object):
 
         return triple,c
     
+    
+    def crop(self,pos):
+        '''
+        :param pos: numpy array (xmin,xmax,ymin,ymax)
+        :type pos: np.array
+        '''
+        
+        self.field=self.field[pos[2]:pos[3], pos[0]:pos[1]]
+    
+    
     def imresize(self,res):
         '''
         Resize the image with nearest interpolation to have a pixel of the length given in res

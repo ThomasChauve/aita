@@ -451,15 +451,17 @@ class aita(object):
         nnlut=np.shape(rlut)
         nnnlut=nnlut[0]
         # fill the color map
-        XX=(nnnlut-1)/2*np.multiply(np.sin(self.phi.field),np.cos(self.phi1.field))+(nnnlut-1)/2
-        YY=(nnnlut-1)/2*np.multiply(np.sin(self.phi.field),np.sin(self.phi1.field))+(nnnlut-1)/2
-    
-        for i in tqdm(range(nx[0])):
-            for j in list(range(nx[1])):
-                if ~np.isnan(self.phi.field[i,j]):
-                    img[i,j,0]=rlut[np.int32(XX[i,j]),np.int32(YY[i,j]),0]
-                    img[i,j,1]=rlut[np.int32(XX[i,j]),np.int32(YY[i,j]),1]
-                    img[i,j,2]=rlut[np.int32(XX[i,j]),np.int32(YY[i,j]),2]
+        XX=np.int32((nnnlut-1)/2*np.multiply(np.sin(self.phi.field),np.cos(self.phi1.field))+(nnnlut-1)/2)
+        YY=np.int32((nnnlut-1)/2*np.multiply(np.sin(self.phi.field),np.sin(self.phi1.field))+(nnnlut-1)/2)
+        
+        id=XX<0
+        XX[id]=0
+        YY[id]=0
+        
+        idx,idy=np.where(id==True)
+        
+        img=rlut[XX,YY]
+        img[idx,idy,:]=np.array([255,255,255])
                 
         h=plt.imshow(img,extent=(0,nx[1]*self.phi.res,0,nx[0]*self.phi.res))               
         

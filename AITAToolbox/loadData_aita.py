@@ -21,7 +21,7 @@ def aita5col(data_adress,micro_adress=0):
     a=pd.read_csv(data_adress,usecols=[3,4,6],skiprows=16,comment='[',header=0,names=['azi','col','qua'],delimiter=' ')
     azi=np.array(a.azi)
     col=np.array(a.col)
-    qua=np.array(a.col)
+    qua=np.array(a.qua)
     # read head of file
     file=open(data_adress,'r')
     a=[]

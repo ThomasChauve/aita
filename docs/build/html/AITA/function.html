@@ -466,7 +466,7 @@ It will crop the data and export the value of the crop in out.pos</p>
 
 <dl class="py method">
 <dt id="AITAToolbox.aita.aita.interactive_segmentation">
-<code class="sig-name descname"><span class="pre">interactive_segmentation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val_scharr_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_scharr_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_canny_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_canny_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_qua_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_qua_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_border_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.interactive_segmentation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AITAToolbox.aita.aita.interactive_segmentation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">interactive_segmentation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val_scharr_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_scharr_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_canny_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_canny_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_qua_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_qua_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_border_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.interactive_segmentation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AITAToolbox.aita.aita.interactive_segmentation" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function allow you to performed grain segmentation on aita data.
 The intitial value of the segmenation function can be set-up initially</p>
 <dl class="field-list simple">
@@ -669,13 +669,12 @@ resInG             _______</p>
 
 <dl class="py method">
 <dt id="AITAToolbox.aita.aita.plotpdf">
-<code class="sig-name descname"><span class="pre">plotpdf</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">peigen=True</span></em>, <em class="sig-param"><span class="pre">select_grain=False</span></em>, <em class="sig-param"><span class="pre">grainlist=[]</span></em>, <em class="sig-param"><span class="pre">nbp=10000</span></em>, <em class="sig-param"><span class="pre">contourf=False</span></em>, <em class="sig-param"><span class="pre">cm2=&lt;matplotlib.colors.ListedColormap</span> <span class="pre">object&gt;</span></em>, <em class="sig-param"><span class="pre">bw=0.1</span></em>, <em class="sig-param"><span class="pre">projz=1</span></em>, <em class="sig-param"><span class="pre">angle=array([30.</span></em>, <em class="sig-param"><span class="pre">60.])</span></em>, <em class="sig-param"><span class="pre">cline=15</span></em>, <em class="sig-param"><span class="pre">n_jobs=-1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.plotpdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AITAToolbox.aita.aita.plotpdf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">plotpdf</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">peigen=True</span></em>, <em class="sig-param"><span class="pre">grainlist=[]</span></em>, <em class="sig-param"><span class="pre">nbp=10000</span></em>, <em class="sig-param"><span class="pre">contourf=True</span></em>, <em class="sig-param"><span class="pre">cm2=&lt;matplotlib.colors.ListedColormap</span> <span class="pre">object&gt;</span></em>, <em class="sig-param"><span class="pre">bw=0.1</span></em>, <em class="sig-param"><span class="pre">projz=1</span></em>, <em class="sig-param"><span class="pre">angle=array([30.</span></em>, <em class="sig-param"><span class="pre">60.])</span></em>, <em class="sig-param"><span class="pre">cline=15</span></em>, <em class="sig-param"><span class="pre">n_jobs=-1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.plotpdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AITAToolbox.aita.aita.plotpdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot pole figure for c-axis (0001)</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peigen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Plot the eigenvalues and eigenvectors on the pole figure (default = False)</p></li>
-<li><p><strong>select_grain</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – select the grains use for the pole figure</p></li>
 <li><p><strong>grainlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – give the list of the grainId you want to plot</p></li>
 <li><p><strong>nbp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of pixel plotted</p></li>
 <li><p><strong>contourf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Do you want to add contouring to your pole figure ? (Default : False)</p></li>
@@ -705,6 +704,43 @@ resInG             _______</p>
 </div>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="AITAToolbox.aita.aita.project_end2init">
+<code class="sig-name descname"><span class="pre">project_end2init</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_morph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.project_end2init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AITAToolbox.aita.aita.project_end2init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project the final microstructure on the initial microstrucure
+:param self_e: final AITA
+:type self_e: aita
+:param image: Binairy image to project instead of final microstructure.
+:type image: im2d.image2d
+:return: image projected on aita initial
+:rtype: im2d.image2d</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It works better if you pass aita with mean_grain function applied before.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="AITAToolbox.aita.aita.rectangular_mask">
+<code class="sig-name descname"><span class="pre">rectangular_mask</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/AITAToolbox/aita.html#aita.rectangular_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AITAToolbox.aita.aita.rectangular_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>out=data_aita.mask()</p>
+<p>This function can be use to crop within a jupyter notebook
+It will crop the data and export the value of the crop in out.pos</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – create a new data variable (default:False; erase input data)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you use new=True (out=interactive_crop(new=true)) you can find the cropped data in out.crop_data</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The position of the rectangle used for the cropping is in out.pos</p>
+</div>
 </dd></dl>
 
 <dl class="py method">

@@ -1,3 +1,8 @@
+```{warning}
+This tools is not maintened anymore. For a similar tools please go to [AITA-book](https://thomaschauve.github.io/AITA-book/docs/intro.html)
+```
+
+
 .. image:: https://mybinder.org/badge_logo.svg
     :target: https://mybinder.org/v2/gh/ThomasChauve/aita/HEAD
 

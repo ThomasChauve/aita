@@ -3,6 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. warning:: This tools is not maintened anymore. For a similar tools please go to AITA-book : https://thomaschauve.github.io/AITA-book/docs/intro.html
+
 Welcome to AITA Toolbox's documentation!
 ========================================
 
